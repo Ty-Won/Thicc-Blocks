@@ -1,0 +1,62 @@
+namespace ca.mcgill.ecse223.block.model;
+
+class Block223 {
+  1 <@>- * Game;
+  1 <@>- * User users;
+}
+
+class Level {
+  1 <@>- * LevelBlock levelBlocks;
+  Integer number;
+}
+
+class GameBlock {
+  
+  // Color represented by a hex
+  String hexColor;
+  Integer pointValue;
+}
+
+class LevelBlock {
+  Integer xPosition;
+  Integer yPosition;
+  
+  * -- 1 GameBlock associatedBlock;
+}
+
+class Game {
+  Integer minSpeed;
+  Integer numberOfLevels;
+  Integer speedIncreaseFactor;
+  unique String name;
+  
+  Integer minPaddleLength;
+Integer maxPaddleLength;
+Integer gameWidth;
+Integer gameHeight;
+1 <@>- * GameBlock;
+  1 <@>- * Level;
+}
+
+class User {
+  unique String username;
+  1 -> 1..2 Role roles;
+}
+
+// I added the abstract getPassword() method here because
+// umple requires an abstract method in order to make the class
+// abstract. We should ask if having this is necessary - Michael S
+class Role {
+  protected String password;
+  abstract String getPassword();
+}
+
+class PlayerRole {
+  isA Role;
+  String getPassword() { return password; }
+}
+
+class AdminRole {
+  isA Role;
+  String getPassword() { return password; } 
+}
