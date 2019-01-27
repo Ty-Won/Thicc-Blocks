@@ -1,0 +1,20 @@
+namespace model;
+
+class Person {
+  name; // Attribute, string by default
+  String toString () {
+    return(getName());
+  }
+}
+
+class Student {
+  isA Person;
+}
+
+class Mentor {
+  isA Person;
+}
+
+association {
+  0..1 Mentor -- * Student;
+}
