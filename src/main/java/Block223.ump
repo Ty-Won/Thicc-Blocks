@@ -43,20 +43,15 @@ class User {
   1 -> 1..2 Role roles;
 }
 
-// I added the abstract getPassword() method here because
-// umple requires an abstract method in order to make the class
-// abstract. We should ask if having this is necessary - Michael S
 class Role {
-  protected String password;
-  abstract String getPassword();
+  abstract;
+  String password;
 }
 
 class PlayerRole {
   isA Role;
-  String getPassword() { return password; }
 }
 
 class AdminRole {
   isA Role;
-  String getPassword() { return password; } 
 }

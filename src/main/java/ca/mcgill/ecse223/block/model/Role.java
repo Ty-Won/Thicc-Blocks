@@ -3,12 +3,7 @@
 
 package ca.mcgill.ecse223.block.model;
 
-/**
- * I added the abstract getPassword() method here because
- * umple requires an abstract method in order to make the class
- * abstract. We should ask if having this is necessary - Michael S
- */
-// line 49 "../../../../../Block223.ump"
+// line 46 "../../../../../Block223.ump"
 public abstract class Role
 {
 
@@ -16,28 +11,42 @@ public abstract class Role
   // MEMBER VARIABLES
   //------------------------
 
+  //Role Attributes
+  private String password;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Role()
-  {}
+  public Role(String aPassword)
+  {
+    password = aPassword;
+  }
 
   //------------------------
   // INTERFACE
   //------------------------
 
+  public boolean setPassword(String aPassword)
+  {
+    boolean wasSet = false;
+    password = aPassword;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public String getPassword()
+  {
+    return password;
+  }
+
   public void delete()
   {}
 
-  public abstract String getPassword();
-  
-  //------------------------
-  // DEVELOPER CODE - PROVIDED AS-IS
-  //------------------------
-  
-  // line 50 "../../../../../Block223.ump"
-  protected String password ;
 
-  
+  public String toString()
+  {
+    return super.toString() + "["+
+            "password" + ":" + getPassword()+ "]";
+  }
 }

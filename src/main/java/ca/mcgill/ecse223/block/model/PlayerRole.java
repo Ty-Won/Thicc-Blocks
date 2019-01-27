@@ -3,7 +3,7 @@
 
 package ca.mcgill.ecse223.block.model;
 
-// line 54 "../../../../../Block223.ump"
+// line 51 "../../../../../Block223.ump"
 public class PlayerRole extends Role
 {
 
@@ -15,9 +15,9 @@ public class PlayerRole extends Role
   // CONSTRUCTOR
   //------------------------
 
-  public PlayerRole()
+  public PlayerRole(String aPassword)
   {
-    super();
+    super(aPassword);
   }
 
   //------------------------
@@ -27,11 +27,6 @@ public class PlayerRole extends Role
   public void delete()
   {
     super.delete();
-  }
-
-  // line 56 "../../../../../Block223.ump"
-  public String getPassword(){
-    return password;
   }
 
 }
