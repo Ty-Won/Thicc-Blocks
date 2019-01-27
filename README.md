@@ -4,7 +4,7 @@ This repository holds the source code for the ECSE 223 group project.
 
 ## Prerequisites
 
-Thicc blocks runs on Java JDK 11 and utilizes gradle for managing dependencies. If using eclipse, the gradle plugin, Buildship, can be downloaded from the Eclipse Marketplace.
+Thicc blocks runs on Java JDK 11 and utilizes gradle for managing dependencies. It also utilizes umple for model generation. If using eclipse, plugins for gradle (Buildship) and umple can be utilized. 
 
 ## Running Code
 
