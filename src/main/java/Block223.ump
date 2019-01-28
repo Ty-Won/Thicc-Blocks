@@ -28,19 +28,20 @@ class Game {
   Integer minSpeed;
   Integer numberOfLevels;
   Integer speedIncreaseFactor;
+  Integer minPaddleLength;
+  Integer maxPaddleLength;
+  Integer gameWidth;
+  Integer gameHeight;
   unique String name;
   
-  Integer minPaddleLength;
-Integer maxPaddleLength;
-Integer gameWidth;
-Integer gameHeight;
-1 <@>- * GameBlock;
+  1 <@>- * GameBlock;
   1 <@>- * Level;
+  * -- 0..1 AdminRole owner;
 }
 
 class User {
   unique String username;
-  1 -> 1..2 Role roles;
+  0..1 <@>- 1..2 Role roles;
 }
 
 class Role {

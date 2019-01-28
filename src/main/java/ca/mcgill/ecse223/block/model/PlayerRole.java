@@ -3,7 +3,7 @@
 
 package ca.mcgill.ecse223.block.model;
 
-// line 51 "../../../../../Block223.ump"
+// line 52 "../../../../../Block223.ump"
 public class PlayerRole extends Role
 {
 

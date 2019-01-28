@@ -3,7 +3,7 @@
 
 package ca.mcgill.ecse223.block.model;
 
-// line 46 "../../../../../Block223.ump"
+// line 47 "../../../../../Block223.ump"
 public abstract class Role
 {
 
@@ -13,6 +13,9 @@ public abstract class Role
 
   //Role Attributes
   private String password;
+
+  //Role Associations
+  private User user;
 
   //------------------------
   // CONSTRUCTOR
@@ -39,14 +42,40 @@ public abstract class Role
   {
     return password;
   }
+  /* Code from template association_GetOne */
+  public User getUser()
+  {
+    return user;
+  }
+
+  public boolean hasUser()
+  {
+    boolean has = user != null;
+    return has;
+  }
 
   public void delete()
-  {}
+  {
+    if (user != null)
+    {
+      if (user.numberOfRoles() <= 1)
+      {
+        user.delete();
+      }
+      else
+      {
+        User placeholderUser = user;
+        this.user = null;
+        placeholderUser.removeRole(this);
+      }
+    }
+  }
 
 
   public String toString()
   {
     return super.toString() + "["+
-            "password" + ":" + getPassword()+ "]";
+            "password" + ":" + getPassword()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "user = "+(getUser()!=null?Integer.toHexString(System.identityHashCode(getUser())):"null");
   }
 }

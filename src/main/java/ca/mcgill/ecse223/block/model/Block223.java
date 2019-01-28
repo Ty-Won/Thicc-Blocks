@@ -95,9 +95,9 @@ public class Block223
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Game addGame(int aMinSpeed, int aNumberOfLevels, int aSpeedIncreaseFactor, String aName, int aMinPaddleLength, int aMaxPaddleLength, int aGameWidth, int aGameHeight)
+  public Game addGame(int aMinSpeed, int aNumberOfLevels, int aSpeedIncreaseFactor, int aMinPaddleLength, int aMaxPaddleLength, int aGameWidth, int aGameHeight, String aName)
   {
-    return new Game(aMinSpeed, aNumberOfLevels, aSpeedIncreaseFactor, aName, aMinPaddleLength, aMaxPaddleLength, aGameWidth, aGameHeight, this);
+    return new Game(aMinSpeed, aNumberOfLevels, aSpeedIncreaseFactor, aMinPaddleLength, aMaxPaddleLength, aGameWidth, aGameHeight, aName, this);
   }
 
   public boolean addGame(Game aGame)

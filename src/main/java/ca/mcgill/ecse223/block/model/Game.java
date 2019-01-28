@@ -22,22 +22,23 @@ public class Game
   private int minSpeed;
   private int numberOfLevels;
   private int speedIncreaseFactor;
-  private String name;
   private int minPaddleLength;
   private int maxPaddleLength;
   private int gameWidth;
   private int gameHeight;
+  private String name;
 
   //Game Associations
   private List<GameBlock> gameBlocks;
   private List<Level> levels;
+  private AdminRole owner;
   private Block223 block223;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Game(int aMinSpeed, int aNumberOfLevels, int aSpeedIncreaseFactor, String aName, int aMinPaddleLength, int aMaxPaddleLength, int aGameWidth, int aGameHeight, Block223 aBlock223)
+  public Game(int aMinSpeed, int aNumberOfLevels, int aSpeedIncreaseFactor, int aMinPaddleLength, int aMaxPaddleLength, int aGameWidth, int aGameHeight, String aName, Block223 aBlock223)
   {
     minSpeed = aMinSpeed;
     numberOfLevels = aNumberOfLevels;
@@ -87,22 +88,6 @@ public class Game
     return wasSet;
   }
 
-  public boolean setName(String aName)
-  {
-    boolean wasSet = false;
-    String anOldName = getName();
-    if (hasWithName(aName)) {
-      return wasSet;
-    }
-    name = aName;
-    wasSet = true;
-    if (anOldName != null) {
-      gamesByName.remove(anOldName);
-    }
-    gamesByName.put(aName, this);
-    return wasSet;
-  }
-
   public boolean setMinPaddleLength(int aMinPaddleLength)
   {
     boolean wasSet = false;
@@ -135,6 +120,22 @@ public class Game
     return wasSet;
   }
 
+  public boolean setName(String aName)
+  {
+    boolean wasSet = false;
+    String anOldName = getName();
+    if (hasWithName(aName)) {
+      return wasSet;
+    }
+    name = aName;
+    wasSet = true;
+    if (anOldName != null) {
+      gamesByName.remove(anOldName);
+    }
+    gamesByName.put(aName, this);
+    return wasSet;
+  }
+
   public int getMinSpeed()
   {
     return minSpeed;
@@ -148,21 +149,6 @@ public class Game
   public int getSpeedIncreaseFactor()
   {
     return speedIncreaseFactor;
-  }
-
-  public String getName()
-  {
-    return name;
-  }
-  /* Code from template attribute_GetUnique */
-  public static Game getWithName(String aName)
-  {
-    return gamesByName.get(aName);
-  }
-  /* Code from template attribute_HasUnique */
-  public static boolean hasWithName(String aName)
-  {
-    return getWithName(aName) != null;
   }
 
   public int getMinPaddleLength()
@@ -183,6 +169,21 @@ public class Game
   public int getGameHeight()
   {
     return gameHeight;
+  }
+
+  public String getName()
+  {
+    return name;
+  }
+  /* Code from template attribute_GetUnique */
+  public static Game getWithName(String aName)
+  {
+    return gamesByName.get(aName);
+  }
+  /* Code from template attribute_HasUnique */
+  public static boolean hasWithName(String aName)
+  {
+    return getWithName(aName) != null;
   }
   /* Code from template association_GetMany */
   public GameBlock getGameBlock(int index)
@@ -243,6 +244,17 @@ public class Game
   {
     int index = levels.indexOf(aLevel);
     return index;
+  }
+  /* Code from template association_GetOne */
+  public AdminRole getOwner()
+  {
+    return owner;
+  }
+
+  public boolean hasOwner()
+  {
+    boolean has = owner != null;
+    return has;
   }
   /* Code from template association_GetOne */
   public Block223 getBlock223()
@@ -393,6 +405,23 @@ public class Game
     }
     return wasAdded;
   }
+  /* Code from template association_SetOptionalOneToMany */
+  public boolean setOwner(AdminRole aOwner)
+  {
+    boolean wasSet = false;
+    AdminRole existingOwner = owner;
+    owner = aOwner;
+    if (existingOwner != null && !existingOwner.equals(aOwner))
+    {
+      existingOwner.removeGame(this);
+    }
+    if (aOwner != null)
+    {
+      aOwner.addGame(this);
+    }
+    wasSet = true;
+    return wasSet;
+  }
   /* Code from template association_SetOneToMany */
   public boolean setBlock223(Block223 aBlock223)
   {
@@ -430,6 +459,12 @@ public class Game
       levels.remove(aLevel);
     }
     
+    if (owner != null)
+    {
+      AdminRole placeholderOwner = owner;
+      this.owner = null;
+      placeholderOwner.removeGame(this);
+    }
     Block223 placeholderBlock223 = block223;
     this.block223 = null;
     if(placeholderBlock223 != null)
@@ -445,11 +480,12 @@ public class Game
             "minSpeed" + ":" + getMinSpeed()+ "," +
             "numberOfLevels" + ":" + getNumberOfLevels()+ "," +
             "speedIncreaseFactor" + ":" + getSpeedIncreaseFactor()+ "," +
-            "name" + ":" + getName()+ "," +
             "minPaddleLength" + ":" + getMinPaddleLength()+ "," +
             "maxPaddleLength" + ":" + getMaxPaddleLength()+ "," +
             "gameWidth" + ":" + getGameWidth()+ "," +
-            "gameHeight" + ":" + getGameHeight()+ "]" + System.getProperties().getProperty("line.separator") +
+            "gameHeight" + ":" + getGameHeight()+ "," +
+            "name" + ":" + getName()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "owner = "+(getOwner()!=null?Integer.toHexString(System.identityHashCode(getOwner())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "block223 = "+(getBlock223()!=null?Integer.toHexString(System.identityHashCode(getBlock223())):"null");
   }
 }
