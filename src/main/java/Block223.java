@@ -4,11 +4,11 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-public class ThiccBlocks extends Application {
+public class Block223 extends Application {
 
     @Override
     public void start(Stage stage) {
-        Label l = new Label("Thicc Blocks v0.0");
+        Label l = new Label("Block 223 v0.0");
         Scene scene = new Scene(new StackPane(l), 640, 480);
         stage.setScene(scene);
         stage.show();
