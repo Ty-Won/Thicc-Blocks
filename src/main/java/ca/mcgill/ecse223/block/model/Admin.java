@@ -4,24 +4,24 @@
 package ca.mcgill.ecse223.block.model;
 import java.util.*;
 
-// line 56 "../../../../../Block223.ump"
-public class AdminRole extends Role
+// line 19 "../../../../../Block223.ump"
+public class Admin extends UserRole
 {
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //AdminRole Associations
+  //Admin Associations
   private List<Game> games;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public AdminRole(String aPassword)
+  public Admin(String aPassword, Block223 aBlock223)
   {
-    super(aPassword);
+    super(aPassword, aBlock223);
     games = new ArrayList<Game>();
   }
 
@@ -63,20 +63,21 @@ public class AdminRole extends Role
   {
     return 0;
   }
-  /* Code from template association_AddManyToOptionalOne */
+  /* Code from template association_AddManyToOne */
+  public Game addGame(String aName, int aNrBlocksPerLevel, int aWidthPlayArea, int aHeightPlayArea, Ball aBall, Paddle aPaddle, Block223 aBlock223)
+  {
+    return new Game(aName, aNrBlocksPerLevel, aWidthPlayArea, aHeightPlayArea, this, aBall, aPaddle, aBlock223);
+  }
+
   public boolean addGame(Game aGame)
   {
     boolean wasAdded = false;
     if (games.contains(aGame)) { return false; }
-    AdminRole existingOwner = aGame.getOwner();
-    if (existingOwner == null)
+    Admin existingAdmin = aGame.getAdmin();
+    boolean isNewAdmin = existingAdmin != null && !this.equals(existingAdmin);
+    if (isNewAdmin)
     {
-      aGame.setOwner(this);
-    }
-    else if (!this.equals(existingOwner))
-    {
-      existingOwner.removeGame(aGame);
-      addGame(aGame);
+      aGame.setAdmin(this);
     }
     else
     {
@@ -89,10 +90,10 @@ public class AdminRole extends Role
   public boolean removeGame(Game aGame)
   {
     boolean wasRemoved = false;
-    if (games.contains(aGame))
+    //Unable to remove aGame, as it must always have a admin
+    if (!this.equals(aGame.getAdmin()))
     {
       games.remove(aGame);
-      aGame.setOwner(null);
       wasRemoved = true;
     }
     return wasRemoved;
@@ -132,9 +133,10 @@ public class AdminRole extends Role
 
   public void delete()
   {
-    while( !games.isEmpty() )
+    for(int i=games.size(); i > 0; i--)
     {
-      games.get(0).setOwner(null);
+      Game aGame = games.get(i - 1);
+      aGame.delete();
     }
     super.delete();
   }

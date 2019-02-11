@@ -3,8 +3,8 @@
 
 package ca.mcgill.ecse223.block.model;
 
-// line 52 "../../../../../Block223.ump"
-public class PlayerRole extends Role
+// line 23 "../../../../../Block223.ump"
+public class Player extends UserRole
 {
 
   //------------------------
@@ -15,9 +15,9 @@ public class PlayerRole extends Role
   // CONSTRUCTOR
   //------------------------
 
-  public PlayerRole(String aPassword)
+  public Player(String aPassword, Block223 aBlock223)
   {
-    super(aPassword);
+    super(aPassword, aBlock223);
   }
 
   //------------------------

@@ -4,7 +4,7 @@
 package ca.mcgill.ecse223.block.model;
 import java.util.*;
 
-// line 42 "../../../../../Block223.ump"
+// line 9 "../../../../../Block223.ump"
 public class User
 {
 
@@ -22,20 +22,20 @@ public class User
   private String username;
 
   //User Associations
-  private List<Role> roles;
+  private List<UserRole> roles;
   private Block223 block223;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public User(String aUsername, Block223 aBlock223, Role... allRoles)
+  public User(String aUsername, Block223 aBlock223, UserRole... allRoles)
   {
     if (!setUsername(aUsername))
     {
       throw new RuntimeException("Cannot create due to duplicate username");
     }
-    roles = new ArrayList<Role>();
+    roles = new ArrayList<UserRole>();
     boolean didAddRoles = setRoles(allRoles);
     if (!didAddRoles)
     {
@@ -83,15 +83,15 @@ public class User
     return getWithUsername(aUsername) != null;
   }
   /* Code from template association_GetMany */
-  public Role getRole(int index)
+  public UserRole getRole(int index)
   {
-    Role aRole = roles.get(index);
+    UserRole aRole = roles.get(index);
     return aRole;
   }
 
-  public List<Role> getRoles()
+  public List<UserRole> getRoles()
   {
-    List<Role> newRoles = Collections.unmodifiableList(roles);
+    List<UserRole> newRoles = Collections.unmodifiableList(roles);
     return newRoles;
   }
 
@@ -107,7 +107,7 @@ public class User
     return has;
   }
 
-  public int indexOfRole(Role aRole)
+  public int indexOfRole(UserRole aRole)
   {
     int index = roles.indexOf(aRole);
     return index;
@@ -127,111 +127,62 @@ public class User
   {
     return 2;
   }
-  /* Code from template association_AddMNToOptionalOne */
-  public boolean addRole(Role aRole)
+  /* Code from template association_AddUnidirectionalMN */
+  public boolean addRole(UserRole aRole)
   {
     boolean wasAdded = false;
     if (roles.contains(aRole)) { return false; }
-    if (numberOfRoles() >= maximumNumberOfRoles())
+    if (numberOfRoles() < maximumNumberOfRoles())
     {
-      return wasAdded;
+      roles.add(aRole);
+      wasAdded = true;
     }
-    User existingUser = aRole.getUser();
-    if (existingUser != null && existingUser.numberOfRoles() <= minimumNumberOfRoles())
-    {
-      return wasAdded;
-    }
-    else if (existingUser != null)
-    {
-      existingUser.roles.remove(aRole);
-    }
-    roles.add(aRole);
-    setUser(aRole,this);
-    wasAdded = true;
     return wasAdded;
   }
 
-  public boolean removeRole(Role aRole)
+  public boolean removeRole(UserRole aRole)
   {
     boolean wasRemoved = false;
-    if (roles.contains(aRole) && numberOfRoles() > minimumNumberOfRoles())
+    if (!roles.contains(aRole))
     {
-      roles.remove(aRole);
-      setUser(aRole,null);
-      wasRemoved = true;
+      return wasRemoved;
     }
+
+    if (numberOfRoles() <= minimumNumberOfRoles())
+    {
+      return wasRemoved;
+    }
+
+    roles.remove(aRole);
+    wasRemoved = true;
     return wasRemoved;
   }
-  /* Code from template association_SetMNToOptionalOne */
-  public boolean setRoles(Role... newRoles)
+  /* Code from template association_SetUnidirectionalMN */
+  public boolean setRoles(UserRole... newRoles)
   {
     boolean wasSet = false;
-    if (newRoles.length < minimumNumberOfRoles() || newRoles.length > maximumNumberOfRoles())
+    ArrayList<UserRole> verifiedRoles = new ArrayList<UserRole>();
+    for (UserRole aRole : newRoles)
+    {
+      if (verifiedRoles.contains(aRole))
+      {
+        continue;
+      }
+      verifiedRoles.add(aRole);
+    }
+
+    if (verifiedRoles.size() != newRoles.length || verifiedRoles.size() < minimumNumberOfRoles() || verifiedRoles.size() > maximumNumberOfRoles())
     {
       return wasSet;
     }
 
-    ArrayList<Role> checkNewRoles = new ArrayList<Role>();
-    HashMap<User,Integer> userToNewRoles = new HashMap<User,Integer>();
-    for (Role aRole : newRoles)
-    {
-      if (checkNewRoles.contains(aRole))
-      {
-        return wasSet;
-      }
-      else if (aRole.getUser() != null && !this.equals(aRole.getUser()))
-      {
-        User existingUser = aRole.getUser();
-        if (!userToNewRoles.containsKey(existingUser))
-        {
-          userToNewRoles.put(existingUser, new Integer(existingUser.numberOfRoles()));
-        }
-        Integer currentCount = userToNewRoles.get(existingUser);
-        int nextCount = currentCount - 1;
-        if (nextCount < 1)
-        {
-          return wasSet;
-        }
-        userToNewRoles.put(existingUser, new Integer(nextCount));
-      }
-      checkNewRoles.add(aRole);
-    }
-
-    roles.removeAll(checkNewRoles);
-
-    for (Role orphan : roles)
-    {
-      setUser(orphan, null);
-    }
     roles.clear();
-    for (Role aRole : newRoles)
-    {
-      if (aRole.getUser() != null)
-      {
-        aRole.getUser().roles.remove(aRole);
-      }
-      setUser(aRole, this);
-      roles.add(aRole);
-    }
+    roles.addAll(verifiedRoles);
     wasSet = true;
     return wasSet;
   }
-  /* Code from template association_GetPrivate */
-  private void setUser(Role aRole, User aUser)
-  {
-    try
-    {
-      java.lang.reflect.Field mentorField = aRole.getClass().getDeclaredField("user");
-      mentorField.setAccessible(true);
-      mentorField.set(aRole, aUser);
-    }
-    catch (Exception e)
-    {
-      throw new RuntimeException("Issue internally setting aUser to aRole", e);
-    }
-  }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addRoleAt(Role aRole, int index)
+  public boolean addRoleAt(UserRole aRole, int index)
   {  
     boolean wasAdded = false;
     if(addRole(aRole))
@@ -245,7 +196,7 @@ public class User
     return wasAdded;
   }
 
-  public boolean addOrMoveRoleAt(Role aRole, int index)
+  public boolean addOrMoveRoleAt(UserRole aRole, int index)
   {
     boolean wasAdded = false;
     if(roles.contains(aRole))
@@ -285,13 +236,7 @@ public class User
   public void delete()
   {
     usersByUsername.remove(getUsername());
-    while (roles.size() > 0)
-    {
-      Role aRole = roles.get(roles.size() - 1);
-      aRole.delete();
-      roles.remove(aRole);
-    }
-    
+    roles.clear();
     Block223 placeholderBlock223 = block223;
     this.block223 = null;
     if(placeholderBlock223 != null)
