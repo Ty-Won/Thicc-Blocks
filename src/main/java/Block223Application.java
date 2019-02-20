@@ -9,6 +9,8 @@ import ca.mcgill.ecse223.block.persistence.*;
 
 public class Block223Application extends Application {
 
+	private static Block223 block223;
+	
     @Override
     public void start(Stage stage) {
         Label l = new Label("Thicc Blocks");
@@ -17,11 +19,19 @@ public class Block223Application extends Application {
         stage.show();
     }
 
-    public static void main(String[] args) {    	
-    	Block223 block223 = Block223Persistence.load();
+    public static void main(String[] args) { 
+    	// temp, remove once controller methods are implemented
+    	Block223 block223 = getBlock223();
     	Block223Persistence.save(block223);
     	
         launch();
     }
 
+    public static Block223 getBlock223() {
+    	if(block223 == null) {
+    		block223 = Block223Persistence.load();
+    	}
+    	
+    	return block223;
+    }
 }
