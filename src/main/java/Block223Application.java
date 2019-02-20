@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 import ca.mcgill.ecse223.block.model.*;
 import ca.mcgill.ecse223.block.persistence.*;
 
-public class ThiccBlocks extends Application {
+public class Block223Application extends Application {
 
     @Override
     public void start(Stage stage) {
