@@ -1,0 +1,72 @@
+external interface Serializable {}
+
+class Block223 {
+  depend java.io.Serializable;
+  isA Serializable;
+  private static final long serialVersionUID = -2683593616927798071L;
+  
+  public void reinitialize() {
+  }
+  
+}
+
+class User {
+  depend java.io.Serializable;
+  isA Serializable;
+  private static final long serialVersionUID = 2315072607928790501L;
+  
+}
+
+class UserRole {
+  depend java.io.Serializable;
+  isA Serializable;
+  private static final long serialVersionUID = 8896099581655989380L;
+}
+
+class Admin {
+  depend java.io.Serializable;
+  isA Serializable;
+  private static final long serialVersionUID = 386717977557499839L;
+}
+
+class Player {
+  depend java.io.Serializable;
+  isA Serializable;
+  private static final long serialVersionUID = -3900912597282882073L;
+}
+
+class Game {
+  depend java.io.Serializable;
+  isA Serializable;
+  private static final long serialVersionUID = 2045406856025012133L;
+}
+
+class Block {
+  depend java.io.Serializable;
+  isA Serializable;
+  private static final long serialVersionUID = -7403802774454467836L;
+}
+
+class Level {
+  depend java.io.Serializable;
+  isA Serializable;
+  private static final long serialVersionUID = 9153802774454467836L;
+}
+
+class BlockAssignment {
+  depend java.io.Serializable;
+  isA Serializable;
+  private static final long serialVersionUID = 5123802774454467836L;
+}
+
+class Ball {
+  depend java.io.Serializable;
+  isA Serializable;
+  private static final long serialVersionUID = -6715202774454467836L;
+}
+
+class Paddle {
+  depend java.io.Serializable;
+  isA Serializable;
+  private static final long serialVersionUID = -1562202774454467836L;
+}

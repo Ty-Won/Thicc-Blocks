@@ -36,4 +36,4 @@ javafx {
     modules = [ 'javafx.controls' ]
 }
 
-mainClassName = 'Block223'
+mainClassName = 'ThiccBlocks'
