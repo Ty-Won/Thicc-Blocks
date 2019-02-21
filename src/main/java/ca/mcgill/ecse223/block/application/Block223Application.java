@@ -1,3 +1,5 @@
+package ca.mcgill.ecse223.block.application;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -6,10 +8,13 @@ import javafx.stage.Stage;
 
 import ca.mcgill.ecse223.block.model.*;
 import ca.mcgill.ecse223.block.persistence.*;
+import ca.mcgill.ecse223.block.controller.*;
 
 public class Block223Application extends Application {
 
 	private static Block223 block223;
+	private static UserRole currentUserRole;
+	private static Game currentGame;
 	
     @Override
     public void start(Stage stage) {
@@ -34,4 +39,25 @@ public class Block223Application extends Application {
     	
     	return block223;
     }
+    
+    public static UserRole getCurrentUserRole() {
+    	return currentUserRole;
+    }
+    
+    public static void setCurrentUserRole(UserRole role) {
+    	currentUserRole = role;
+    }
+    
+    public static void resetBlock223() {
+    	// TODO
+    }
+    
+    public static Game getCurrentGame() {
+    	return currentGame;
+    }
+    
+    public static void setCurrentGame(Game game) {
+    	currentGame = game;
+    }
+    
 }
