@@ -1,5 +1,6 @@
 package ca.mcgill.ecse223.block.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import ca.mcgill.ecse223.block.model.*;
 import ca.mcgill.ecse223.block.persistence.Block223Persistence;
@@ -29,9 +30,65 @@ public class Block223Controller {
 	}
 
 	public static void addBlock(int red, int green, int blue, int points) throws InvalidInputException {
+		Game game = Block223Application.getCurrentGame();
+		
+		//Beginning of method input checks
+		if(!(Block223Application.getCurrentUserRole() instanceof Admin)) {
+			throw new InvalidInputException("Admin privileges are required to add a block.");
+		}
+		
+		if(game == null) {
+			throw new InvalidInputException("A game must be selected to add a block.");
+		}
+		
+		if (Block223Application.getCurrentUserRole() != game.getAdmin()) {
+			throw new InvalidInputException("Only the admin who created the game can add a block.");
+		}
+		
+		for (Block block : game.getBlocks()) {
+			if (block.getBlue() == blue && block.getGreen() == green && block.getRed() == red) {
+				throw new InvalidInputException("A block with the same color already exists for the game.");
+			}
+		}
+		
+		//Creating the block and catching exceptions
+		Block newBlock;
+		try {
+			newBlock = new Block(red, green, blue, points, game);
+		}
+		catch(RuntimeException e) {
+			String msg;
+			if (e.getMessage().contentEquals("Red invalid")) msg = "Red must be between 0 and 255";
+			else if (e.getMessage().contentEquals("Green invalid")) msg = "Green must be between 0 and 255";
+			else if (e.getMessage().contentEquals("Blue invalid")) msg = "Blue must be between 0 and 255";
+			else if (e.getMessage().contentEquals("Points invalid")) msg = "Points must be between 1 and 1000";
+			else msg = "Unable to create block due to game.";
+			
+			throw new InvalidInputException(msg);
+			
+		}
 	}
 
 	public static void deleteBlock(int id) throws InvalidInputException {
+		Game game = Block223Application.getCurrentGame();
+		
+		//Beginning of method input checks
+		if(!(Block223Application.getCurrentUserRole() instanceof Admin)) {
+			throw new InvalidInputException("Admin privileges are required to delete a block.");
+		}
+		
+		if(game == null) {
+			throw new InvalidInputException("A game must be selected to delete a block.");
+		}
+		
+		if (Block223Application.getCurrentUserRole() != game.getAdmin()) {
+			throw new InvalidInputException("Only the admin who created the game can delete a block.");
+		}
+		
+		Block block = game.findBlock(id);
+		if (block != null) {
+			block.delete();
+		}
 	}
 
 	public static void updateBlock(int id, int red, int green, int blue, int points) throws InvalidInputException {
@@ -137,8 +194,29 @@ public class Block223Controller {
 		return null;
 	}
 
-	public static List<TOBlock> getBlocksOfCurrentDesignableGame() {
-		return null;
+	public static List<TOBlock> getBlocksOfCurrentDesignableGame() throws InvalidInputException {
+		Game game = Block223Application.getCurrentGame();
+		
+		//Beginning of method input checks
+		if(!(Block223Application.getCurrentUserRole() instanceof Admin)) {
+			throw new InvalidInputException("Admin privileges are required to access game information.");
+		}
+		
+		if(game == null) {
+			throw new InvalidInputException("A game must be selected to access its information.");
+		}
+		
+		if (Block223Application.getCurrentUserRole() != game.getAdmin()) {
+			throw new InvalidInputException("Only the admin who created the game can access its information.");
+		}
+		
+		List<TOBlock> result = new ArrayList<TOBlock>();
+		for (Block block : game.getBlocks()) {
+			TOBlock to = new TOBlock(block.getId(), block.getRed(), block.getGreen(), block.getBlue(), block.getPoints());
+			result.add(to);
+		}
+		
+		return result;
 	}
 
 	public static TOBlock getBlockOfCurrentDesignableGame(int id) throws InvalidInputException {
