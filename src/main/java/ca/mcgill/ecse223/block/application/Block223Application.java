@@ -48,8 +48,9 @@ public class Block223Application extends Application {
     	currentUserRole = role;
     }
     
-    public static void resetBlock223() {
-    	// TODO
+    public static Block223 resetBlock223() {
+    	block223 = Block223Persistence.load();
+    	return block223;
     }
     
     public static Game getCurrentGame() {
