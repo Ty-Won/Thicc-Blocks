@@ -159,7 +159,7 @@ public class Block223Controller {
 		if(Block223Application.getCurrentUserRole() != null) {
 			throw new InvalidInputException("Cannot login a user while a user is already logged in.");
 		}
-		User user = User.getWithUsername(username);
+		User user = User.getWithUsername(username); 
 		if(user == null) {
 			throw new InvalidInputException("The username and password do not match.");
 		}
@@ -168,11 +168,12 @@ public class Block223Controller {
 		for(UserRole role : roles) {
 			String rolePassword = role.getPassword();
 			
-			if(rolePassword == password) {
+			if(rolePassword.equals(password)) {
+				Block223Application.setCurrentUser(user);
 				Block223Application.setCurrentUserRole(role);
 				Block223Application.resetBlock223();
 				
-				break;
+				return;
 			}
 		}
 		
