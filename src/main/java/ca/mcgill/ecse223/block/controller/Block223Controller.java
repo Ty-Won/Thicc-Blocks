@@ -13,8 +13,35 @@ public class Block223Controller {
 	// Modifier methods
 	// ****************************
 	public static void createGame(String name) throws InvalidInputException {
-	}
+		Block223 block223 = Block223Application.getBlock223();
+		UserRole userRole = Block223Application.getCurrentUserRole();
 
+		// User must be admin
+		if(!(userRole instanceof Admin)) {
+			throw new InvalidInputException("Admin privileges are required to create a game.");
+		}
+
+		// Cast to adminRole
+		Admin adminRole = (Admin) userRole;
+
+		// Check for name uniqueness
+		if (block223.findGame(name) != null) {
+			throw new InvalidInputException("The name of a game must be unique.");
+		}
+
+		// Check for null or empty names
+		String errMsgNameEmptyOrNull = "The name of a game must be specified.";
+		if (name == null) {
+			throw new InvalidInputException(errMsgNameEmptyOrNull);
+		}
+		else if (name.equals("")) {
+			throw new InvalidInputException(errMsgNameEmptyOrNull);
+		}
+
+		// Create new game
+		new Game(name, 1, adminRole, 1, 1, 1, 10, 10, block223);
+	}
+		
 	/**
 	 * Sets the new attributes for a game
 	 * 
@@ -373,6 +400,8 @@ public class Block223Controller {
 	public List<TOGridCell> getBlocksAtLevelOfCurrentDesignableGame(int level) throws InvalidInputException {
 		return null;
 	}
+
+	
 
 	public static TOUserMode getUserMode() {
 		TOUserMode mode;
