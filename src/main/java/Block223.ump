@@ -41,6 +41,15 @@ class Game {
    1 <@>- * BlockAssignment blockAssignments;
    1 <@>- 1 Ball ball;
    1 <@>- 1 Paddle paddle;
+   
+	public Block findBlock(int id) {
+	  for (Block block : this.getBlocks()) {
+		  if (block.getId() == id) {
+			  return block;
+		  }
+	  }
+	  return null;
+  	}
 }
 
 class Block {
@@ -54,6 +63,21 @@ class Block {
    Integer green;
    Integer blue;
    Integer points;
+   
+   before constructor {
+   		if (aRed < 0 || aRed > 255) {
+   			throw new RuntimeException("Red invalid");
+   		}
+   		if (aGreen < 0 || aGreen > 255) {
+   			throw new RuntimeException("Green invalid");
+   		}
+   		if (aBlue < 0 || aBlue > 255) {
+   			throw new RuntimeException("Blue invalid");
+   		}
+   		if (aPoints < 1 || aPoints > 1000) {
+   			throw new RuntimeException("Points invalid");
+   		}
+   }
 }
 
 // random attribute not needed anymore
