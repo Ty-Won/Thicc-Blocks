@@ -8,20 +8,20 @@ import javafx.stage.Stage;
 
 import ca.mcgill.ecse223.block.model.*;
 import ca.mcgill.ecse223.block.persistence.*;
+import ca.mcgill.ecse223.block.view.LoginPage;
 import ca.mcgill.ecse223.block.controller.*;
 
 public class Block223Application extends Application {
 
 	private static Block223 block223;
+	private static User currentUser;
 	private static UserRole currentUserRole;
 	private static Game currentGame;
 	
     @Override
     public void start(Stage stage) {
-        Label l = new Label("Thicc Blocks");
-        Scene scene = new Scene(new StackPane(l), 640, 480);
-        stage.setScene(scene);
-        stage.show();
+    	LoginPage loginPage = new LoginPage(stage); 
+    	loginPage.display();
     }
 
     public static void main(String[] args) { 
@@ -36,8 +36,20 @@ public class Block223Application extends Application {
     	if(block223 == null) {
     		block223 = Block223Persistence.load();
     	}
-    	
     	return block223;
+    }
+    
+    public static Block223 resetBlock223() {
+    	block223 = Block223Persistence.load();
+    	return block223;
+    }
+    
+    public static User getCurrentUser() {
+    	return currentUser;
+    }
+    
+    public static void setCurrentUser(User user) {
+    	currentUser = user;
     }
     
     public static UserRole getCurrentUserRole() {
@@ -46,11 +58,6 @@ public class Block223Application extends Application {
     
     public static void setCurrentUserRole(UserRole role) {
     	currentUserRole = role;
-    }
-    
-    public static Block223 resetBlock223() {
-    	block223 = Block223Persistence.load();
-    	return block223;
     }
     
     public static Game getCurrentGame() {
