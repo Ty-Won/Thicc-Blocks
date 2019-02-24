@@ -74,7 +74,7 @@ public class Block223Controller {
 			ball.setMinBallSpeedY(minBallSpeedY);
 			ball.setBallSpeedIncreaseFactor(ballSpeedIncreaseFactor);
 		} catch (Exception e) {
-			throw new InvalidInputException("The minimum speed of the ball and the ball increase factor must be greater than zero.");
+			throw new InvalidInputException("The minimum speed of the ball and the ball speed increase factor must be greater than zero.");
 		}
 		
 		// Set paddle attributes
@@ -181,8 +181,71 @@ public class Block223Controller {
 			throws InvalidInputException {
 	}
 
+	/**
+	 * Moves an existing block assignment from one position to another within a level
+	 * 
+	 * @param level - the target level to perform the move
+	 * @param oldGridHorizontalPosition - the existing horizontal position of the block assignment
+	 * @param oldGridVerticalPosition - the existing vertical position of the block assignment
+	 * @param newGridHorizontalPosition - the new horizontal position to move the block assignment to (existing block assignment must not exist)
+	 * @param newGridVerticalPosition - the new vertical position to move the block assignment to (existing block assignment must not exist)
+	 * 
+	 * @throws InvalidInputException
+	 */
 	public static void moveBlock(int level, int oldGridHorizontalPosition, int oldGridVerticalPosition,
 			int newGridHorizontalPosition, int newGridVerticalPosition) throws InvalidInputException {
+		
+		// Retrieve user role and current game
+		UserRole userRole = Block223Application.getCurrentUserRole();
+		Game game = Block223Application.getCurrentGame();
+		
+		// Check to ensure user has admin privileges
+		if(!(userRole instanceof Admin)) {
+			throw new InvalidInputException("Admin privileges are required to move a block.");
+		}
+
+		// Check to ensure that a game is set
+		if (game == null) {
+			throw new InvalidInputException("A game must be selected to move a block.");
+		}
+		
+		// Check to ensure the game admin matches current admin logged in 
+		if (userRole != game.getAdmin()) {
+			throw new InvalidInputException("Only the admin who created the game can move a block.");
+		}
+		
+		// Get targeted level
+		Level targetLevel;
+		try {
+			targetLevel = game.getLevel(level);
+		} catch (Exception e) {
+			throw new InvalidInputException("Level " + level + " does not exist for the game");
+		}
+		
+		// Check to ensure existing block doesn't already exist in new position
+		BlockAssignment newBlockAssignment = findBlockAssignment(targetLevel, newGridHorizontalPosition, newGridVerticalPosition);
+		if (newBlockAssignment != null) {
+			throw new InvalidInputException("A block already exists at location " + newGridHorizontalPosition + ", " 
+					+ newGridVerticalPosition + "." );
+		}
+		
+		// Find existing block assignment
+		BlockAssignment blockAssignment = findBlockAssignment(targetLevel, oldGridHorizontalPosition, oldGridVerticalPosition);
+		if (blockAssignment == null) {
+			throw new InvalidInputException("A block does not exist at location " + oldGridHorizontalPosition + ", " 
+					+ oldGridVerticalPosition + "." );
+		}
+		
+		// Set new block position
+		int maxHorizontalBlocks = (Game.PLAY_AREA_SIDE - 2*Game.WALL_PADDING) / (Block.SIZE + Game.COLUMNS_PADDING) + 1;
+		int maxVerticalBlocks = (Game.PLAY_AREA_SIDE - 2*Game.WALL_PADDING) / (Block.SIZE + Game.ROW_PADDING) + 1;
+		try {
+			blockAssignment.setGridHorizontalPosition(newGridHorizontalPosition);
+			blockAssignment.setGridVerticalPosition(newGridVerticalPosition);
+		} catch (Exception e) {
+			throw new InvalidInputException("The horizontal position must be between 1 and " + maxHorizontalBlocks 
+					+ ". The vertical position must be between 1 and " + maxVerticalBlocks + ".");
+		}
 	}
 
 	public static void removeBlock(int level, int gridHorizontalPosition, int gridVerticalPosition)
@@ -321,6 +384,27 @@ public class Block223Controller {
 		else mode = null;
 		
 		return mode;
+	}
+	
+	/**
+	 * Helper method for finding a target block assignment
+	 * 
+	 * @param level - the corresponding level of the block assignment
+	 * @param gridHorizontalPosition - the horizontal position on the grid
+	 * @param gridVerticalPosition - the vertical position on the grid
+	 * 
+	 * @return the BlockAssignment object if it exists, otherwise null
+	 */
+	private static BlockAssignment findBlockAssignment(Level level, int gridHorizontalPosition, int gridVerticalPosition) {
+		List<BlockAssignment> blockAssignments = level.getBlockAssignments();
+		for (BlockAssignment blockAssignment : blockAssignments) {
+			int horizontalPosition = blockAssignment.getGridHorizontalPosition();
+			int verticalPosition = blockAssignment.getGridVerticalPosition();
+			if (horizontalPosition == gridHorizontalPosition && verticalPosition == gridVerticalPosition) {
+				return blockAssignment;
+			}
+		}
+		return null;
 	}
 
 }
