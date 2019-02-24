@@ -15,8 +15,91 @@ public class Block223Controller {
 	public static void createGame(String name) throws InvalidInputException {
 	}
 
+	/**
+	 * Sets the new attributes for a game
+	 * 
+	 * @param nrLevels - number of levels 
+	 * @param nrBlocksPerLevel - number of blocks per level (must be greater than 0)
+	 * @param minBallSpeedX - minimum horizontal speed of the ball (must be greater than 0)
+	 * @param minBallSpeedY - minimum vertical speed of the ball (must be greater than 0)
+	 * @param ballSpeedIncreaseFactor - ball speed increase factor (must be greater than 0)
+	 * @param maxPaddleLength - maximum length of the paddle (must be between 0 and 400)
+	 * @param minPaddleLength - minimum length of the paddle (must be between 0 and 400)
+	 * 
+	 * @throws InvalidInputException
+	 */
 	public static void setGameDetails(int nrLevels, int nrBlocksPerLevel, int minBallSpeedX, int minBallSpeedY,
-			Double ballSpeedIncreaseFactor, int maxPaddleLength, int minPaddleLength) throws InvalidInputException {
+			double ballSpeedIncreaseFactor, int maxPaddleLength, int minPaddleLength) throws InvalidInputException {
+		
+		// Retrieve user role and current game
+		UserRole userRole = Block223Application.getCurrentUserRole();
+		Game game = Block223Application.getCurrentGame();
+		
+		// Check to ensure user has admin privileges
+		if(!(userRole instanceof Admin)) {
+			throw new InvalidInputException("Admin privileges are required to define game settings.");
+		}
+
+		// Check to ensure that a game is set
+		if (game == null) {
+			throw new InvalidInputException("A game must be selected to define game settings.");
+		}
+		
+		// Check to ensure the game admin matches current admin logged in 
+		if (userRole != game.getAdmin()) {
+			throw new InvalidInputException("Only the admin who created the game can define its game settings.");
+		}
+		
+		// Check to ensure number of levels fall within limited range
+		if (nrLevels > 0 && nrLevels < 100) {
+			throw new InvalidInputException("The number of levels must be between 1 and 99");
+		}
+		
+		// Check to ensure the minimum paddle length is less than or equal to the maximum
+		if (minPaddleLength > maxPaddleLength) {
+			throw new InvalidInputException("The minimum paddle length must be less than the maximum paddle length");
+		}
+		
+		// Set number of blocks per level
+		try {
+			game.setNrBlocksPerLevel(nrBlocksPerLevel);
+		} catch (Exception e) {
+			throw new InvalidInputException("The number of blocks per level must be greater than zero");
+		}
+		
+		// Set ball attributes
+		Ball ball = game.getBall();
+		try {
+			ball.setMinBallSpeedX(minBallSpeedX);
+			ball.setMinBallSpeedY(minBallSpeedY);
+			ball.setBallSpeedIncreaseFactor(ballSpeedIncreaseFactor);
+		} catch (Exception e) {
+			throw new InvalidInputException("The minimum speed of the ball and the ball increase factor must be greater than zero.");
+		}
+		
+		// Set paddle attributes
+		Paddle paddle = game.getPaddle();
+		try {
+			paddle.setMaxPaddleLength(maxPaddleLength);
+			paddle.setMinPaddleLength(minPaddleLength);
+		} catch (Exception e) {
+			throw new InvalidInputException("The maximum length of the paddle must be greater than 0 and less than 400.");
+		}
+		
+		// Set level attributes
+		List<Level> levels = game.getLevels();
+		int levelSize = levels.size();
+		
+		// If nrLevels is greater than current level size, then add sufficient number of levels
+		for (int i=levelSize-1; i<nrLevels; i++) {
+			levels.add(new Level(game));
+		}
+		
+		// If current level size is greater than nrLevels, then delete sufficient number of levels
+		for (int i=levelSize-1; i>=nrLevels; i--) {
+			levels.remove(i);
+		}
+		
 	}
 
 	public static void deleteGame(String name) throws InvalidInputException {
