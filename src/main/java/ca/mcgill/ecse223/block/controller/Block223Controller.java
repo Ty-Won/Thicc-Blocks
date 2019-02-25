@@ -15,8 +15,91 @@ public class Block223Controller {
 	public static void createGame(String name) throws InvalidInputException {
 	}
 
+	/**
+	 * Sets the new attributes for a game
+	 * 
+	 * @param nrLevels - number of levels 
+	 * @param nrBlocksPerLevel - number of blocks per level (must be greater than 0)
+	 * @param minBallSpeedX - minimum horizontal speed of the ball (must be greater than 0)
+	 * @param minBallSpeedY - minimum vertical speed of the ball (must be greater than 0)
+	 * @param ballSpeedIncreaseFactor - ball speed increase factor (must be greater than 0)
+	 * @param maxPaddleLength - maximum length of the paddle (must be between 0 and 400)
+	 * @param minPaddleLength - minimum length of the paddle (must be between 0 and 400)
+	 * 
+	 * @throws InvalidInputException
+	 */
 	public static void setGameDetails(int nrLevels, int nrBlocksPerLevel, int minBallSpeedX, int minBallSpeedY,
-			Double ballSpeedIncreaseFactor, int maxPaddleLength, int minPaddleLength) throws InvalidInputException {
+			double ballSpeedIncreaseFactor, int maxPaddleLength, int minPaddleLength) throws InvalidInputException {
+		
+		// Retrieve user role and current game
+		UserRole userRole = Block223Application.getCurrentUserRole();
+		Game game = Block223Application.getCurrentGame();
+		
+		// Check to ensure user has admin privileges
+		if(!(userRole instanceof Admin)) {
+			throw new InvalidInputException("Admin privileges are required to define game settings.");
+		}
+
+		// Check to ensure that a game is set
+		if (game == null) {
+			throw new InvalidInputException("A game must be selected to define game settings.");
+		}
+		
+		// Check to ensure the game admin matches current admin logged in 
+		if (userRole != game.getAdmin()) {
+			throw new InvalidInputException("Only the admin who created the game can define its game settings.");
+		}
+		
+		// Check to ensure number of levels fall within limited range
+		if (nrLevels > 0 && nrLevels < 100) {
+			throw new InvalidInputException("The number of levels must be between 1 and 99");
+		}
+		
+		// Check to ensure the minimum paddle length is less than or equal to the maximum
+		if (minPaddleLength > maxPaddleLength) {
+			throw new InvalidInputException("The minimum paddle length must be less than the maximum paddle length");
+		}
+		
+		// Set number of blocks per level
+		try {
+			game.setNrBlocksPerLevel(nrBlocksPerLevel);
+		} catch (Exception e) {
+			throw new InvalidInputException("The number of blocks per level must be greater than zero");
+		}
+		
+		// Set ball attributes
+		Ball ball = game.getBall();
+		try {
+			ball.setMinBallSpeedX(minBallSpeedX);
+			ball.setMinBallSpeedY(minBallSpeedY);
+			ball.setBallSpeedIncreaseFactor(ballSpeedIncreaseFactor);
+		} catch (Exception e) {
+			throw new InvalidInputException("The minimum speed of the ball and the ball speed increase factor must be greater than zero.");
+		}
+		
+		// Set paddle attributes
+		Paddle paddle = game.getPaddle();
+		try {
+			paddle.setMaxPaddleLength(maxPaddleLength);
+			paddle.setMinPaddleLength(minPaddleLength);
+		} catch (Exception e) {
+			throw new InvalidInputException("The maximum length of the paddle must be greater than 0 and less than 400.");
+		}
+		
+		// Set level attributes
+		List<Level> levels = game.getLevels();
+		int levelSize = levels.size();
+		
+		// If nrLevels is greater than current level size, then add sufficient number of levels
+		for (int i=levelSize-1; i<nrLevels; i++) {
+			levels.add(new Level(game));
+		}
+		
+		// If current level size is greater than nrLevels, then delete sufficient number of levels
+		for (int i=levelSize-1; i>=nrLevels; i--) {
+			levels.remove(i);
+		}
+		
 	}
 
 	public static void deleteGame(String name) throws InvalidInputException {
@@ -98,8 +181,71 @@ public class Block223Controller {
 			throws InvalidInputException {
 	}
 
+	/**
+	 * Moves an existing block assignment from one position to another within a level
+	 * 
+	 * @param level - the target level to perform the move
+	 * @param oldGridHorizontalPosition - the existing horizontal position of the block assignment
+	 * @param oldGridVerticalPosition - the existing vertical position of the block assignment
+	 * @param newGridHorizontalPosition - the new horizontal position to move the block assignment to (existing block assignment must not exist)
+	 * @param newGridVerticalPosition - the new vertical position to move the block assignment to (existing block assignment must not exist)
+	 * 
+	 * @throws InvalidInputException
+	 */
 	public static void moveBlock(int level, int oldGridHorizontalPosition, int oldGridVerticalPosition,
 			int newGridHorizontalPosition, int newGridVerticalPosition) throws InvalidInputException {
+		
+		// Retrieve user role and current game
+		UserRole userRole = Block223Application.getCurrentUserRole();
+		Game game = Block223Application.getCurrentGame();
+		
+		// Check to ensure user has admin privileges
+		if(!(userRole instanceof Admin)) {
+			throw new InvalidInputException("Admin privileges are required to move a block.");
+		}
+
+		// Check to ensure that a game is set
+		if (game == null) {
+			throw new InvalidInputException("A game must be selected to move a block.");
+		}
+		
+		// Check to ensure the game admin matches current admin logged in 
+		if (userRole != game.getAdmin()) {
+			throw new InvalidInputException("Only the admin who created the game can move a block.");
+		}
+		
+		// Get targeted level
+		Level targetLevel;
+		try {
+			targetLevel = game.getLevel(level);
+		} catch (Exception e) {
+			throw new InvalidInputException("Level " + level + " does not exist for the game");
+		}
+		
+		// Check to ensure existing block doesn't already exist in new position
+		BlockAssignment newBlockAssignment = findBlockAssignment(targetLevel, newGridHorizontalPosition, newGridVerticalPosition);
+		if (newBlockAssignment != null) {
+			throw new InvalidInputException("A block already exists at location " + newGridHorizontalPosition + ", " 
+					+ newGridVerticalPosition + "." );
+		}
+		
+		// Find existing block assignment
+		BlockAssignment blockAssignment = findBlockAssignment(targetLevel, oldGridHorizontalPosition, oldGridVerticalPosition);
+		if (blockAssignment == null) {
+			throw new InvalidInputException("A block does not exist at location " + oldGridHorizontalPosition + ", " 
+					+ oldGridVerticalPosition + "." );
+		}
+		
+		// Set new block position
+		int maxHorizontalBlocks = (Game.PLAY_AREA_SIDE - 2*Game.WALL_PADDING) / (Block.SIZE + Game.COLUMNS_PADDING) + 1;
+		int maxVerticalBlocks = (Game.PLAY_AREA_SIDE - 2*Game.WALL_PADDING) / (Block.SIZE + Game.ROW_PADDING) + 1;
+		try {
+			blockAssignment.setGridHorizontalPosition(newGridHorizontalPosition);
+			blockAssignment.setGridVerticalPosition(newGridVerticalPosition);
+		} catch (Exception e) {
+			throw new InvalidInputException("The horizontal position must be between 1 and " + maxHorizontalBlocks 
+					+ ". The vertical position must be between 1 and " + maxVerticalBlocks + ".");
+		}
 	}
 
 	public static void removeBlock(int level, int gridHorizontalPosition, int gridVerticalPosition)
@@ -238,6 +384,27 @@ public class Block223Controller {
 		else mode = null;
 		
 		return mode;
+	}
+	
+	/**
+	 * Helper method for finding a target block assignment
+	 * 
+	 * @param level - the corresponding level of the block assignment
+	 * @param gridHorizontalPosition - the horizontal position on the grid
+	 * @param gridVerticalPosition - the vertical position on the grid
+	 * 
+	 * @return the BlockAssignment object if it exists, otherwise null
+	 */
+	private static BlockAssignment findBlockAssignment(Level level, int gridHorizontalPosition, int gridVerticalPosition) {
+		List<BlockAssignment> blockAssignments = level.getBlockAssignments();
+		for (BlockAssignment blockAssignment : blockAssignments) {
+			int horizontalPosition = blockAssignment.getGridHorizontalPosition();
+			int verticalPosition = blockAssignment.getGridVerticalPosition();
+			if (horizontalPosition == gridHorizontalPosition && verticalPosition == gridVerticalPosition) {
+				return blockAssignment;
+			}
+		}
+		return null;
 	}
 
 }
