@@ -321,7 +321,34 @@ public class Block223Controller {
 			throws InvalidInputException {
 	}
 
-	public static void saveGame() throws InvalidInputException {
+	/**
+     * Saves the game (by saving the entire state of the block223 application)
+     * @throws InvalidInputException
+     */
+    public static void saveGame() throws InvalidInputException {
+        UserRole userRole = Block223Application.getCurrentUserRole();
+        Game game = Block223Application.getCurrentGame();
+
+        if (!(userRole instanceof Admin)) {
+            throw new InvalidInputException("Admin privileges are required to save a game.");
+        }
+
+        if (game == null) {
+            throw new InvalidInputException("A game must be selected to save it.");
+        }
+
+        if (userRole != game.getAdmin()) {
+            throw new InvalidInputException("Only the admin who created the game can position a block.");
+        }
+
+        try{
+            Block223 block223= Block223Application.getBlock223();
+            Block223Persistence.save(block223);
+        }catch(RuntimeException e){
+            throw new InvalidInputException("Error saving block 223 to persistence layer");
+        }
+
+
     }  
 
 	public static void register(String username, String playerPassword, String adminPassword)
