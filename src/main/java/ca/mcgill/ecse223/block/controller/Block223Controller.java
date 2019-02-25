@@ -216,15 +216,11 @@ public class Block223Controller {
                     +game.getNrBlocksPerLevel() + ") allowed for this game.");
         }
 
-        List<BlockAssignment> levelBlockAssignments = currentLevel.getBlockAssignments();
-        for (BlockAssignment blockAssignment : levelBlockAssignments) {
-            int horizontalPosition = blockAssignment.getGridHorizontalPosition();
-            int verticalPosition = blockAssignment.getGridVerticalPosition();
-            if (gridHorizontalPosition == horizontalPosition && gridVerticalPosition == verticalPosition) {
-                throw new InvalidInputException("A block already exists at location" + gridHorizontalPosition + "/"
-                        + gridVerticalPosition + ".");
-            }
-        }
+		BlockAssignment levelBlockAssignment = findBlockAssignment(currentLevel,gridHorizontalPosition,gridVerticalPosition);
+		if(levelBlockAssignment != null){
+			throw new InvalidInputException("A block already exists at location" + gridHorizontalPosition + "/"+ gridVerticalPosition + ".");
+		}
+
 
 
         Block block = game.findBlock(id);
@@ -232,9 +228,10 @@ public class Block223Controller {
             throw new InvalidInputException("The Block does not exist.");
         }
 
-
-        int maxHorizontalBlocks = (Game.PLAY_AREA_SIDE - 2*Game.WALL_PADDING) / (Block.SIZE + Game.COLUMNS_PADDING) + 1;
-        int maxVerticalBlocks = (Game.PLAY_AREA_SIDE - 2*Game.WALL_PADDING) / (Block.SIZE + Game.ROW_PADDING) + 1;
+		// x_y_capacity contains the max blocks available in x (array position 0) and y (array position 1)
+		int [] x_y_capacity = getMaxBlockCapacity();
+        int maxHorizontalBlocks = x_y_capacity[0];
+        int maxVerticalBlocks = x_y_capacity[1];
 
         if(gridHorizontalPosition>0 && gridHorizontalPosition<maxHorizontalBlocks
             && gridVerticalPosition>0 && gridVerticalPosition<maxVerticalBlocks){
@@ -306,8 +303,10 @@ public class Block223Controller {
 		}
 		
 		// Set new block position
-		int maxHorizontalBlocks = (Game.PLAY_AREA_SIDE - 2*Game.WALL_PADDING) / (Block.SIZE + Game.COLUMNS_PADDING) + 1;
-		int maxVerticalBlocks = (Game.PLAY_AREA_SIDE - 2*Game.WALL_PADDING) / (Block.SIZE + Game.ROW_PADDING) + 1;
+		// x_y_capacity contains the max blocks available in x (array position 0) and y (array position 1)
+		int [] x_y_capacity = getMaxBlockCapacity();
+		int maxHorizontalBlocks = x_y_capacity[0];
+		int maxVerticalBlocks = x_y_capacity[1];
 		try {
 			blockAssignment.setGridHorizontalPosition(newGridHorizontalPosition);
 			blockAssignment.setGridVerticalPosition(newGridVerticalPosition);
@@ -501,6 +500,21 @@ public class Block223Controller {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Helper method to calculate the maximum horizontal and vertical block capacity
+	 * 
+	 * @param game - the corresponding game to be measured
+	 * @param block - the corresponding block to be used as a measurement
+	 * 
+	 * @return int [] x_y_capacity array with 2 values, the first being the horizontal capacity and the second being vertical
+	 * 
+	 */
+	private static int[] getMaxBlockCapacity(){
+			int[] x_y_capacity = { (Game.PLAY_AREA_SIDE - 2 * Game.WALL_PADDING) / (Block.SIZE + Game.COLUMNS_PADDING) + 1,
+				((Game.PLAY_AREA_SIDE - 2 * Game.WALL_PADDING) / (Block.SIZE + Game.ROW_PADDING) + 1) };
+			return x_y_capacity;
 	}
 
 }
