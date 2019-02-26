@@ -297,8 +297,6 @@ public class Block223Controller {
 		// Retrieve user role and current game
 		UserRole userRole = Block223Application.getCurrentUserRole();
 		Game game = Block223Application.getCurrentGame();
-		Level someLevel = game.getLevel(level);
-		BlockAssignment assignment = someLevel.findBlockAssignment(gridHorizontalPosition, gridVerticalPosition);
 		
 		// Check to ensure user has admin privileges
 		if(!(userRole instanceof Admin)) {
@@ -313,6 +311,13 @@ public class Block223Controller {
 		// Check to ensure the game admin matches current admin who is logged in 
 		if (userRole != game.getAdmin()) {
 			throw new InvalidInputException("Only the admin who created the game can remove a block.");
+		}
+		
+		Level someLevel = game.getLevel(level);
+		BlockAssignment assignment = findBlockAssignment(someLevel, gridHorizontalPosition, gridVerticalPosition);
+		
+		if(assignment != null){
+			assignment.delete();
 		}
 	}
 
