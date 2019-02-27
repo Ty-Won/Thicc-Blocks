@@ -337,6 +337,19 @@ public class Block223 implements Serializable
     return wasAdded;
   }
 
+  public Game findGame(String name) {
+    
+		// Look for the game with <name>
+		for (Game curGame : games) {
+			if (curGame.getName().equals(name)) {
+				return curGame;
+			}
+		}
+
+		// No game found
+		return null;
+	}
+
   public void delete()
   {
     while (users.size() > 0)

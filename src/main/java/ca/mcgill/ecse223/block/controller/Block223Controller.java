@@ -12,9 +12,40 @@ public class Block223Controller {
 	// ****************************
 	// Modifier methods
 	// ****************************
-	public static void createGame(String name) throws InvalidInputException {
-	}
 
+	/**
+	 * Creates a new game
+	 * 
+	 * @param name - name of game to create
+	 * @throws InvalidInputException
+	 */
+	public static void createGame(String name) throws InvalidInputException {
+		Block223 block223 = Block223Application.getBlock223();
+		UserRole userRole = Block223Application.getCurrentUserRole();
+
+		// User must be admin
+		if(!(userRole instanceof Admin)) {
+			throw new InvalidInputException("Admin privileges are required to create a game.");
+		}
+		Admin adminRole = (Admin) userRole;
+
+		if (block223.findGame(name) != null) {
+			throw new InvalidInputException("The name of a game must be unique.");
+		}
+
+		// Check for null or empty names
+		String errMsg = "The name of a game must be specified.";
+		if (name == null) {
+			throw new InvalidInputException(errMsg);
+		}
+		else if (name.equals("")) {
+			throw new InvalidInputException(errMsg);
+		}
+
+		// Create new game
+		new Game(name, 1, adminRole, 1, 1, 1, 10, 10, block223);
+	}
+		
 	/**
 	 * Sets the new attributes for a game
 	 * 
@@ -108,8 +139,53 @@ public class Block223Controller {
 	public static void selectGame(String name) throws InvalidInputException {
 	}
 
+	/**
+	 * Updates a given game
+	 * 
+	 * @param name - new name for game
+	 * @param nrLevels - number of levels 
+	 * @param nrBlocksPerLevel - number of blocks per level (must be greater than 0)
+	 * @param minBallSpeedX - minimum horizontal speed of the ball (must be greater than 0)
+	 * @param minBallSpeedY - minimum vertical speed of the ball (must be greater than 0)
+	 * @param ballSpeedIncreaseFactor - ball speed increase factor (must be greater than 0)
+	 * @param maxPaddleLength - maximum length of the paddle (must be between 0 and 400)
+	 * @param minPaddleLength - minimum length of the paddle (must be between 0 and 400)
+	 * 
+	 * @throws InvalidInputException
+	 */
 	public static void updateGame(String name, int nrLevels, int nrBlocksPerLevel, int minBallSpeedX, int minBallSpeedY,
 			Double ballSpeedIncreaseFactor, int maxPaddleLength, int minPaddleLength) throws InvalidInputException {
+			
+		UserRole userRole = Block223Application.getCurrentUserRole();
+		Game game = Block223Application.getCurrentGame();
+		
+		// User must be admin
+		if(!(userRole instanceof Admin)) {
+			throw new InvalidInputException("Admin privileges are required to define game settings");
+		}
+
+		if (game == null) {
+			throw new InvalidInputException("A game must be selected to define game settings.");
+		}
+
+		// Check to see if user created game
+		if (userRole != game.getAdmin()) {
+			throw new InvalidInputException("Only the admin who created the game can define its game settings.");
+		}
+
+		// Check to see if name is valid
+		String errMsg = "The name of a game must be specified";
+		if (name == null) {
+			throw new InvalidInputException(errMsg);
+		} else if (name.isEmpty()) {
+			throw new InvalidInputException(errMsg);
+		}
+		
+		if (!game.setName(name)) {
+			throw new InvalidInputException("The name of a game must be unique.");
+		}
+
+		setGameDetails(nrLevels, nrBlocksPerLevel, minBallSpeedX, minBallSpeedY, ballSpeedIncreaseFactor, maxPaddleLength, minPaddleLength);
 	}
 
 	public static void addBlock(int red, int green, int blue, int points) throws InvalidInputException {
@@ -442,6 +518,8 @@ public class Block223Controller {
 	public List<TOGridCell> getBlocksAtLevelOfCurrentDesignableGame(int level) throws InvalidInputException {
 		return null;
 	}
+
+	
 
 	public static TOUserMode getUserMode() {
 		TOUserMode mode;
