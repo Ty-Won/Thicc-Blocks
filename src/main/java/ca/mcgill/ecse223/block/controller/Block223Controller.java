@@ -136,7 +136,33 @@ public class Block223Controller {
 	public static void deleteGame(String name) throws InvalidInputException {
 	}
 
+	/**
+	 * Selects a given game (Set game to be the current game in the application)
+	 * 
+	 * @param name - name of game to select
+	 * @throws InvalidInputException
+	 */
 	public static void selectGame(String name) throws InvalidInputException {
+		
+		Block223 block223 = Block223Application.getBlock223();
+		UserRole userRole = Block223Application.getCurrentUserRole();
+
+		// User must be admin
+		if(!(userRole instanceof Admin)) {
+			throw new InvalidInputException("Admin privileges are required to create a game.");
+		}
+
+		Game game = block223.findGame(name);
+		if (game == null) {
+			throw new InvalidInputException("A game with name " + name + " does not exist.");
+		}
+
+		// Check to see if user created game
+		if (userRole != game.getAdmin()) {
+			throw new InvalidInputException("Only the admin who created the game can define its game settings.");
+		}
+		
+		Block223Application.setCurrentGame(game);
 	}
 
 	/**
@@ -482,8 +508,38 @@ public class Block223Controller {
 		return null;
 	}
 
-	public static TOGame getCurrentDesignableGame() {
-		return null;
+	/**
+	 * Get the current designable game
+	 * 
+	 * @throws InvalidInputException
+	 */
+	public static TOGame getCurrentDesignableGame() throws InvalidInputException {
+
+		UserRole userRole = Block223Application.getCurrentUserRole();
+		Game game = Block223Application.getCurrentGame();
+
+		// User must be admin
+		if(!(userRole instanceof Admin)) {
+			throw new InvalidInputException("Admin privileges are required to access game information.");
+		}
+
+		if (game == null) {
+			throw new InvalidInputException("A game must be selected to access its information.");
+		}
+
+		// Check to see if user created game
+		if (userRole != game.getAdmin()) {
+			throw new InvalidInputException("Only the admin who created the game can access its information.");
+		}
+		
+		return new TOGame(game.getName(), 
+			game.getLevels().size(), 
+			game.getNrBlocksPerLevel(), 
+			game.getBall().getMinBallSpeedX(), 
+			game.getBall().getMinBallSpeedY(), 
+			game.getBall().getBallSpeedIncreaseFactor(), 
+			game.getPaddle().getMaxPaddleLength(), 
+			game.getPaddle().getMinPaddleLength())
 	}
 
 	public static List<TOBlock> getBlocksOfCurrentDesignableGame() throws InvalidInputException {
