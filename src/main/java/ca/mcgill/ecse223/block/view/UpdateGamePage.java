@@ -1,5 +1,8 @@
 package ca.mcgill.ecse223.block.view;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 import ca.mcgill.ecse223.block.application.Block223Application;
 import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
@@ -18,8 +21,12 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
@@ -36,17 +43,50 @@ public class UpdateGamePage {
 	}
 	
 	public void display() {
-
-        // Create the create game grid pane
+		// Create the create game grid pane
         GridPane gridPane = createGridPane();
         // Add the UI components to the grid pane
         addUIComponents(gridPane);
-        // Create the scene with gridPane as the root node
-        Scene scene = new Scene(gridPane, 1000, 800);
+        
+        //Create an HBox to hold the back button at the top of the screen
+        HBox hbButtons = new HBox();
+        
+        //Add Back Button, requires catch for file not found
+        try {
+        	FileInputStream backImageInput = new FileInputStream("Images/next.png");
+        	Image backImage = new Image(backImageInput); 
+            ImageView backImageView = new ImageView(backImage); 
+            backImageView.setFitHeight(60);
+            backImageView.setFitWidth(60);
+            
+            Button backButton = new Button("", backImageView);
+            backButton.setStyle("-fx-base: #92D3FC;");	//Styles the default background color of the button
+            hbButtons.getChildren().add(backButton);
+            hbButtons.setAlignment(Pos.CENTER_LEFT);
+            
+            backButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+    	        	//TODO Should go back to Available GAMES page
+    	            LoginPage loginPage = new LoginPage(stage); 
+    	        	loginPage.display();
+                }
+            });
+        } catch (FileNotFoundException e) {
+        	System.out.println("File not found");
+        }
+
+        //Create a border pane which will hold the gridPane in the center of the screen and the HBox at the top
+        BorderPane root = new BorderPane();
+	    root.setPadding(new Insets(20)); // space between elements and window border
+	    root.setCenter(gridPane);
+	    root.setTop(hbButtons);
+	    
+        // Create the scene with borderPane as the root node (since it contains everything else)
+        Scene scene = new Scene(root, 1000, 800);
         // Set the scene and display it
         stage.setScene(scene);
-        stage.show();
-        
+        stage.show(); 
 	}
 	
 	private GridPane createGridPane() {
@@ -72,15 +112,15 @@ public class UpdateGamePage {
         columnOneConstraints.setHalignment(HPos.LEFT);
 
         // columnTwoConstraints will be applied to all the nodes placed in column two.
-        ColumnConstraints columnTwoConstraints = new ColumnConstraints(200,200, Double.MAX_VALUE);
+        ColumnConstraints columnTwoConstraints = new ColumnConstraints(150,150, Double.MAX_VALUE);
         columnTwoConstraints.setHalignment(HPos.CENTER);
         
         //Column Three
-        ColumnConstraints columnThreeConstraints = new ColumnConstraints(10,100, Double.MAX_VALUE);
+        ColumnConstraints columnThreeConstraints = new ColumnConstraints(150,150, Double.MAX_VALUE);
         columnThreeConstraints.setHalignment(HPos.CENTER);
         
         //Column Four
-        ColumnConstraints columnFourConstraints = new ColumnConstraints(200,200, Double.MAX_VALUE);
+        ColumnConstraints columnFourConstraints = new ColumnConstraints(150,150, Double.MAX_VALUE);
         columnFourConstraints.setHalignment(HPos.CENTER);
 
         gridPane.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstraints, columnThreeConstraints, columnFourConstraints);
@@ -95,7 +135,7 @@ public class UpdateGamePage {
         headerLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, 50));
         gridPane.add(headerLabel,0,0,4,1);
         GridPane.setHalignment(headerLabel, HPos.CENTER);
-        //GridPane.setMargin(headerLabel, new Insets(20,0,20,0));
+        GridPane.setMargin(headerLabel, new Insets(40,0,20,0));
         
         // Add Game name Label
         Label gameNameLabel = new Label("Game Name: ");
@@ -107,39 +147,16 @@ public class UpdateGamePage {
         gameNameField.setPrefHeight(40);
         gridPane.add(gameNameField,1,1,3,1);
         
-        // Add Game Dimensions Label
-        Label gameDimensionsLabel = new Label("Game Dimensions: ");
-        gridPane.add(gameDimensionsLabel,0,2);
-
-        // Add width Field
-        TextField gameWidthField = new TextField();
-        gameWidthField.setPromptText("Width");
-        gameWidthField.setAlignment(Pos.CENTER);
-        gameWidthField.setPrefHeight(40);
-        gridPane.add(gameWidthField,1,2);
-        
-        // Add X Label
-        Label XLabel = new Label("X");
-        XLabel.setPrefWidth(10);
-        gridPane.add(XLabel,2,2);
-        
-        // Add height Field
-        TextField gameHeightField = new TextField();
-        gameHeightField.setPromptText("Height");
-        gameHeightField.setAlignment(Pos.CENTER);
-        gameHeightField.setPrefHeight(40);
-        gridPane.add(gameHeightField, 3,2);
-        
         // Add Max Blocks Per Level Label
         Label maxBlocksLabel = new Label("Max Blocks Per Level: ");
-        gridPane.add(maxBlocksLabel,0,3);
+        gridPane.add(maxBlocksLabel,0,2);
         
         //Add numeric spinner for max blocks per level
         Spinner<Integer> spinner = new Spinner<Integer>();
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, game.getNrBlocksPerLevel());
         spinner.setValueFactory(valueFactory);
         spinner.setPrefHeight(40);
-        gridPane.add(spinner, 2, 3);
+        gridPane.add(spinner, 2, 2);
         
         // Add Paddle Header
         Label paddleLabel = new Label("Paddle");
@@ -150,27 +167,27 @@ public class UpdateGamePage {
         paddlePane.getChildren().addAll(paddleLabel);
         
         StackPane.setAlignment(paddleLabel, Pos.CENTER);
-        gridPane.add(paddlePane,0,4,4,1);
+        gridPane.add(paddlePane,0,3,4,1);
         
         // Add Paddle Min Length Label
         Label minLengthLabel = new Label("Min Length: ");
-        gridPane.add(minLengthLabel,0,5);
+        gridPane.add(minLengthLabel,0,4);
 
         // Add Paddle Min Length Field
         TextField minLengthField = new TextField(Integer.toString(game.getMinPaddleLength()));
         minLengthField.setAlignment(Pos.CENTER);
         minLengthField.setPrefHeight(40);
-        gridPane.add(minLengthField,1,5);
+        gridPane.add(minLengthField,1,4);
         
         // Add Paddle Max Length Label
         Label maxLengthLabel = new Label("Max Length:");
-        gridPane.add(maxLengthLabel,2,5);
+        gridPane.add(maxLengthLabel,2,4);
         
         // Add Paddle Max Length Field
         TextField maxLengthField = new TextField(Integer.toString(game.getMaxPaddleLength()));
         maxLengthField.setAlignment(Pos.CENTER);
         maxLengthField.setPrefHeight(40);
-        gridPane.add(maxLengthField,3,5);
+        gridPane.add(maxLengthField,3,4);
         
         // Add Ball Header
         Label ballLabel = new Label("Ball");
@@ -181,35 +198,35 @@ public class UpdateGamePage {
         ballPane.getChildren().addAll(ballLabel);
         
         StackPane.setAlignment(ballLabel, Pos.CENTER);
-        gridPane.add(ballPane,0,6,4,1);
+        gridPane.add(ballPane,0,5,4,1);
         //GridPane.setHalignment(ballLabel, HPos.CENTER);
         
         // Add Ball Min Speed Label
         Label minSpeedLabel = new Label("Min Speed: ");
-        gridPane.add(minSpeedLabel,0,7);
+        gridPane.add(minSpeedLabel,0,6);
 
         // Add Ball Min Speed Field
         TextField minSpeedField = new TextField(Integer.toString(game.getMinBallSpeedX()));
         minSpeedField.setAlignment(Pos.CENTER);
         minSpeedField.setPrefHeight(40);
-        gridPane.add(minSpeedField,1,7);
+        gridPane.add(minSpeedField,1,6);
         
         // Add Ball Speed Up Factor Label
         Label speedUpLabel = new Label("Speed Up\nFactor:");
-        gridPane.add(speedUpLabel,2,7);
+        gridPane.add(speedUpLabel,2,6);
         
         // Add Ball Speed Up Factor Field
         TextField speedUpField = new TextField(Double.toString(game.getBallSpeedIncreaseFactor()));
         speedUpField.setAlignment(Pos.CENTER);
         speedUpField.setPrefHeight(40);
-        gridPane.add(speedUpField,3,7);
+        gridPane.add(speedUpField,3,6);
         
         // Add Levels Button
         Button levelsButton = new Button("Levels");
         levelsButton.setPrefHeight(60);
         levelsButton.setDefaultButton(true);
         levelsButton.setPrefWidth(150);
-        gridPane.add(levelsButton, 0, 8, 2, 1);
+        gridPane.add(levelsButton, 0, 7, 2, 1);
         GridPane.setHalignment(levelsButton, HPos.CENTER);
         GridPane.setMargin(levelsButton, new Insets(20,0,20,0));
         
@@ -218,7 +235,7 @@ public class UpdateGamePage {
         blocksButton.setPrefHeight(60);
         blocksButton.setDefaultButton(true);
         blocksButton.setPrefWidth(150);
-        gridPane.add(blocksButton, 2, 8, 2, 1);
+        gridPane.add(blocksButton, 2, 7, 2, 1);
         GridPane.setHalignment(blocksButton, HPos.CENTER);
         GridPane.setMargin(blocksButton, new Insets(20,0,20,0));
         
@@ -227,7 +244,7 @@ public class UpdateGamePage {
         createButton.setPrefHeight(60);
         createButton.setDefaultButton(true);
         createButton.setPrefWidth(150);
-        gridPane.add(createButton, 0, 9, 4, 1);
+        gridPane.add(createButton, 0, 8, 4, 1);
         GridPane.setHalignment(createButton, HPos.CENTER);
         GridPane.setMargin(createButton, new Insets(20,0,20,0));
         
@@ -245,6 +262,61 @@ public class UpdateGamePage {
                     	Block223Controller.updateGame(gameNameField.getText(), game.getNrLevels(), spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
     					
                     	//Currently redirects to the welcome page until other pages are added!!
+                    	//TODO Change to redirect to Available GAMES page
+                    	WelcomePage welcomePage = new WelcomePage(stage);
+    	                welcomePage.display();
+    				} catch (InvalidInputException e) {
+    					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Create Game Error", e.getMessage());
+    				}
+                	
+                } catch (NumberFormatException n) {
+                	showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Create Game Error", "Please enter only numbers in the numeric fields\n and ensure no fields are empty.");
+                }
+              
+            }
+        });
+        
+        levelsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                	int minSpeed = Integer.parseInt(minSpeedField.getText());
+                	double speedUpFactor = Double.parseDouble(speedUpField.getText());
+                	int maxLength = Integer.parseInt(maxLengthField.getText());
+                	int minLength = Integer.parseInt(minLengthField.getText());
+                	
+                	try {
+                    	Block223Controller.updateGame(gameNameField.getText(), game.getNrLevels(), spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
+    					
+                    	//Currently redirects to the welcome page until other pages are added!!
+                    	//TODO: Change to redirect to Available LEVELS page
+                    	WelcomePage welcomePage = new WelcomePage(stage);
+    	                welcomePage.display();
+    				} catch (InvalidInputException e) {
+    					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Create Game Error", e.getMessage());
+    				}
+                	
+                } catch (NumberFormatException n) {
+                	showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Create Game Error", "Please enter only numbers in the numeric fields\n and ensure no fields are empty.");
+                }
+              
+            }
+        });
+        
+        blocksButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                	int minSpeed = Integer.parseInt(minSpeedField.getText());
+                	double speedUpFactor = Double.parseDouble(speedUpField.getText());
+                	int maxLength = Integer.parseInt(maxLengthField.getText());
+                	int minLength = Integer.parseInt(minLengthField.getText());
+                	
+                	try {
+                    	Block223Controller.updateGame(gameNameField.getText(), game.getNrLevels(), spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
+    					
+                    	//Currently redirects to the welcome page until other pages are added!!
+                    	//TODO Change to redirect to Available BLOCKS page
                     	WelcomePage welcomePage = new WelcomePage(stage);
     	                welcomePage.display();
     				} catch (InvalidInputException e) {
