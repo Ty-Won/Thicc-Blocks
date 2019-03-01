@@ -323,8 +323,74 @@ public class Block223Controller {
 		
 	}
 
+
+    /**
+     * Places a new block within the grid at a specified position where there is not already an existing block
+     *
+     * @param id - The block id to specify which block type to place
+     * @param level - The level that a block will be added to
+     * @param gridHorizontalPosition - The horizontal coordinate where the block will be placed in the grid
+     * @param gridVerticalPosition - The vertical coordinate where the block will be placed in the grid
+     * @throws InvalidInputException
+     */
 	public static void positionBlock(int id, int level, int gridHorizontalPosition, int gridVerticalPosition)
 			throws InvalidInputException {
+
+    	Game game = Block223Application.getCurrentGame();
+        UserRole userRole = Block223Application.getCurrentUserRole();
+
+        if (!(userRole instanceof Admin)) {
+            throw new InvalidInputException("Admin privileges are required to access game information.");
+        }
+
+        if (game == null) {
+            throw new InvalidInputException("A game must be selected to position a block.");
+        }
+
+        if (userRole != game.getAdmin()) {
+            throw new InvalidInputException("Only the admin who created the game can position a block.");
+        }
+
+        if (level < 1 || level > game.numberOfLevels()) {
+            throw new InvalidInputException("Level " + level + " does not exist for the game.");
+        }
+
+
+        Level currentLevel = game.getLevel(level);
+        if (currentLevel.numberOfBlockAssignments() == game.getNrBlocksPerLevel()) {
+            throw new InvalidInputException("The number of blocks has reached the maximum number (" +
+                    +game.getNrBlocksPerLevel() + ") allowed for this game.");
+        }
+
+		BlockAssignment levelBlockAssignment = findBlockAssignment(currentLevel,gridHorizontalPosition,gridVerticalPosition);
+		if(levelBlockAssignment != null){
+			throw new InvalidInputException("A block already exists at location" + gridHorizontalPosition + "/"+ gridVerticalPosition + ".");
+		}
+
+
+
+        Block block = game.findBlock(id);
+        if (block == null) {
+            throw new InvalidInputException("The Block does not exist.");
+        }
+
+		// x_y_capacity contains the max blocks available in x (array position 0) and y (array position 1)
+		int [] x_y_capacity = getMaxBlockCapacity();
+        int maxHorizontalBlocks = x_y_capacity[0];
+        int maxVerticalBlocks = x_y_capacity[1];
+
+        if(gridHorizontalPosition>0 && gridHorizontalPosition<maxHorizontalBlocks
+            && gridVerticalPosition>0 && gridVerticalPosition<maxVerticalBlocks){
+
+            BlockAssignment newBlockAssignment = currentLevel.addBlockAssignment(gridHorizontalPosition,
+                                                                                gridVerticalPosition, block, game);
+
+            currentLevel.addBlockAssignment(newBlockAssignment);
+
+        }else{
+            throw new InvalidInputException("The horizontal position must be between 1 and " + maxHorizontalBlocks +
+                    " and the Vertical position must be be between 1 and" + maxVerticalBlocks);
+        }
 	}
 
 	/**
@@ -383,8 +449,10 @@ public class Block223Controller {
 		}
 		
 		// Set new block position
-		int maxHorizontalBlocks = (Game.PLAY_AREA_SIDE - 2*Game.WALL_PADDING) / (Block.SIZE + Game.COLUMNS_PADDING) + 1;
-		int maxVerticalBlocks = (Game.PLAY_AREA_SIDE - 2*Game.WALL_PADDING) / (Block.SIZE + Game.ROW_PADDING) + 1;
+		// x_y_capacity contains the max blocks available in x (array position 0) and y (array position 1)
+		int [] x_y_capacity = getMaxBlockCapacity();
+		int maxHorizontalBlocks = x_y_capacity[0];
+		int maxVerticalBlocks = x_y_capacity[1];
 		try {
 			blockAssignment.setGridHorizontalPosition(newGridHorizontalPosition);
 			blockAssignment.setGridVerticalPosition(newGridVerticalPosition);
@@ -423,8 +491,35 @@ public class Block223Controller {
 		}
 	}
 
-	public static void saveGame() throws InvalidInputException {
-	}
+	/**
+     * Saves the game (by saving the entire state of the block223 application)
+     * @throws InvalidInputException
+     */
+    public static void saveGame() throws InvalidInputException {
+        UserRole userRole = Block223Application.getCurrentUserRole();
+        Game game = Block223Application.getCurrentGame();
+
+        if (!(userRole instanceof Admin)) {
+            throw new InvalidInputException("Admin privileges are required to save a game.");
+        }
+
+        if (game == null) {
+            throw new InvalidInputException("A game must be selected to save it.");
+        }
+
+        if (userRole != game.getAdmin()) {
+            throw new InvalidInputException("Only the admin who created the game can position a block.");
+        }
+
+        try{
+            Block223 block223= Block223Application.getBlock223();
+            Block223Persistence.save(block223);
+        }catch(RuntimeException e){
+            throw new InvalidInputException("Error saving block 223 to persistence layer");
+        }
+
+
+    }  
 
 	public static void register(String username, String playerPassword, String adminPassword)
 			throws InvalidInputException {
@@ -608,6 +703,21 @@ public class Block223Controller {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Helper method to calculate the maximum horizontal and vertical block capacity
+	 * 
+	 * @param game - the corresponding game to be measured
+	 * @param block - the corresponding block to be used as a measurement
+	 * 
+	 * @return int [] x_y_capacity array with 2 values, the first being the horizontal capacity and the second being vertical
+	 * 
+	 */
+	private static int[] getMaxBlockCapacity(){
+			int[] x_y_capacity = { (Game.PLAY_AREA_SIDE - 2 * Game.WALL_PADDING) / (Block.SIZE + Game.COLUMNS_PADDING) + 1,
+				((Game.PLAY_AREA_SIDE - 2 * Game.WALL_PADDING) / (Block.SIZE + Game.ROW_PADDING) + 1) };
+			return x_y_capacity;
 	}
 
 }
