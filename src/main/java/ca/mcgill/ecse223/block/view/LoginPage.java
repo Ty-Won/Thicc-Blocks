@@ -138,6 +138,7 @@ public class LoginPage {
 					Block223Controller.login(usernameField.getText(), passwordField.getText());
 					WelcomePage welcomePage = new WelcomePage(stage);
 	                welcomePage.display();
+					
 				} catch (InvalidInputException e) {
 					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Login Error", e.getMessage());
 				}

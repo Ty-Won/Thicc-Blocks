@@ -8,7 +8,9 @@ import javafx.stage.Stage;
 
 import ca.mcgill.ecse223.block.model.*;
 import ca.mcgill.ecse223.block.persistence.*;
+import ca.mcgill.ecse223.block.view.CreateGamePage;
 import ca.mcgill.ecse223.block.view.LoginPage;
+import ca.mcgill.ecse223.block.view.UpdateGamePage;
 import ca.mcgill.ecse223.block.controller.*;
 
 public class Block223Application extends Application {
