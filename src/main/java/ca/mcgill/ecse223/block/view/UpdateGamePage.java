@@ -42,7 +42,7 @@ public class UpdateGamePage {
 		this.stage = stage;
 	}
 	
-	public void display() {
+	public void display() throws InvalidInputException {
 		// Create the create game grid pane
         GridPane gridPane = createGridPane();
         // Add the UI components to the grid pane
@@ -127,7 +127,7 @@ public class UpdateGamePage {
         return gridPane;
     }
 
-    private void addUIComponents(GridPane gridPane) {
+    private void addUIComponents(GridPane gridPane) throws InvalidInputException {
         TOGame game = Block223Controller.getCurrentDesignableGame();
     	
         // Add Header
