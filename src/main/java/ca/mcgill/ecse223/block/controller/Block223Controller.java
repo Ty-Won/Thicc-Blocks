@@ -470,7 +470,7 @@ public class Block223Controller {
 			game.getBall().getMinBallSpeedY(), 
 			game.getBall().getBallSpeedIncreaseFactor(), 
 			game.getPaddle().getMaxPaddleLength(), 
-			game.getPaddle().getMinPaddleLength())
+			game.getPaddle().getMinPaddleLength());
 	}
 
 	public static List<TOBlock> getBlocksOfCurrentDesignableGame() throws InvalidInputException {
