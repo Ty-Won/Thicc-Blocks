@@ -17,6 +17,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Alert;
@@ -36,6 +37,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -43,7 +45,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.*;
@@ -191,49 +195,166 @@ public class EditLevelPage {
                 event.consume();
             }
         });
-
-
-        Rectangle rect = new Rectangle(200, 200, Color.RED);
-        ScrollPane s1 = new ScrollPane();
-        s1.setPrefSize(120, 120);
-        s1.setContent(rect);
         
         ListView<TOBlock> lview = createBlockSelectionUI();
         root.setRight(lview);
 
+        GridPane gridPane = createBlockPlacementUI();
+        root.setCenter(gridPane);
 
-        Scene scene = new Scene(root, 1000, 800);
+
+        Scene scene = new Scene(root, 490, 390);
         stage.setScene(scene);
         stage.show();
     }
     
+    /**
+     * Creates the block selection UI
+     */
     private ListView<TOBlock> createBlockSelectionUI() {
         ListView<TOBlock> list = new ListView<>();
-        ObservableList<String> data = FXCollections.observableArrayList(
-            "chocolate", "salmon", "gold", "coral", "darkorchid",
-            "darkgoldenrod", "lightsalmon", "black", "rosybrown", "blue",
-            "blueviolet", "brown", "salmon", "gold", "coral", "darkorchid",
-            "darkgoldenrod", "lightsalmon", "black", "rosybrown", "blue",
-            "blueviolet", "brown", "salmon", "gold", "coral", "darkorchid",
-            "darkgoldenrod", "lightsalmon", "black", "rosybrown", "blue",
-            "blueviolet", "brown", "salmon", "gold", "coral", "darkorchid",
-            "darkgoldenrod", "lightsalmon", "black", "rosybrown", "blue",
-            "blueviolet", "brown");
-
+        list.setPrefWidth(100);
         list.setItems(blocks);
 
         list.setCellFactory(new Callback<ListView<TOBlock>, 
             ListCell<TOBlock>>() {
                 @Override 
                 public ListCell<TOBlock> call(ListView<TOBlock> list) {
-                    return new BlockListCell();
+                    BlockListCell cell = new BlockListCell();
+                    
+                    cell.setOnDragDetected(new EventHandler <MouseEvent>() {
+                        public void handle(MouseEvent event) {
+                            /* drag was detected, start drag-and-drop gesture*/
+                            System.out.println("onDragDetected");
+                            
+                            /* allow any transfer mode */
+                            Dragboard db = cell.startDragAndDrop(TransferMode.ANY);
+                            
+                            /* put a string on dragboard */
+                            ClipboardContent content = new ClipboardContent();
+                            content.putString(Integer.toString(cell.getItem().getId()));
+                            db.setContent(content);
+                            event.consume();
+                        }
+                    });
+
+                    cell.setOnDragDone(new EventHandler <DragEvent>() {
+                        public void handle(DragEvent event) {
+                            /* the drag-and-drop gesture ended */
+                            System.out.println("onDragDone");
+                            /* if the data was successfully moved, clear it */
+                            if (event.getTransferMode() == TransferMode.MOVE) {
+                                cell.setText("");
+                            }
+                            
+                            event.consume();
+                        }
+                    });
+                    
+
+                    return cell;
                 }
             }
         );
 
         return list;
     }
-	
+    
+    private GridPane createBlockPlacementUI() {
+        GridPane grid = new GridPane();
+        grid.setPrefWidth(390);
+        grid.setPrefHeight(390);
+        grid.setHgap(5);
+        grid.setVgap(2);
+        grid.setPadding(new Insets(0, 10, 0, 10));
+        grid.setGridLinesVisible(true);
+
+        int[] cap = Block223Controller.getMaxBlockCapacity();
+
+        for (int x = 0; x < cap[0]; x++) {
+            for (int y = 0; y < cap[1]; y++) {
+                Rectangle rect = new Rectangle(20, 20, Color.BLACK);
+                rect.setX(x);
+                rect.setY(y);
+                setupTargetDragAndDrop(rect);
+                grid.add(rect, x, y);
+            }
+        }
+
+        return grid;
+    }
+
+    private void setupTargetDragAndDrop(Rectangle target) {
+        
+        target.setOnDragOver(new EventHandler <DragEvent>() {
+            public void handle(DragEvent event) {
+                /* data is dragged over the target */
+                System.out.println("onDragOver");
+                
+                /* accept it only if it is  not dragged from the same node 
+                 * and if it has a string data */
+                if (event.getGestureSource() != target &&
+                        event.getDragboard().hasString()) {
+                    /* allow for both copying and moving, whatever user chooses */
+                    event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                }
+                
+                event.consume();
+            }
+        });
+
+        target.setOnDragEntered(new EventHandler <DragEvent>() {
+            public void handle(DragEvent event) {
+                /* the drag-and-drop gesture entered the target */
+                System.out.println("onDragEntered");
+                /* show to the user that it is an actual gesture target */
+                if (event.getGestureSource() != target &&
+                        event.getDragboard().hasString()) {
+                    //target.setFill(Color.GREEN);
+                }
+                
+                event.consume();
+            }
+        });
+
+        target.setOnDragExited(new EventHandler <DragEvent>() {
+            public void handle(DragEvent event) {
+                /* mouse moved away, remove the graphical cues */
+                //target.setFill(Color.BLACK);
+                
+                event.consume();
+            }
+        });
+        
+        target.setOnDragDropped(new EventHandler <DragEvent>() {
+            public void handle(DragEvent event) {
+                /* data dropped */
+                System.out.println("onDragDropped");
+                /* if there is a string data on dragboard, read it and use it */
+                Dragboard db = event.getDragboard();
+                boolean success = false;
+                if (db.hasString()) {
+                    int blockID = Integer.parseInt(db.getString());
+
+                    for (TOBlock block : blocks) {
+                        if (block.getId() == blockID) {
+                            System.out.println(blockID);
+                            target.setFill(Color.rgb(block.getRed(), block.getGreen(), block.getBlue()));
+                            break;
+                        }
+                    }
+
+                    success = true;
+                }
+                /* let the source know whether the string was successfully 
+                 * transferred and used */
+                event.setDropCompleted(success);
+                
+                event.consume();
+            }
+        });
+    }
+
 	private GridPane createGridPane() {
         // Instantiate a new Grid Pane
         GridPane gridPane = new GridPane();
@@ -272,20 +393,6 @@ public class EditLevelPage {
         return gridPane;
     }
 
-    private void addUIComponents(HBox hbox) {
-        Button b = new Button("add");
-        b.setOnAction(ev -> hbox.getChildren().add(new Label("Test")));
-
-        ScrollPane scrollPane = new ScrollPane(hbox);
-        scrollPane.setFitToHeight(true);
-
-        BorderPane root = new BorderPane(scrollPane);
-        root.setPadding(new Insets(15));
-        root.setTop(b);
-
-
-    }
-    
     private void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -296,28 +403,24 @@ public class EditLevelPage {
     }
 
     /**
-     * 
+     * Represents a TOBlock entry in a ListView
      */
     static class BlockListCell extends ListCell<TOBlock> {
         
-        /**
-         * 
-         */
         @Override
         public void updateItem(TOBlock item, boolean empty) {
 
             super.updateItem(item, empty);
 
-            int red = item.getRed();
-            int green = item.getGreen();
-            int blue = item.getBlue();
-
-            Rectangle rect = new Rectangle(100, 20);
+            Rectangle rect = new Rectangle(50, 50);
             if (item != null) {
+                int red = item.getRed();
+                int green = item.getGreen();
+                int blue = item.getBlue();
+
                 rect.setFill(Color.rgb(red, green, blue));
                 setGraphic(rect);
             }
-            System.out.println("Here!");
         }
     }
 
