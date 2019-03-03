@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.mcgill.ecse223.block.application.Block223Application;
+import ca.mcgill.ecse223.block.application.Block223Application.Pages;
 import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
 import ca.mcgill.ecse223.block.controller.TOGame;
@@ -25,6 +26,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
@@ -108,9 +110,10 @@ public class AvailableGames implements IPage {
     	List<TOGame> toGames = null;
     	try {
 			toGames = Block223Controller.getDesignableGames();
+			if(toGames != null) Components.showAlert(AlertType.INFORMATION, stage.getOwner(), "", "Num games loaded:\n" + toGames.size());
+			else Components.showAlert(AlertType.INFORMATION, stage.getOwner(), "", "toGames is null");
 		} catch (InvalidInputException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Components.showAlert(AlertType.INFORMATION, stage.getOwner(), "", "Error getting games:\n" + e.getMessage());
 		}
     	
     	for(TOGame game : toGames) {
@@ -163,8 +166,11 @@ public class AvailableGames implements IPage {
                 	Components.showAlert(Alert.AlertType.INFORMATION, gridPane.getScene().getWindow(), "Edit Game" , "Please select a game to edit");   
             	}
             	else {
-            		Block223Application.setCurrentGame(Game.getWithName(selectedGameName));
-                	UpdateGamePage updateGamePage = new UpdateGamePage(stage);
+        			Game game = Block223Application.getBlock223().findGame(selectedGameName);
+					if(game == null) Components.showAlert(Alert.AlertType.INFORMATION, gridPane.getScene().getWindow(), "Edit Game" , "selected game is null");
+            		
+					Block223Application.setCurrentGame(game);
+                	IPage updateGamePage = Block223Application.getPage(Pages.UpdateGame);
                 	updateGamePage.display();
             	}   
             }
@@ -179,7 +185,13 @@ public class AvailableGames implements IPage {
             	}
             	else {
             		try {
+            			Game game = Block223Application.getBlock223().findGame(selectedGameName);
+						if(game == null) Components.showAlert(Alert.AlertType.INFORMATION, gridPane.getScene().getWindow(), "Delete Game" , "game is null before delete");
+
 						Block223Controller.deleteGame(selectedGameName);
+						
+						game = Game.getWithName(selectedGameName);
+						if(game == null) Components.showAlert(Alert.AlertType.INFORMATION, gridPane.getScene().getWindow(), "Delete Game" , "game is null after delete");
 						data.remove(selectedGameName);
 	                	Components.showAlert(Alert.AlertType.INFORMATION, gridPane.getScene().getWindow(), "Delete Game" , "Successfully deleted game: " + selectedGameName);   
 						
@@ -194,119 +206,10 @@ public class AvailableGames implements IPage {
         addButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {       
-            	CreateGamePage createGamePage = new CreateGamePage(stage);
+            	IPage createGamePage = Block223Application.getPage(Pages.CreateGame);
             	createGamePage.display();
             }
         });
-        
-    	/*
-        // Add logo
-        ImageView logo = new ImageView();   
-        logo.setFitHeight(100);
-        logo.setFitWidth(100);
-        Image image = new Image(new FileInputStream("Images/logo.PNG"));
-        logo.setImage(image);
-        gridPane.add(logo, 1, 0);
-        GridPane.setHalignment(logo, HPos.CENTER);
-        GridPane.setMargin(logo, new Insets(0,75,0,0));
-        
-        // Add Header
-        Label headerLabel = new Label("THICC BLOCKS");
-        headerLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, 50));
-        gridPane.add(headerLabel, 0,1,2,1);
-        GridPane.setHalignment(headerLabel, HPos.CENTER);
-        GridPane.setMargin(headerLabel, new Insets(20, 0,20,0));
-
-        // Add Username Label
-        Label usernameLabel = new Label("Username ");
-        usernameLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 15));
-        gridPane.add(usernameLabel, 0,2);
-
-        // Add Username Field
-        TextField usernameField = new TextField();
-        usernameField.setPrefHeight(40);
-        usernameField.setStyle("-fx-border-color: black; -fx-border-radius: 1%;");
-        gridPane.add(usernameField, 1,2);
-
-        // Add Password Label
-        Label passwordLabel = new Label("Password ");
-        passwordLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 15));
-        gridPane.add(passwordLabel, 0, 3);
-
-        // Add Password Field
-        PasswordField passwordField = new PasswordField();
-        passwordField.setStyle("-fx-border-color: black; -fx-border-radius: 1%;");
-        passwordField.setPrefHeight(40);
-        gridPane.add(passwordField, 1, 3);
-
-        // Add Login Button
-        Button loginButton = new Button("LOGIN");
-        loginButton.setPrefHeight(40);
-        loginButton.setDefaultButton(true);
-        loginButton.setPrefWidth(130);
-        loginButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
-        loginButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
-        gridPane.add(loginButton, 0, 4, 2, 1);
-        GridPane.setHalignment(loginButton, HPos.CENTER);
-        GridPane.setMargin(loginButton, new Insets(20, 0,20,0));
-        
-        // Add Create User Button 
-        Button createUserButon = new Button("Create User");
-        createUserButon.setPrefHeight(40);
-        createUserButon.setDefaultButton(true);
-        createUserButon.setPrefWidth(130);
-        createUserButon.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
-        createUserButon.setFont(Font.font("Arial", FontWeight.NORMAL, 15));
-        gridPane.add(createUserButon, 0, 5, 2, 1);
-        GridPane.setHalignment(createUserButon, HPos.CENTER);
-        GridPane.setMargin(createUserButon, new Insets(20, 0,20,0));
-
-        loginButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                if(usernameField.getText().isEmpty()) {
-                    Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Login Error", "Please enter a username");
-                    return;
-                }
-                if(passwordField.getText().isEmpty()) {
-                    Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Login Error", "Please enter a password");
-                    return;
-                }
-                
-                try {
-					Block223Controller.login(usernameField.getText(), passwordField.getText());
-					WelcomePage welcomePage = new WelcomePage(stage);
-	                welcomePage.display();
-					
-				} catch (InvalidInputException e) {
-					Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Login Error", e.getMessage());
-				}
-              
-            }
-        });
-        
-        createUserButon.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                if(usernameField.getText().isEmpty()) {
-                    Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Registration Error", "Please enter a username");
-                    return;
-                }
-                if(passwordField.getText().isEmpty()) {
-                	Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Registration Error", "Please enter a password");
-                    return;
-                }
-
-                try {
-					Block223Controller.register(usernameField.getText(), passwordField.getText(), null);
-					Components.showAlert(Alert.AlertType.CONFIRMATION, gridPane.getScene().getWindow(), "Registration Successful!", "Registration Successful!");
-				} catch (InvalidInputException e) {
-					Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Registration Error", e.getMessage());
-				}
-              
-            }
-        });
-    	*/
     }
 
 }

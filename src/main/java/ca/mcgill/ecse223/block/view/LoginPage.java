@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import ca.mcgill.ecse223.block.application.Block223Application;
+import ca.mcgill.ecse223.block.application.Block223Application.Pages;
 import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
 import ca.mcgill.ecse223.block.model.Block223;
@@ -168,7 +169,7 @@ public class LoginPage implements IPage {
                 
                 try {
 					Block223Controller.login(usernameField.getText(), passwordField.getText());
-					WelcomePage welcomePage = new WelcomePage(stage);
+					IPage welcomePage = Block223Application.getPage(Pages.Welcome);
 	                welcomePage.display();
 					
 				} catch (InvalidInputException e) {

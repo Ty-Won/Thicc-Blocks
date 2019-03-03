@@ -3,12 +3,14 @@ package ca.mcgill.ecse223.block.application;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import ca.mcgill.ecse223.block.model.*;
 import ca.mcgill.ecse223.block.persistence.*;
 import ca.mcgill.ecse223.block.view.AvailableGames;
+import ca.mcgill.ecse223.block.view.Components;
 import ca.mcgill.ecse223.block.view.CreateGamePage;
 import ca.mcgill.ecse223.block.view.EditLevelPage;
 import ca.mcgill.ecse223.block.view.IPage;
@@ -48,11 +50,13 @@ public class Block223Application extends Application {
     	try {
 			Block223Controller.register("Michael", "abc", "123");
 			Block223Controller.login("Michael", "123");
-			Block223Controller.createGame("Game 1");
-			Block223Controller.createGame("ANother one");
+			
+			//System.out.println(block223.getGames().size());
+			//Block223Controller.createGame("Game 1");
+			//Block223Controller.createGame("ANother one");
+			//System.out.println(block223.getGames().size());
 		} catch (InvalidInputException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Components.showAlert(AlertType.INFORMATION, stage.getOwner(),  "", "throw in start:\n" + e.getMessage());
 		}
     	
     	IPage availableGames = Block223Application.getPage(Pages.AvaliableGames);

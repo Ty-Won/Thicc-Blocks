@@ -46,6 +46,8 @@ public class Block223Controller {
 		// so we pass in a temp string for the name and then manually call setName
 		Game game = new Game("sometempstring", 1, adminRole, 1, 1, 1, 10, 10, block223);
 		game.setName(name);
+		
+		Block223Persistence.save(block223);
 	}
 		
 	/**
@@ -136,6 +138,28 @@ public class Block223Controller {
 	}
 
 	public static void deleteGame(String name) throws InvalidInputException {
+		Block223 block223 = Block223Application.getBlock223();
+		Game game = block223.findGame(name);
+		if(game == null) {
+			System.out.println("WARNING: game was null in deleteGame");
+			return;
+		}
+		
+		UserRole userRole = Block223Application.getCurrentUserRole();
+		
+		if(!(userRole instanceof Admin)) {
+			throw new InvalidInputException("Admin privileges are required to delete a game.");
+		}
+		
+		Admin admin = (Admin) userRole;
+		if(admin != game.getAdmin()) {
+			throw new InvalidInputException("Only the admin who created the game can delete the game.");
+		}
+		
+		System.out.println("games in deletGame before remove: " + block223.getGames().size());
+		game.delete();
+		Block223Persistence.save(block223);
+		System.out.println("games in deletGame after remove: " + block223.getGames().size());
 	}
 
 	/**
@@ -609,7 +633,8 @@ public class Block223Controller {
 		}
 		
 		Admin admin = (Admin) userRole;
-		List<Game> games = admin.getGames();
+		List<Game> games = block223.getGames();
+		System.out.println("games: " + games.size());
 		
 		List<TOGame> toGames = new ArrayList<TOGame>();
 		for(Game game : games) {
