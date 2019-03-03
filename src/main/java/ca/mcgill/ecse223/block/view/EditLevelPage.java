@@ -81,120 +81,21 @@ public class EditLevelPage {
         this.stage = stage;
         this.levelID = levelID;
         
+        // Get the current game's block
         try {
-            
             this.blocks = FXCollections.observableList(Block223Controller.getBlocksOfCurrentDesignableGame());
         } catch (InvalidInputException e) {
             showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
         }
-
-        //System.out.println(blocks.size());
     }
-	
+    
+    /**
+     * Display the page
+     */
 	public void display() {
 
         // Create the main border pain.        
         this.root = new BorderPane();
-
-        final Text source = new Text(50, 100, "DRAG ME");
-        source.setScaleX(2.0);
-        source.setScaleY(2.0);
-
-        final Text target = new Text(250, 100, "DROP HERE");
-        target.setScaleX(2.0);
-        target.setScaleY(2.0);
-
-        Image image = new Image("http://www.sohme.com/wp-content/uploads/2015/07/red-180x180.png", true);
-
-        source.setOnDragDetected(new EventHandler <MouseEvent>() {
-            public void handle(MouseEvent event) {
-                /* drag was detected, start drag-and-drop gesture*/
-                System.out.println("onDragDetected");
-                
-                /* allow any transfer mode */
-                Dragboard db = source.startDragAndDrop(TransferMode.ANY);
-                
-                /* put a string on dragboard */
-                ClipboardContent content = new ClipboardContent();
-                content.putString(source.getText());
-                content.putImage(image);
-                db.setContent(content);
-                
-                event.consume();
-            }
-        });
-
-        target.setOnDragOver(new EventHandler <DragEvent>() {
-            public void handle(DragEvent event) {
-                /* data is dragged over the target */
-                System.out.println("onDragOver");
-                
-                /* accept it only if it is  not dragged from the same node 
-                 * and if it has a string data */
-                if (event.getGestureSource() != target &&
-                        event.getDragboard().hasString()) {
-                    /* allow for both copying and moving, whatever user chooses */
-                    event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-                }
-                
-                event.consume();
-            }
-        });
-
-        target.setOnDragEntered(new EventHandler <DragEvent>() {
-            public void handle(DragEvent event) {
-                /* the drag-and-drop gesture entered the target */
-                System.out.println("onDragEntered");
-                /* show to the user that it is an actual gesture target */
-                if (event.getGestureSource() != target &&
-                        event.getDragboard().hasString()) {
-                    target.setFill(Color.GREEN);
-                }
-                
-                event.consume();
-            }
-        });
-
-        target.setOnDragExited(new EventHandler <DragEvent>() {
-            public void handle(DragEvent event) {
-                /* mouse moved away, remove the graphical cues */
-                target.setFill(Color.BLACK);
-                
-                event.consume();
-            }
-        });
-        
-        target.setOnDragDropped(new EventHandler <DragEvent>() {
-            public void handle(DragEvent event) {
-                /* data dropped */
-                System.out.println("onDragDropped");
-                /* if there is a string data on dragboard, read it and use it */
-                Dragboard db = event.getDragboard();
-                boolean success = false;
-                if (db.hasString()) {
-                    target.setText(db.getString());
-                    success = true;
-                }
-                /* let the source know whether the string was successfully 
-                 * transferred and used */
-                event.setDropCompleted(success);
-                
-                event.consume();
-            }
-        });
-
-        source.setOnDragDone(new EventHandler <DragEvent>() {
-            public void handle(DragEvent event) {
-                /* the drag-and-drop gesture ended */
-                System.out.println("onDragDone");
-                /* if the data was successfully moved, clear it */
-                if (event.getTransferMode() == TransferMode.MOVE) {
-                    source.setText("");
-                }
-                
-                event.consume();
-            }
-        });
         
         ListView<TOBlock> lview = createBlockSelectionUI();
         root.setRight(lview);
@@ -210,12 +111,15 @@ public class EditLevelPage {
     
     /**
      * Creates the block selection UI
+     * 
+     * @param ListView<TOBlock> - ListView containing a set of Block TOs
      */
-    private ListView<TOBlock> createBlockSelectionUI() {
+    private ListView<TOBlock> createBlockSelectionUI() {        
         ListView<TOBlock> list = new ListView<>();
         list.setPrefWidth(100);
         list.setItems(blocks);
 
+        // Define the listView's cell factory
         list.setCellFactory(new Callback<ListView<TOBlock>, 
             ListCell<TOBlock>>() {
                 @Override 
@@ -226,10 +130,8 @@ public class EditLevelPage {
                         public void handle(MouseEvent event) {
                             /* drag was detected, start drag-and-drop gesture*/
                             System.out.println("onDragDetected");
-                            
                             /* allow any transfer mode */
                             Dragboard db = cell.startDragAndDrop(TransferMode.ANY);
-                            
                             /* put a string on dragboard */
                             ClipboardContent content = new ClipboardContent();
                             content.putString(Integer.toString(cell.getItem().getId()));
@@ -237,21 +139,7 @@ public class EditLevelPage {
                             event.consume();
                         }
                     });
-
-                    cell.setOnDragDone(new EventHandler <DragEvent>() {
-                        public void handle(DragEvent event) {
-                            /* the drag-and-drop gesture ended */
-                            System.out.println("onDragDone");
-                            /* if the data was successfully moved, clear it */
-                            if (event.getTransferMode() == TransferMode.MOVE) {
-                                cell.setText("");
-                            }
-                            
-                            event.consume();
-                        }
-                    });
-                    
-
+              
                     return cell;
                 }
             }
@@ -260,6 +148,9 @@ public class EditLevelPage {
         return list;
     }
     
+    /**
+     * Creates the block placement UI
+     */
     private GridPane createBlockPlacementUI() {
         GridPane grid = new GridPane();
         grid.setPrefWidth(390);
@@ -273,7 +164,9 @@ public class EditLevelPage {
 
         for (int x = 0; x < cap[0]; x++) {
             for (int y = 0; y < cap[1]; y++) {
-                Rectangle rect = new Rectangle(20, 20, Color.BLACK);
+
+                // Allocate each cell a white rectangle
+                Rectangle rect = new Rectangle(20, 20, Color.WHITE);
                 rect.setX(x);
                 rect.setY(y);
                 setupTargetDragAndDrop(rect);
@@ -303,29 +196,6 @@ public class EditLevelPage {
             }
         });
 
-        target.setOnDragEntered(new EventHandler <DragEvent>() {
-            public void handle(DragEvent event) {
-                /* the drag-and-drop gesture entered the target */
-                System.out.println("onDragEntered");
-                /* show to the user that it is an actual gesture target */
-                if (event.getGestureSource() != target &&
-                        event.getDragboard().hasString()) {
-                    //target.setFill(Color.GREEN);
-                }
-                
-                event.consume();
-            }
-        });
-
-        target.setOnDragExited(new EventHandler <DragEvent>() {
-            public void handle(DragEvent event) {
-                /* mouse moved away, remove the graphical cues */
-                //target.setFill(Color.BLACK);
-                
-                event.consume();
-            }
-        });
-        
         target.setOnDragDropped(new EventHandler <DragEvent>() {
             public void handle(DragEvent event) {
                 /* data dropped */
@@ -335,14 +205,22 @@ public class EditLevelPage {
                 boolean success = false;
                 if (db.hasString()) {
                     int blockID = Integer.parseInt(db.getString());
+                    try {
+                        TOBlock block = Block223Controller.getBlockOfCurrentDesignableGame(blockID);
 
-                    for (TOBlock block : blocks) {
-                        if (block.getId() == blockID) {
-                            System.out.println(blockID);
-                            target.setFill(Color.rgb(block.getRed(), block.getGreen(), block.getBlue()));
-                            break;
-                        }
+                        int x = (int) target.getX();
+                        int y = (int) target.getY();
+
+                        // Position block
+                        Block223Controller.positionBlock(blockID, levelID, x, y);
+
+                        System.out.println("X: " + x + " | Y: " + y);
+
+                        target.setFill(Color.rgb(block.getRed(), block.getGreen(), block.getBlue()));
+                    } catch (InvalidInputException e) {
+                        showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
                     }
+
 
                     success = true;
                 }
@@ -353,44 +231,6 @@ public class EditLevelPage {
                 event.consume();
             }
         });
-    }
-
-	private GridPane createGridPane() {
-        // Instantiate a new Grid Pane
-        GridPane gridPane = new GridPane();
-
-        // Position the pane at the center of the screen, both vertically and horizontally
-        gridPane.setAlignment(Pos.CENTER);
-
-        // Set a padding of 20px on each side
-        gridPane.setPadding(new Insets(40, 40, 40, 40)); 
-
-        // Set the horizontal gap between columns
-        gridPane.setHgap(10);
-
-        // Set the vertical gap between rows
-        gridPane.setVgap(10);
-
-        // ------ Add Column Constraints -------
-
-        // columnOneConstraints will be applied to all the nodes placed in column one.
-        ColumnConstraints columnOneConstraints = new ColumnConstraints(150, 150, Double.MAX_VALUE);
-        columnOneConstraints.setHalignment(HPos.LEFT);
-
-        // columnTwoConstraints will be applied to all the nodes placed in column two.
-        ColumnConstraints columnTwoConstraints = new ColumnConstraints(150,150, Double.MAX_VALUE);
-        columnTwoConstraints.setHalignment(HPos.CENTER);
-        
-        //Column Three
-        ColumnConstraints columnThreeConstraints = new ColumnConstraints(150,150, Double.MAX_VALUE);
-        columnThreeConstraints.setHalignment(HPos.CENTER);
-        
-        //Column Four
-        ColumnConstraints columnFourConstraints = new ColumnConstraints(150,150, Double.MAX_VALUE);
-        columnFourConstraints.setHalignment(HPos.CENTER);
-
-        gridPane.getColumnConstraints().addAll(columnOneConstraints, columnTwoConstraints, columnThreeConstraints, columnFourConstraints);
-        return gridPane;
     }
 
     private void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {

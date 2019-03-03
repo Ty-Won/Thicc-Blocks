@@ -82,7 +82,7 @@ public class Block223Controller {
 		}
 		
 		// Check to ensure number of levels fall within limited range
-		if (nrLevels > 0 && nrLevels < 100) {
+		if (nrLevels < 0 || nrLevels > 100) {
 			throw new InvalidInputException("The number of levels must be between 1 and 99");
 		}
 		
