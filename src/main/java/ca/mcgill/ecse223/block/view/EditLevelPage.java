@@ -77,9 +77,8 @@ public class EditLevelPage implements IPage {
      */
     private int levelID;
 	
-	public EditLevelPage(Stage stage, int levelID) {
+	public EditLevelPage(Stage stage) {
         this.stage = stage;
-        this.levelID = levelID;
         
         try {
             
@@ -90,6 +89,10 @@ public class EditLevelPage implements IPage {
 
         //System.out.println(blocks.size());
     }
+	
+	public void setLevelID(int levelID) {
+		this.levelID = levelID;
+	}
 	
 	public void display() {
 
