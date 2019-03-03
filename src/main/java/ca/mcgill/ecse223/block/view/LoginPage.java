@@ -1,5 +1,8 @@
 package ca.mcgill.ecse223.block.view;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 import ca.mcgill.ecse223.block.application.Block223Application;
 import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
@@ -15,10 +18,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -37,11 +43,15 @@ public class LoginPage {
         // Create the login grid pane
         GridPane gridPane = createGridPane();
         // Add the UI components to the grid pane
-        addUIComponents(gridPane);
+        try {
+			addUIComponents(gridPane);
+		} catch (FileNotFoundException e) {
+			Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Error loading page:", e.getMessage());
+		}
         // Create the scene with gridPane as the root node
-        Scene scene = new Scene(gridPane, 1000, 600);
+        Scene scene = new Scene(gridPane, Block223Application.APPLICATION_WIDTH, Block223Application.APPLICATION_HEIGHT, Color.WHITE);
         // Set the title scene and display it
-        stage.setTitle("ThiccBlocks Application");
+        stage.setTitle("Thicc Blocks Application");
         stage.setScene(scene);
         stage.show();
         
@@ -63,6 +73,9 @@ public class LoginPage {
         // Set the vertical gap between rows
         gridPane.setVgap(10);
 
+        // set background color to white
+        gridPane.setStyle("-fx-background-color: #fff;");
+        
         // Add Column Constraints
 
         // columnOneConstraints will be applied to all the nodes placed in column one.
@@ -78,38 +91,55 @@ public class LoginPage {
         return gridPane;
     }
 
-    private void addUIComponents(GridPane gridPane) {
+    private void addUIComponents(GridPane gridPane) throws FileNotFoundException {
+        
+        // Add logo
+        ImageView logo = new ImageView();   
+        logo.setFitHeight(100);
+        logo.setFitWidth(100);
+        Image image = new Image(new FileInputStream("Images/logo.PNG"));
+        logo.setImage(image);
+        gridPane.add(logo, 1, 0);
+        GridPane.setHalignment(logo, HPos.CENTER);
+        GridPane.setMargin(logo, new Insets(0,75,0,0));
+        
         // Add Header
         Label headerLabel = new Label("THICC BLOCKS");
         headerLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, 50));
-        gridPane.add(headerLabel, 0,0,2,1);
+        gridPane.add(headerLabel, 0,1,2,1);
         GridPane.setHalignment(headerLabel, HPos.CENTER);
         GridPane.setMargin(headerLabel, new Insets(20, 0,20,0));
 
         // Add Username Label
         Label usernameLabel = new Label("Username ");
-        gridPane.add(usernameLabel, 0,1);
+        usernameLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 15));
+        gridPane.add(usernameLabel, 0,2);
 
         // Add Username Field
         TextField usernameField = new TextField();
         usernameField.setPrefHeight(40);
-        gridPane.add(usernameField, 1,1);
+        usernameField.setStyle("-fx-border-color: black; -fx-border-radius: 1%;");
+        gridPane.add(usernameField, 1,2);
 
         // Add Password Label
         Label passwordLabel = new Label("Password ");
-        gridPane.add(passwordLabel, 0, 2);
+        passwordLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 15));
+        gridPane.add(passwordLabel, 0, 3);
 
         // Add Password Field
         PasswordField passwordField = new PasswordField();
+        passwordField.setStyle("-fx-border-color: black; -fx-border-radius: 1%;");
         passwordField.setPrefHeight(40);
-        gridPane.add(passwordField, 1, 2);
+        gridPane.add(passwordField, 1, 3);
 
         // Add Login Button
-        Button loginButton = new Button("Login");
+        Button loginButton = new Button("LOGIN");
         loginButton.setPrefHeight(40);
         loginButton.setDefaultButton(true);
-        loginButton.setPrefWidth(100);
-        gridPane.add(loginButton, 0, 3, 2, 1);
+        loginButton.setPrefWidth(130);
+        loginButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
+        loginButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
+        gridPane.add(loginButton, 0, 4, 2, 1);
         GridPane.setHalignment(loginButton, HPos.CENTER);
         GridPane.setMargin(loginButton, new Insets(20, 0,20,0));
         
@@ -117,8 +147,10 @@ public class LoginPage {
         Button createUserButon = new Button("Create User");
         createUserButon.setPrefHeight(40);
         createUserButon.setDefaultButton(true);
-        createUserButon.setPrefWidth(100);
-        gridPane.add(createUserButon, 0, 4, 2, 1);
+        createUserButon.setPrefWidth(130);
+        createUserButon.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
+        createUserButon.setFont(Font.font("Arial", FontWeight.NORMAL, 15));
+        gridPane.add(createUserButon, 0, 5, 2, 1);
         GridPane.setHalignment(createUserButon, HPos.CENTER);
         GridPane.setMargin(createUserButon, new Insets(20, 0,20,0));
 
@@ -126,11 +158,11 @@ public class LoginPage {
             @Override
             public void handle(ActionEvent event) {
                 if(usernameField.getText().isEmpty()) {
-                    showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Login Error", "Please enter a username");
+                    Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Login Error", "Please enter a username");
                     return;
                 }
                 if(passwordField.getText().isEmpty()) {
-                    showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Login Error", "Please enter a password");
+                    Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Login Error", "Please enter a password");
                     return;
                 }
                 
@@ -140,7 +172,7 @@ public class LoginPage {
 	                welcomePage.display();
 					
 				} catch (InvalidInputException e) {
-					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Login Error", e.getMessage());
+					Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Login Error", e.getMessage());
 				}
               
             }
@@ -150,32 +182,23 @@ public class LoginPage {
             @Override
             public void handle(ActionEvent event) {
                 if(usernameField.getText().isEmpty()) {
-                    showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Registration Error", "Please enter a username");
+                    Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Registration Error", "Please enter a username");
                     return;
                 }
                 if(passwordField.getText().isEmpty()) {
-                    showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Registration Error", "Please enter a password");
+                	Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Registration Error", "Please enter a password");
                     return;
                 }
 
                 try {
 					Block223Controller.register(usernameField.getText(), passwordField.getText(), null);
-					showAlert(Alert.AlertType.CONFIRMATION, gridPane.getScene().getWindow(), "Registration Successful!", "Registration Successful!");
+					Components.showAlert(Alert.AlertType.CONFIRMATION, gridPane.getScene().getWindow(), "Registration Successful!", "Registration Successful!");
 				} catch (InvalidInputException e) {
-					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Registration Error", e.getMessage());
+					Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Registration Error", e.getMessage());
 				}
               
             }
         });
-    }
-
-    private void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.initOwner(owner);
-        alert.show();
     }
 
 }

@@ -5,7 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-
+import javafx.stage.StageStyle;
 import ca.mcgill.ecse223.block.model.*;
 import ca.mcgill.ecse223.block.persistence.*;
 import ca.mcgill.ecse223.block.view.CreateGamePage;
@@ -14,6 +14,9 @@ import ca.mcgill.ecse223.block.view.UpdateGamePage;
 import ca.mcgill.ecse223.block.controller.*;
 
 public class Block223Application extends Application {
+	
+	public static final int APPLICATION_WIDTH = 1000;
+	public static final int APPLICATION_HEIGHT = 600;
 
 	private static Block223 block223;
 	private static User currentUser;
@@ -22,6 +25,7 @@ public class Block223Application extends Application {
 	
     @Override
     public void start(Stage stage) {
+    	
     	LoginPage loginPage = new LoginPage(stage); 
     	loginPage.display();
     }
@@ -69,5 +73,6 @@ public class Block223Application extends Application {
     public static void setCurrentGame(Game game) {
     	currentGame = game;
     }
-    
+ 
+   
 }
