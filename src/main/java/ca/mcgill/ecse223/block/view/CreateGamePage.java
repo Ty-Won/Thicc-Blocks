@@ -33,7 +33,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class CreateGamePage {
+public class CreateGamePage implements IPage {
 	
 	Stage stage;
 	

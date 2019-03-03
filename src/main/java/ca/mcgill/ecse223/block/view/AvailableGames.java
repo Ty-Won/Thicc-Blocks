@@ -37,7 +37,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class AvailableGames {
+public class AvailableGames implements IPage {
 	
 	Stage stage;
 	
@@ -165,11 +165,7 @@ public class AvailableGames {
             	else {
             		Block223Application.setCurrentGame(Game.getWithName(selectedGameName));
                 	UpdateGamePage updateGamePage = new UpdateGamePage(stage);
-                	try {
-						updateGamePage.display();
-					} catch (InvalidInputException e) {
-	                	Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Edit Game" , "Unable to switch to update game page: " + e.getMessage());   
-					}
+                	updateGamePage.display();
             	}   
             }
         });

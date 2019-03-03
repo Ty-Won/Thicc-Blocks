@@ -53,7 +53,7 @@ import javafx.collections.ObservableList;
 import javafx.event.*;
 
 
-public class EditLevelPage {
+public class EditLevelPage implements IPage {
 	
     Stage stage;
     

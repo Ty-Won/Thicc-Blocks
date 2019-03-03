@@ -30,7 +30,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class LoginPage {
+public class LoginPage implements IPage {
 	
 	Stage stage;
 	
