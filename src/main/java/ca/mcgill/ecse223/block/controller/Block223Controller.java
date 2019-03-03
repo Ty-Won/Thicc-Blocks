@@ -662,8 +662,35 @@ public class Block223Controller {
 		return result;
 	}
 
+	/**
+	 * Returns the Block with "id" for the current game
+	 * 
+	 * @param id - ID of the block
+	 * @throws InvalidInputException
+	 */
 	public static TOBlock getBlockOfCurrentDesignableGame(int id) throws InvalidInputException {
-		return null;
+		Game game = Block223Application.getCurrentGame();
+
+		//Beginning of method input checks
+		if(!(Block223Application.getCurrentUserRole() instanceof Admin)) {
+			throw new InvalidInputException("Admin privileges are required to access game information.");
+		}
+
+		if(game == null) {
+			throw new InvalidInputException("A game must be selected to access its information.");
+		}
+
+		if (Block223Application.getCurrentUserRole() != game.getAdmin()) {
+			throw new InvalidInputException("Only the admin who created the game can access its information.");
+		}
+
+		Block block = game.findBlock(id);
+
+		if (block == null) {
+			throw new InvalidInputException("The block does not exist");
+		}
+
+		return new TOBlock(block.getId(), block.getRed(), block.getGreen(), block.getBlue(), block.getPoints());
 	}
 
 	public List<TOGridCell> getBlocksAtLevelOfCurrentDesignableGame(int level) throws InvalidInputException {
@@ -714,7 +741,7 @@ public class Block223Controller {
 	 * @return int [] x_y_capacity array with 2 values, the first being the horizontal capacity and the second being vertical
 	 * 
 	 */
-	private static int[] getMaxBlockCapacity(){
+	public static int[] getMaxBlockCapacity(){
 			int[] x_y_capacity = { (Game.PLAY_AREA_SIDE - 2 * Game.WALL_PADDING) / (Block.SIZE + Game.COLUMNS_PADDING) + 1,
 				((Game.PLAY_AREA_SIDE - 2 * Game.WALL_PADDING) / (Block.SIZE + Game.ROW_PADDING) + 1) };
 			return x_y_capacity;
