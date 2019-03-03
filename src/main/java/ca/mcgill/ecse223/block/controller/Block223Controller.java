@@ -42,8 +42,10 @@ public class Block223Controller {
 			throw new InvalidInputException(errMsg);
 		}
 
-		// Create new game
-		new Game(name, 1, adminRole, 1, 1, 1, 10, 10, block223);
+		// For some reason, this umple generated constructor does not call setName,
+		// so we pass in a temp string for the name and then manually call setName
+		Game game = new Game("sometempstring", 1, adminRole, 1, 1, 1, 10, 10, block223);
+		game.setName(name);
 	}
 		
 	/**
@@ -599,8 +601,30 @@ public class Block223Controller {
 	// ****************************
 	// Query methods
 	// ****************************
-	public static List<TOGame> getDesignableGames() {
-		return null;
+	public static List<TOGame> getDesignableGames() throws InvalidInputException {
+		Block223 block223 = Block223Application.getBlock223();
+		UserRole userRole = Block223Application.getCurrentUserRole();
+		if(!(userRole instanceof Admin)) {
+			throw new InvalidInputException("Admin privileges are required to access game information.");
+		}
+		
+		Admin admin = (Admin) userRole;
+		List<Game> games = admin.getGames();
+		
+		List<TOGame> toGames = new ArrayList<TOGame>();
+		for(Game game : games) {
+			TOGame toGame = new TOGame(game.getName(), 
+							game.getLevels().size(), 
+							game.getNrBlocksPerLevel(), 
+							game.getBall().getMinBallSpeedX(), 
+							game.getBall().getMinBallSpeedY(), 
+							game.getBall().getBallSpeedIncreaseFactor(), 
+							game.getPaddle().getMaxPaddleLength(), 
+							game.getPaddle().getMinPaddleLength());
+			toGames.add(toGame);
+		}
+		
+		return toGames;
 	}
 
 	/**
