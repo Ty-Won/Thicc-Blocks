@@ -66,9 +66,8 @@ public class CreateGamePage {
             backButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-    	        	//TODO Change to redirect to Available Games page
-    	            LoginPage loginPage = new LoginPage(stage); 
-    	        	loginPage.display();
+                	AvailableGames availableGames = new AvailableGames(stage);
+                	availableGames.display();
                 }
             });
         } catch (FileNotFoundException e) {
@@ -258,10 +257,8 @@ public class CreateGamePage {
                     	Block223Controller.createGame(gameNameField.getText());
                     	Block223Controller.setGameDetails(1, spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
                     	
-                    	//Currently redirects to the welcome page until other pages are added!!
-                    	//TODO Change to redirect to Available Games page
-                    	WelcomePage welcomePage = new WelcomePage(stage);
-    	                welcomePage.display();
+                    	AvailableGames availableGames = new AvailableGames(stage);
+                    	availableGames.display();
     	                
     				} catch (InvalidInputException e) {
     					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Create Game Error", e.getMessage());
