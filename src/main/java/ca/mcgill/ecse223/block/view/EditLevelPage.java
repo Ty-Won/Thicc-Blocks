@@ -231,6 +231,7 @@ public class EditLevelPage {
                 // Allocate each cell a white rectangle
                 Rectangle rect = new Rectangle(20, 20, Color.WHITE);
                 
+                // ---- TODO :: ADD BLOCK ASSIGNMENT LOADING -----
 
                 // Set the X & Y coordinates to +1 of actual.
                 // gridHorizontalPosition & gridVerticlePosition are indexed from 1
