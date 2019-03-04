@@ -256,7 +256,7 @@ public class UpdateGamePage implements IPage {
         
         
         final int gameNrLevels = game.getNrLevels();
-        createButton.setOnAction(new EventHandler<ActionEvent>() {
+        updateButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 try {
