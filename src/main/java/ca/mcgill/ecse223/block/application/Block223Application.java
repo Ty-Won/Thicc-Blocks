@@ -16,6 +16,7 @@ import ca.mcgill.ecse223.block.view.CreateGamePage;
 import ca.mcgill.ecse223.block.view.EditLevelPage;
 import ca.mcgill.ecse223.block.view.IPage;
 import ca.mcgill.ecse223.block.view.LoginPage;
+import ca.mcgill.ecse223.block.view.RegisterPage;
 import ca.mcgill.ecse223.block.view.UpdateGamePage;
 import ca.mcgill.ecse223.block.view.WelcomePage;
 
@@ -35,7 +36,8 @@ public class Block223Application extends Application {
 			CreateGame,
 			UpdateGame,
 			EditLevel,
-			AvailableLevels
+			AvailableLevels,
+			Register
 	}
 	
 	private static HashMap<Pages, IPage> pageMap;
@@ -91,6 +93,9 @@ public class Block223Application extends Application {
     		case AvailableLevels:
     			newPage = new AvailableLevelsPage(Block223Application.stage);
     			break;
+    		case Register:
+    			newPage = new RegisterPage(Block223Application.stage);
+    			break;
     		}
     		
     		pageMap.put(page, newPage);
@@ -107,6 +112,7 @@ public class Block223Application extends Application {
     	pageMap.put(Pages.CreateGame, new CreateGamePage(stage));
     	pageMap.put(Pages.UpdateGame, new UpdateGamePage(stage));
     	pageMap.put(Pages.EditLevel, new EditLevelPage(stage));
+    	pageMap.put(Pages.Register, new RegisterPage(stage));
     }
 
     public static void main(String[] args) { 

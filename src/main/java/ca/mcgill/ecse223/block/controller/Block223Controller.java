@@ -751,7 +751,7 @@ public class Block223Controller {
 	 * @param level - level ID
 	 * @throws InvalidInputException
 	 */
-	public List<TOGridCell> getBlocksAtLevelOfCurrentDesignableGame(int level) throws InvalidInputException {
+	public static List<TOGridCell> getBlocksAtLevelOfCurrentDesignableGame(int level) throws InvalidInputException {
 		Game game = Block223Application.getCurrentGame();
 
 		//Beginning of method input checks
