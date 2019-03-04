@@ -81,7 +81,7 @@ public class CreateGamePage {
 	    root.setTop(hbButtons);
 	    
         // Create the scene with borderPane as the root node (since it contains everything else)
-        Scene scene = new Scene(root, 1000, 800);
+        Scene scene = new Scene(root, Block223Application.APPLICATION_WIDTH, Block223Application.APPLICATION_HEIGHT);
         // Set the scene and display it
         stage.setScene(scene);
         stage.show(); 
