@@ -385,10 +385,9 @@ public class Block223Controller {
         if(gridHorizontalPosition>0 && gridHorizontalPosition<maxHorizontalBlocks
             && gridVerticalPosition>0 && gridVerticalPosition<maxVerticalBlocks){
 
-            BlockAssignment newBlockAssignment = currentLevel.addBlockAssignment(gridHorizontalPosition,
-                                                                                gridVerticalPosition, block, game);
+			currentLevel.addBlockAssignment(gridHorizontalPosition,gridVerticalPosition, block, game);
 
-            currentLevel.addBlockAssignment(newBlockAssignment);
+
 
         }else{
             throw new InvalidInputException("The horizontal position must be between 1 and " + maxHorizontalBlocks +
@@ -759,9 +758,6 @@ public class Block223Controller {
 
 	/**
 	 * Helper method to calculate the maximum horizontal and vertical block capacity
-	 * 
-	 * @param game - the corresponding game to be measured
-	 * @param block - the corresponding block to be used as a measurement
 	 * 
 	 * @return int [] x_y_capacity array with 2 values, the first being the horizontal capacity and the second being vertical
 	 * 
