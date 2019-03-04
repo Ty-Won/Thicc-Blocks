@@ -13,6 +13,7 @@ import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
 import ca.mcgill.ecse223.block.controller.TOBlock;
 import ca.mcgill.ecse223.block.controller.TOGame;
+import ca.mcgill.ecse223.block.controller.TOGridCell;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -232,13 +233,19 @@ public class EditLevelPage implements IPage {
 
         int[] cap = Block223Controller.getMaxBlockCapacity();
 
+        List<TOGridCell> assignments = null;
+        try {
+            assignments = Block223Controller.getBlocksAtLevelOfCurrentDesignableGame(levelID);
+        } catch (InvalidInputException e) {
+            showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
+        }
+
         for (int x = 0; x < cap[0]-1; x++) {
             for (int y = 0; y < cap[1]-1; y++) {
 
                 // Allocate each cell a white rectangle
                 Rectangle rect = new Rectangle(20, 20, Color.WHITE);
-                
-                // ---- TODO :: ADD BLOCK ASSIGNMENT LOADING -----
+               
 
                 // Set the X & Y coordinates to +1 of actual.
                 // gridHorizontalPosition & gridVerticlePosition are indexed from 1
@@ -246,6 +253,19 @@ public class EditLevelPage implements IPage {
                 int gridVerticalPosition = y + 1;
                 rect.setX(gridHorizontalPosition);
                 rect.setY(gridVerticalPosition);
+
+                 
+                if (assignments != null) {
+                    for (TOGridCell assignement : assignments) {
+                        if (assignement.getGridHorizontalPosition() == gridHorizontalPosition
+                        && assignement.getGridVerticalPosition() == gridVerticalPosition) {
+                            rect.setFill(Color.rgb(assignement.getRed(), 
+                                                   assignement.getGreen(),
+                                                   assignement.getBlue()));
+                        }
+                    }
+                }
+                
 
                 setupTargetDragAndDrop(rect);
                 grid.add(rect, x, y);
