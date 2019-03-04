@@ -84,8 +84,8 @@ public class AvailableGames implements IPage {
     	List<TOGame> toGames = null;
     	try {
 			toGames = Block223Controller.getDesignableGames();
-			if(toGames != null) Components.showAlert(AlertType.INFORMATION, stage.getOwner(), "", "Num games loaded:\n" + toGames.size());
-			else Components.showAlert(AlertType.INFORMATION, stage.getOwner(), "", "toGames is null");
+			//if(toGames != null) Components.showAlert(AlertType.INFORMATION, stage.getOwner(), "", "Num games loaded:\n" + toGames.size());
+			//else Components.showAlert(AlertType.INFORMATION, stage.getOwner(), "", "toGames is null");
 		} catch (InvalidInputException e) {
 			Components.showAlert(AlertType.INFORMATION, stage.getOwner(), "", "Error getting games:\n" + e.getMessage());
 		}
