@@ -29,8 +29,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -57,9 +59,42 @@ public class AvailableGames implements IPage {
 		} catch (FileNotFoundException e) {
 			Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Error loading page:", e.getMessage());
 		}
+        
+        //Create an HBox to hold the back button at the top of the screen
+        HBox hbButtons = new HBox();
+        
+        //Add Back Button, requires catch for file not found
+        try {
+        	FileInputStream backImageInput = new FileInputStream("Images/next.png");
+        	Image backImage = new Image(backImageInput); 
+            ImageView backImageView = new ImageView(backImage); 
+            backImageView.setFitHeight(60);
+            backImageView.setFitWidth(60);
+            
+            Button backButton = new Button("", backImageView);
+            backButton.setStyle("-fx-base: #92D3FC;");	//Styles the default background color of the button
+            hbButtons.getChildren().add(backButton);
+            hbButtons.setAlignment(Pos.CENTER_LEFT);
+            
+            backButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                	Block223Controller.logout();
+                	IPage login = Block223Application.getPage(Pages.Login);
+                	login.display();
+                }
+            });
+        } catch (FileNotFoundException e) {
+        	System.out.println("File not found");
+        }
     	
+        BorderPane root = new BorderPane();
+	    root.setPadding(new Insets(20)); // space between elements and window border
+	    root.setCenter(gridPane);
+	    root.setTop(hbButtons);
+	    
         // Create the scene with gridPane as the root node
-        Scene scene = new Scene(gridPane, Block223Application.APPLICATION_WIDTH, Block223Application.APPLICATION_HEIGHT, Color.WHITE);
+        Scene scene = new Scene(root, Block223Application.APPLICATION_WIDTH, Block223Application.APPLICATION_HEIGHT, Color.WHITE);
         // Set the title scene and display it
         stage.setTitle("Thicc Blocks Application");
         stage.setScene(scene);
