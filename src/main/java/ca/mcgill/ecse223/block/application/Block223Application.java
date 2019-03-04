@@ -127,6 +127,7 @@ public class Block223Application extends Application {
     }
     
     public static Block223 resetBlock223() {
+    	block223.delete();
     	block223 = Block223Persistence.load();
     	return block223;
     }

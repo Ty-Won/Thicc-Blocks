@@ -594,6 +594,7 @@ public class Block223Controller {
 	}
 
 	public static void login(String username, String password) throws InvalidInputException {
+		Block223Application.resetBlock223();
 		if(Block223Application.getCurrentUserRole() != null) {
 			throw new InvalidInputException("Cannot login a user while a user is already logged in.");
 		}
@@ -609,7 +610,6 @@ public class Block223Controller {
 			if(rolePassword.equals(password)) {
 				Block223Application.setCurrentUser(user);
 				Block223Application.setCurrentUserRole(role);
-				Block223Application.resetBlock223();
 				
 				return;
 			}
