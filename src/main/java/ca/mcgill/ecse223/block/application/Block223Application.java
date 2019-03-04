@@ -18,7 +18,7 @@ import ca.mcgill.ecse223.block.controller.*;
 public class Block223Application extends Application {
 	
 	public static final int APPLICATION_WIDTH = 1000;
-	public static final int APPLICATION_HEIGHT = 600;
+	public static final int APPLICATION_HEIGHT = 800;
 
 	private static Block223 block223;
 	private static User currentUser;
