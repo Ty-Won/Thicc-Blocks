@@ -64,7 +64,7 @@ public class Block223Controller {
 	 * @throws InvalidInputException
 	 */
 	public static void setGameDetails(int nrLevels, int nrBlocksPerLevel, int minBallSpeedX, int minBallSpeedY,
-			double ballSpeedIncreaseFactor, int maxPaddleLength, int minPaddleLength) throws InvalidInputException {
+		double ballSpeedIncreaseFactor, int maxPaddleLength, int minPaddleLength) throws InvalidInputException {
 		
 		// Retrieve user role and current game
 		UserRole userRole = Block223Application.getCurrentUserRole();
@@ -138,13 +138,16 @@ public class Block223Controller {
 		
 	}
 
+	/**
+	 * Delete a specific game by name
+	 * 
+	 * @param name - The name of the game to delete
+	 * 
+	 * @throws InvalidInputException
+	 */
 	public static void deleteGame(String name) throws InvalidInputException {
 		Block223 block223 = Block223Application.getBlock223();
 		Game game = block223.findGame(name);
-		if(game == null) {
-			System.out.println("WARNING: game was null in deleteGame");
-			return;
-		}
 		
 		UserRole userRole = Block223Application.getCurrentUserRole();
 		
@@ -157,10 +160,8 @@ public class Block223Controller {
 			throw new InvalidInputException("Only the admin who created the game can delete the game.");
 		}
 		
-		System.out.println("games in deletGame before remove: " + block223.getGames().size());
 		game.delete();
 		Block223Persistence.save(block223);
-		System.out.println("games in deletGame after remove: " + block223.getGames().size());
 	}
 
 	/**
@@ -234,8 +235,11 @@ public class Block223Controller {
 			throw new InvalidInputException(errMsg);
 		}
 		
-		if (!game.setName(name)) {
-			throw new InvalidInputException("The name of a game must be unique.");
+		// New name must be different that current name
+		if (!game.getName().equals(name)) {
+			if (!game.setName(name)) {
+				throw new InvalidInputException("The name of a game must be unique.");
+			}
 		}
 
 		setGameDetails(nrLevels, nrBlocksPerLevel, minBallSpeedX, minBallSpeedY, ballSpeedIncreaseFactor, maxPaddleLength, minPaddleLength);
@@ -742,11 +746,53 @@ public class Block223Controller {
 		return new TOBlock(block.getId(), block.getRed(), block.getGreen(), block.getBlue(), block.getPoints());
 	}
 
+	/**
+	 * Get all block assigments associated with a given level
+	 * 
+	 * @param level - level ID
+	 * @throws InvalidInputException
+	 */
 	public List<TOGridCell> getBlocksAtLevelOfCurrentDesignableGame(int level) throws InvalidInputException {
-		return null;
-	}
+		Game game = Block223Application.getCurrentGame();
 
-	
+		//Beginning of method input checks
+		if(!(Block223Application.getCurrentUserRole() instanceof Admin)) {
+			throw new InvalidInputException("Admin privileges are required to access game information.");
+		}
+
+		if(game == null) {
+			throw new InvalidInputException("A game must be selected to access its information.");
+		}
+
+		if (Block223Application.getCurrentUserRole() != game.getAdmin()) {
+			throw new InvalidInputException("Only the admin who created the game can access its information.");
+		}
+
+		List<TOGridCell> result = new ArrayList<TOGridCell>();
+
+		Level lvl;
+		try {
+			lvl = game.getLevel(level-1);
+		} catch(IndexOutOfBoundsException e) {
+			throw new InvalidInputException("Level " + level + " does not exist for the game.");
+		}
+
+		for (BlockAssignment assignment : lvl.getBlockAssignments()) {
+			TOGridCell toGridCell = new TOGridCell(
+				assignment.getGridHorizontalPosition(),
+				assignment.getGridVerticalPosition(),
+				assignment.getBlock().getId(),
+				assignment.getBlock().getRed(),
+				assignment.getBlock().getGreen(),
+				assignment.getBlock().getBlue(),
+				assignment.getBlock().getPoints()
+			);
+
+			result.add(toGridCell);
+		}
+
+		return result; 
+	}
 
 	public static TOUserMode getUserMode() {
 		TOUserMode mode;
