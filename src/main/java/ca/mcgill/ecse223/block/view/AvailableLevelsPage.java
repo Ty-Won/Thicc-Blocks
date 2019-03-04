@@ -39,7 +39,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class AvailableLevelsPage {
+public class AvailableLevelsPage implements IPage {
 
     Stage stage;
 

@@ -10,6 +10,7 @@ import javafx.stage.StageStyle;
 import ca.mcgill.ecse223.block.model.*;
 import ca.mcgill.ecse223.block.persistence.*;
 import ca.mcgill.ecse223.block.view.AvailableGames;
+import ca.mcgill.ecse223.block.view.AvailableLevelsPage;
 import ca.mcgill.ecse223.block.view.Components;
 import ca.mcgill.ecse223.block.view.CreateGamePage;
 import ca.mcgill.ecse223.block.view.EditLevelPage;
@@ -33,7 +34,8 @@ public class Block223Application extends Application {
 			AvaliableGames,
 			CreateGame,
 			UpdateGame,
-			EditLevel
+			EditLevel,
+			AvailableLevels
 	}
 	
 	private static HashMap<Pages, IPage> pageMap;
@@ -85,6 +87,9 @@ public class Block223Application extends Application {
     			break;
     		case EditLevel:
     			newPage = new EditLevelPage(Block223Application.stage);
+    			break;
+    		case AvailableLevels:
+    			newPage = new AvailableLevelsPage(Block223Application.stage);
     			break;
     		}
     		
