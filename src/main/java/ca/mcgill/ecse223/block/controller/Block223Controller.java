@@ -86,7 +86,7 @@ public class Block223Controller {
 		}
 		
 		// Check to ensure number of levels fall within limited range
-		if (nrLevels > 0 && nrLevels < 100) {
+		if (nrLevels < 0 || nrLevels > 100) {
 			throw new InvalidInputException("The number of levels must be between 1 and 99");
 		}
 		
@@ -127,12 +127,13 @@ public class Block223Controller {
 		
 		// If nrLevels is greater than current level size, then add sufficient number of levels
 		for (int i=levelSize-1; i<nrLevels; i++) {
-			levels.add(new Level(game));
+			game.addLevel();
 		}
 		
 		// If current level size is greater than nrLevels, then delete sufficient number of levels
 		for (int i=levelSize-1; i>=nrLevels; i--) {
-			levels.remove(i);
+			Level level = game.getLevel(i);
+			level.delete();
 		}
 		
 	}
@@ -408,10 +409,9 @@ public class Block223Controller {
         if(gridHorizontalPosition>0 && gridHorizontalPosition<maxHorizontalBlocks
             && gridVerticalPosition>0 && gridVerticalPosition<maxVerticalBlocks){
 
-            BlockAssignment newBlockAssignment = currentLevel.addBlockAssignment(gridHorizontalPosition,
-                                                                                gridVerticalPosition, block, game);
+			currentLevel.addBlockAssignment(gridHorizontalPosition,gridVerticalPosition, block, game);
 
-            currentLevel.addBlockAssignment(newBlockAssignment);
+
 
         }else{
             throw new InvalidInputException("The horizontal position must be between 1 and " + maxHorizontalBlocks +
@@ -783,9 +783,6 @@ public class Block223Controller {
 
 	/**
 	 * Helper method to calculate the maximum horizontal and vertical block capacity
-	 * 
-	 * @param game - the corresponding game to be measured
-	 * @param block - the corresponding block to be used as a measurement
 	 * 
 	 * @return int [] x_y_capacity array with 2 values, the first being the horizontal capacity and the second being vertical
 	 * 

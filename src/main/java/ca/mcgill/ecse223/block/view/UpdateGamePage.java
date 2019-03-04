@@ -83,7 +83,7 @@ public class UpdateGamePage implements IPage {
 	    root.setTop(hbButtons);
 	    
         // Create the scene with borderPane as the root node (since it contains everything else)
-        Scene scene = new Scene(root, 1000, 800);
+        Scene scene = new Scene(root, Block223Application.APPLICATION_WIDTH, Block223Application.APPLICATION_HEIGHT);
         // Set the scene and display it
         stage.setScene(scene);
         stage.show(); 
@@ -137,7 +137,7 @@ public class UpdateGamePage implements IPage {
 		}
     	
         // Add Header
-        Label headerLabel = new Label("Create a New Game");
+        Label headerLabel = new Label("Update a Game");
         headerLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, 50));
         gridPane.add(headerLabel,0,0,4,1);
         GridPane.setHalignment(headerLabel, HPos.CENTER);
@@ -245,14 +245,14 @@ public class UpdateGamePage implements IPage {
         GridPane.setHalignment(blocksButton, HPos.CENTER);
         GridPane.setMargin(blocksButton, new Insets(20,0,20,0));
         
-        // Add Create Game Button
-        Button createButton = new Button("Create");
-        createButton.setPrefHeight(60);
-        createButton.setDefaultButton(true);
-        createButton.setPrefWidth(150);
-        gridPane.add(createButton, 0, 8, 4, 1);
-        GridPane.setHalignment(createButton, HPos.CENTER);
-        GridPane.setMargin(createButton, new Insets(20,0,20,0));
+        // Add Update Game Button
+        Button updateButton = new Button("Update");
+        updateButton.setPrefHeight(60);
+        updateButton.setDefaultButton(true);
+        updateButton.setPrefWidth(150);
+        gridPane.add(updateButton, 0, 8, 4, 1);
+        GridPane.setHalignment(updateButton, HPos.CENTER);
+        GridPane.setMargin(updateButton, new Insets(20,0,20,0));
         
         
         final int gameNrLevels = game.getNrLevels();
@@ -271,11 +271,11 @@ public class UpdateGamePage implements IPage {
                     	IPage availableGames = Block223Application.getPage(Pages.AvaliableGames);
                     	availableGames.display();
     				} catch (InvalidInputException e) {
-    					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Create Game Error", e.getMessage());
+    					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", e.getMessage());
     				}
                 	
                 } catch (NumberFormatException n) {
-                	showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Create Game Error", "Please enter only numbers in the numeric fields\n and ensure no fields are empty.");
+                	showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", "Please enter only numbers in the numeric fields\n and ensure no fields are empty.");
                 }
               
             }
@@ -298,11 +298,11 @@ public class UpdateGamePage implements IPage {
                     	WelcomePage welcomePage = new WelcomePage(stage);
     	                welcomePage.display();
     				} catch (InvalidInputException e) {
-    					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Create Game Error", e.getMessage());
+    					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", e.getMessage());
     				}
                 	
                 } catch (NumberFormatException n) {
-                	showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Create Game Error", "Please enter only numbers in the numeric fields\n and ensure no fields are empty.");
+                	showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", "Please enter only numbers in the numeric fields\n and ensure no fields are empty.");
                 }
               
             }
@@ -325,11 +325,11 @@ public class UpdateGamePage implements IPage {
                     	WelcomePage welcomePage = new WelcomePage(stage);
     	                welcomePage.display();
     				} catch (InvalidInputException e) {
-    					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Create Game Error", e.getMessage());
+    					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", e.getMessage());
     				}
                 	
                 } catch (NumberFormatException n) {
-                	showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Create Game Error", "Please enter only numbers in the numeric fields\n and ensure no fields are empty.");
+                	showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", "Please enter only numbers in the numeric fields\n and ensure no fields are empty.");
                 }
               
             }
