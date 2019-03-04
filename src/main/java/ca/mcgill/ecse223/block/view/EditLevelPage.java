@@ -2,6 +2,7 @@ package ca.mcgill.ecse223.block.view;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.List;
 
 import javafx.util.Callback;
@@ -39,6 +40,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -76,7 +78,26 @@ public class EditLevelPage {
      * ID of the current level being modified
      */
     private int levelID;
-	
+
+    /** 
+     * Defines the type of a block drag, either
+     * movement or positioning
+    */
+    private enum BlockDragType {
+        POSITION_BLOCK,
+        MOVE_BLOCK
+    }
+
+    /**
+     * Source rectangle for a drage type MOVE_BLOCK
+     */
+    private Rectangle sourceRectangle;
+
+    /**
+     * Define the type of drag to be default POSITION_BLOCK
+     */
+    private BlockDragType dragType = BlockDragType.POSITION_BLOCK;
+
 	public EditLevelPage(Stage stage, int levelID) {
         this.stage = stage;
         this.levelID = levelID;
@@ -97,14 +118,52 @@ public class EditLevelPage {
         // Create the main border pain.        
         this.root = new BorderPane();
         
+        // Create right vbox
+        VBox rightPane = new VBox();
+        rightPane.setPadding(new Insets(10));
+        rightPane.setSpacing(8);
+
+        // Create top HBOX
+        HBox topPane = new HBox();
+
+        // ----- UI CREATION ----
+
+        // Create block list view
         ListView<TOBlock> lview = createBlockSelectionUI();
-        root.setRight(lview);
 
+        // Create block placement grid pane
         GridPane gridPane = createBlockPlacementUI();
+
+        // Add done button
+        Button doneButton = new Button("Done");
+        doneButton.setPrefHeight(40);
+        doneButton.setDefaultButton(true);
+        doneButton.setPrefWidth(130);
+        doneButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
+        doneButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
+        GridPane.setHalignment(doneButton, HPos.CENTER);
+        GridPane.setMargin(doneButton, new Insets(20, 0,20,0));
+
+        // Add Header
+        Label headerLabel = new Label("THICC BLOCKS");
+        headerLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, 50));
+        GridPane.setHalignment(headerLabel, HPos.CENTER);
+        GridPane.setMargin(headerLabel, new Insets(20, 0,20,0));
+
+        // ---------------------
+
+
+        rightPane.getChildren().add(lview);
+        rightPane.getChildren().add(doneButton);
+
+        topPane.getChildren().add(headerLabel);
+
+        // Set BorderPane elements
+        root.setRight(rightPane);
         root.setCenter(gridPane);
+        root.setTop(topPane);
 
-
-        Scene scene = new Scene(root, 490, 390);
+        Scene scene = new Scene(root, 600, 450);
         stage.setScene(scene);
         stage.show();
     }
@@ -132,10 +191,14 @@ public class EditLevelPage {
                             System.out.println("onDragDetected");
                             /* allow any transfer mode */
                             Dragboard db = cell.startDragAndDrop(TransferMode.ANY);
+                            
                             /* put a string on dragboard */
                             ClipboardContent content = new ClipboardContent();
+
+                            // Set drag type
+                            dragType = BlockDragType.POSITION_BLOCK;
                             content.putString(Integer.toString(cell.getItem().getId()));
-                            db.setContent(content);
+                            db.setContent(content);                           
                             event.consume();
                         }
                     });
@@ -158,7 +221,7 @@ public class EditLevelPage {
         grid.setHgap(5);
         grid.setVgap(2);
         grid.setPadding(new Insets(0, 10, 0, 10));
-        grid.setGridLinesVisible(true);
+        //grid.setGridLinesVisible(true);
 
         int[] cap = Block223Controller.getMaxBlockCapacity();
 
@@ -167,8 +230,15 @@ public class EditLevelPage {
 
                 // Allocate each cell a white rectangle
                 Rectangle rect = new Rectangle(20, 20, Color.WHITE);
-                rect.setX(x);
-                rect.setY(y);
+                
+
+                // Set the X & Y coordinates to +1 of actual.
+                // gridHorizontalPosition & gridVerticlePosition are indexed from 1
+                int gridHorizontalPosition = x + 1;
+                int gridVerticalPosition = y + 1;
+                rect.setX(gridHorizontalPosition);
+                rect.setY(gridVerticalPosition);
+
                 setupTargetDragAndDrop(rect);
                 grid.add(rect, x, y);
             }
@@ -179,6 +249,7 @@ public class EditLevelPage {
 
     private void setupTargetDragAndDrop(Rectangle target) {
         
+        // ---------- INTERMEDIATE ----------
         target.setOnDragOver(new EventHandler <DragEvent>() {
             public void handle(DragEvent event) {
                 /* data is dragged over the target */
@@ -196,31 +267,25 @@ public class EditLevelPage {
             }
         });
 
+        // ---------- MOVE BLOCK ASSIGNMENT OR POSITION BLOCK ------------
         target.setOnDragDropped(new EventHandler <DragEvent>() {
             public void handle(DragEvent event) {
+
                 /* data dropped */
                 System.out.println("onDragDropped");
                 /* if there is a string data on dragboard, read it and use it */
                 Dragboard db = event.getDragboard();
                 boolean success = false;
+
                 if (db.hasString()) {
-                    int blockID = Integer.parseInt(db.getString());
-                    try {
-                        TOBlock block = Block223Controller.getBlockOfCurrentDesignableGame(blockID);
 
-                        int x = (int) target.getX();
-                        int y = (int) target.getY();
+                    String content = db.getString();
 
-                        // Position block
-                        Block223Controller.positionBlock(blockID, levelID, x, y);
-
-                        System.out.println("X: " + x + " | Y: " + y);
-
-                        target.setFill(Color.rgb(block.getRed(), block.getGreen(), block.getBlue()));
-                    } catch (InvalidInputException e) {
-                        showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
+                    if (dragType == BlockDragType.POSITION_BLOCK) {
+                        handlePositionBlock(target, content);
+                    } else {
+                        handleMoveBlock(sourceRectangle, target, content);
                     }
-
 
                     success = true;
                 }
@@ -231,8 +296,105 @@ public class EditLevelPage {
                 event.consume();
             }
         });
+
+        // ---------- MOVE BLOCK ASSIGNMENT --------------
+        target.setOnDragDetected(new EventHandler <MouseEvent>() {
+			public void handle(MouseEvent event) {
+                /* drag was detected, start drag-and-drop gesture*/
+                System.out.println("onDragDetected");
+                /* allow any transfer mode */
+                Dragboard db = target.startDragAndDrop(TransferMode.ANY);
+                dragType = BlockDragType.MOVE_BLOCK;
+                
+                // Set the source rectangle to this
+                sourceRectangle = target;
+                
+                /* put a string on dragboard */
+                ClipboardContent content = new ClipboardContent();
+
+                // Get oldGridHorizontalPosition and oldGridVerticalPosition from current rectangle
+                int oldGridHorizontalPosition = (int) target.getX();
+                int oldGridVerticalPosition   = (int) target.getY();
+
+                // Add "[oldGridHorizontalPosition, oldGridVerticlePosition]" to clipboard
+                content.putString(Arrays.toString(new int[]{oldGridHorizontalPosition, oldGridVerticalPosition}));
+                db.setContent(content);
+                event.consume();
+            }
+        });
     }
 
+    /**
+     * Helper method to handle block positioning
+     * 
+     * @param target - the target rectangle to place the block
+     * @param content - the content from the clipboard
+     */
+    private void handlePositionBlock(Rectangle target, String content) {
+        int blockID = Integer.parseInt(content);
+
+        try {
+            TOBlock block = Block223Controller.getBlockOfCurrentDesignableGame(blockID);
+
+            int gridHorizontalPosition = (int) target.getX();
+            int gridVerticalPosition = (int) target.getY();
+
+            // Position block
+            Block223Controller.positionBlock(blockID, levelID, gridHorizontalPosition, gridVerticalPosition);
+
+            System.out.println("X: " + gridHorizontalPosition + " | Y: " + gridVerticalPosition);
+
+            target.setFill(Color.rgb(block.getRed(), block.getGreen(), block.getBlue()));
+        } catch (InvalidInputException e) {
+            showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
+        }
+    }
+
+    /**
+     * Helper method to handle block movement
+     * 
+     * @param source - source rectangle
+     * @param target - destination rectangle
+     * @param content - the content from the clipboard
+     */
+    private void handleMoveBlock(Rectangle source, Rectangle target, String content) {
+        
+        // Arrays.toString() will convert an integer array to: "[a, b, c, d, ..., y, z]"
+        // We thus want to remove the first and last characters (I.E '[' & ']') from the string
+        // before parsing
+        content = content.substring(1, content.length()-1); 
+        
+        // Parse content into array of two integers 
+        int[] oldGridPositions = Arrays.stream(content.split(", ")).mapToInt(Integer::parseInt).toArray();
+
+        // Get grid positions
+        int oldGridHorizontalPosition = oldGridPositions[0];
+        int oldGridVerticalPosition   = oldGridPositions[1];
+        int newGridHorizontalPosition = (int) target.getX();
+        int newGridVerticalPosition = (int) target.getY();
+
+        try {
+            // Move block assignment
+            Block223Controller.moveBlock(
+                levelID, 
+                oldGridHorizontalPosition, 
+                oldGridVerticalPosition,
+                newGridHorizontalPosition,
+                newGridVerticalPosition);
+
+            
+            // Set the colors for the rectangles
+            Color color = (Color) source.getFill();
+            target.setFill(color);
+            source.setFill(Color.WHITE);
+        } catch (InvalidInputException e) {
+            showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
+        }
+    }
+
+    /**
+     * Helper method for showing alert
+     */
     private void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -252,14 +414,20 @@ public class EditLevelPage {
 
             super.updateItem(item, empty);
 
-            Rectangle rect = new Rectangle(50, 50);
             if (item != null) {
+                // Get block RGB components
                 int red = item.getRed();
                 int green = item.getGreen();
                 int blue = item.getBlue();
 
+                Rectangle rect = new Rectangle(50, 50);
                 rect.setFill(Color.rgb(red, green, blue));
-                setGraphic(rect);
+
+                Text text = new Text(Integer.toString(item.getPoints()));
+                StackPane stack = new StackPane();
+                stack.getChildren().addAll(rect, text);      
+                
+                setGraphic(stack);
             }
         }
     }
