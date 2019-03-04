@@ -210,8 +210,11 @@ public class Block223Controller {
 			throw new InvalidInputException(errMsg);
 		}
 		
-		if (!game.setName(name)) {
-			throw new InvalidInputException("The name of a game must be unique.");
+		// New name must be different that current name
+		if (!game.getName().equals(name)) {
+			if (!game.setName(name)) {
+				throw new InvalidInputException("The name of a game must be unique.");
+			}
 		}
 
 		setGameDetails(nrLevels, nrBlocksPerLevel, minBallSpeedX, minBallSpeedY, ballSpeedIncreaseFactor, maxPaddleLength, minPaddleLength);
