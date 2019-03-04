@@ -101,13 +101,6 @@ public class EditLevelPage {
 	public EditLevelPage(Stage stage, int levelID) {
         this.stage = stage;
         this.levelID = levelID;
-        
-        // Get the current game's block
-        try {
-            this.blocks = FXCollections.observableList(Block223Controller.getBlocksOfCurrentDesignableGame());
-        } catch (InvalidInputException e) {
-            showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
-        }
     }
     
     /**
@@ -115,9 +108,16 @@ public class EditLevelPage {
      */
 	public void display() {
 
+        // Get the current game's block
+        try {
+            this.blocks = FXCollections.observableList(Block223Controller.getBlocksOfCurrentDesignableGame());
+        } catch (InvalidInputException e) {
+            showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
+        }
+
         // Create the main border pain.        
         this.root = new BorderPane();
-        
+
         // Create right vbox
         VBox rightPane = new VBox();
         rightPane.setPadding(new Insets(10));
