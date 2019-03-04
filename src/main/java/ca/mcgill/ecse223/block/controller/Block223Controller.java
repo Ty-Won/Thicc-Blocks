@@ -62,7 +62,7 @@ public class Block223Controller {
 	 * @throws InvalidInputException
 	 */
 	public static void setGameDetails(int nrLevels, int nrBlocksPerLevel, int minBallSpeedX, int minBallSpeedY,
-			double ballSpeedIncreaseFactor, int maxPaddleLength, int minPaddleLength) throws InvalidInputException {
+		double ballSpeedIncreaseFactor, int maxPaddleLength, int minPaddleLength) throws InvalidInputException {
 		
 		// Retrieve user role and current game
 		UserRole userRole = Block223Application.getCurrentUserRole();
@@ -136,7 +136,43 @@ public class Block223Controller {
 		
 	}
 
+	/**
+	 * Delete a specific game by name
+	 * 
+	 * @param name - The name of the game to delete
+	 * 
+	 * @throws InvalidInputException
+	 */
 	public static void deleteGame(String name) throws InvalidInputException {
+
+		Block223 block223 = Block223Application.getBlock223();
+		UserRole userRole = Block223Application.getCurrentUserRole();
+
+		//Note due to the Umple bug, we needed to use block223 findgame instead
+		//of game method getwithName
+		Game game = block223.findGame(name);
+
+
+		if(!(userRole instanceof Admin)) {
+			throw new InvalidInputException("Admin privileges are required to delete game.");
+		}
+
+	
+		if (game == null) {
+			throw new InvalidInputException("Game with name:"+ name+ " does not exist.");
+		}
+
+		if (userRole != game.getAdmin()) {
+			throw new InvalidInputException("Only the admin who created the game can delete the game.");
+		}
+
+		try{
+			game.delete();
+            Block223Persistence.save(block223);
+        }catch(RuntimeException e){
+            throw new InvalidInputException("Error saving block 223 to persistence layer");
+        }
+		
 	}
 
 	/**
