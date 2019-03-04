@@ -255,6 +255,9 @@ public class CreateGamePage {
                 	
                 	try {
                     	Block223Controller.createGame(gameNameField.getText());
+                    	
+                    	Block223Controller.selectGame(gameNameField.getText());
+                    	
                     	Block223Controller.setGameDetails(1, spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
                     	
                     	AvailableGames availableGames = new AvailableGames(stage);
@@ -282,11 +285,12 @@ public class CreateGamePage {
                 	
                 	try {
                     	Block223Controller.createGame(gameNameField.getText());
-                    	Block223Controller.setGameDetails(1, spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
                     	
                     	//Selects the game that was just made as the currentDesignableGame so that the available levels page can access the right one
                     	Block223Controller.selectGame(gameNameField.getText());
                     	
+                    	Block223Controller.setGameDetails(1, spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
+
                     	//Currently redirects to the welcome page until other pages are added!!
                     	//TODO Change to redirect to Available Levels page
                     	WelcomePage welcomePage = new WelcomePage(stage);
@@ -314,10 +318,11 @@ public class CreateGamePage {
                 	
                 	try {
                     	Block223Controller.createGame(gameNameField.getText());
-                    	Block223Controller.setGameDetails(1, spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
                     	
                     	//Selects the game that was just made as the currentDesignableGame so that the available levels page can access the right one
                     	Block223Controller.selectGame(gameNameField.getText());
+                    	
+                    	Block223Controller.setGameDetails(1, spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
                     	
                     	//Currently redirects to the welcome page until other pages are added!!
                     	//TODO Change to redirect to Available Blocks page
