@@ -125,12 +125,13 @@ public class Block223Controller {
 		
 		// If nrLevels is greater than current level size, then add sufficient number of levels
 		for (int i=levelSize-1; i<nrLevels; i++) {
-			levels.add(new Level(game));
+			game.addLevel();
 		}
 		
 		// If current level size is greater than nrLevels, then delete sufficient number of levels
 		for (int i=levelSize-1; i>=nrLevels; i--) {
-			levels.remove(i);
+			Level level = game.getLevel(i);
+			level.delete();
 		}
 		
 	}
