@@ -39,6 +39,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -97,14 +98,52 @@ public class EditLevelPage {
         // Create the main border pain.        
         this.root = new BorderPane();
         
+        // Create right vbox
+        VBox rightPane = new VBox();
+        rightPane.setPadding(new Insets(10));
+        rightPane.setSpacing(8);
+
+        // Create top HBOX
+        HBox topPane = new HBox();
+
+        // ----- UI CREATION ----
+
+        // Create block list view
         ListView<TOBlock> lview = createBlockSelectionUI();
-        root.setRight(lview);
 
+        // Create block placement grid pane
         GridPane gridPane = createBlockPlacementUI();
+
+        // Add done button
+        Button doneButton = new Button("Done");
+        doneButton.setPrefHeight(40);
+        doneButton.setDefaultButton(true);
+        doneButton.setPrefWidth(130);
+        doneButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
+        doneButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
+        GridPane.setHalignment(doneButton, HPos.CENTER);
+        GridPane.setMargin(doneButton, new Insets(20, 0,20,0));
+
+        // Add Header
+        Label headerLabel = new Label("THICC BLOCKS");
+        headerLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, 50));
+        GridPane.setHalignment(headerLabel, HPos.CENTER);
+        GridPane.setMargin(headerLabel, new Insets(20, 0,20,0));
+
+        // ---------------------
+
+
+        rightPane.getChildren().add(lview);
+        rightPane.getChildren().add(doneButton);
+
+        topPane.getChildren().add(headerLabel);
+
+        // Set BorderPane elements
+        root.setRight(rightPane);
         root.setCenter(gridPane);
+        root.setTop(topPane);
 
-
-        Scene scene = new Scene(root, 490, 390);
+        Scene scene = new Scene(root, 600, 450);
         stage.setScene(scene);
         stage.show();
     }
@@ -132,6 +171,7 @@ public class EditLevelPage {
                             System.out.println("onDragDetected");
                             /* allow any transfer mode */
                             Dragboard db = cell.startDragAndDrop(TransferMode.ANY);
+                            
                             /* put a string on dragboard */
                             ClipboardContent content = new ClipboardContent();
                             content.putString(Integer.toString(cell.getItem().getId()));
@@ -158,7 +198,7 @@ public class EditLevelPage {
         grid.setHgap(5);
         grid.setVgap(2);
         grid.setPadding(new Insets(0, 10, 0, 10));
-        grid.setGridLinesVisible(true);
+        //grid.setGridLinesVisible(true);
 
         int[] cap = Block223Controller.getMaxBlockCapacity();
 
@@ -167,8 +207,15 @@ public class EditLevelPage {
 
                 // Allocate each cell a white rectangle
                 Rectangle rect = new Rectangle(20, 20, Color.WHITE);
-                rect.setX(x);
-                rect.setY(y);
+                
+
+                // Set the X & Y coordinates to +1 of actual.
+                // gridHorizontalPosition & gridVerticlePosition are indexed from 1
+                int gridHorizontalPosition = x + 1;
+                int gridVerticalPosition = y + 1;
+                rect.setX(gridHorizontalPosition);
+                rect.setY(gridVerticalPosition);
+
                 setupTargetDragAndDrop(rect);
                 grid.add(rect, x, y);
             }
@@ -208,13 +255,14 @@ public class EditLevelPage {
                     try {
                         TOBlock block = Block223Controller.getBlockOfCurrentDesignableGame(blockID);
 
-                        int x = (int) target.getX();
-                        int y = (int) target.getY();
+
+                        int gridHorizontalPosition = (int) target.getX();
+                        int gridVerticalPosition = (int) target.getY();
 
                         // Position block
-                        Block223Controller.positionBlock(blockID, levelID, x, y);
+                        Block223Controller.positionBlock(blockID, levelID, gridHorizontalPosition, gridVerticalPosition);
 
-                        System.out.println("X: " + x + " | Y: " + y);
+                        System.out.println("X: " + gridHorizontalPosition + " | Y: " + gridVerticalPosition);
 
                         target.setFill(Color.rgb(block.getRed(), block.getGreen(), block.getBlue()));
                     } catch (InvalidInputException e) {
@@ -252,14 +300,20 @@ public class EditLevelPage {
 
             super.updateItem(item, empty);
 
-            Rectangle rect = new Rectangle(50, 50);
             if (item != null) {
+                // Get block RGB components
                 int red = item.getRed();
                 int green = item.getGreen();
                 int blue = item.getBlue();
 
+                Rectangle rect = new Rectangle(50, 50);
                 rect.setFill(Color.rgb(red, green, blue));
-                setGraphic(rect);
+
+                Text text = new Text(Integer.toString(item.getPoints()));
+                StackPane stack = new StackPane();
+                stack.getChildren().addAll(rect, text);               
+
+                setGraphic(stack);
             }
         }
     }
