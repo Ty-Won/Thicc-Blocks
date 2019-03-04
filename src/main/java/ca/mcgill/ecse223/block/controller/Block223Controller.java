@@ -46,6 +46,8 @@ public class Block223Controller {
 		// so we pass in a temp string for the name and then manually call setName
 		Game game = new Game("sometempstring", 1, adminRole, 1, 1, 1, 10, 10, block223);
 		game.setName(name);
+		
+		Block223Persistence.save(block223);
 	}
 		
 	/**
@@ -144,35 +146,22 @@ public class Block223Controller {
 	 * @throws InvalidInputException
 	 */
 	public static void deleteGame(String name) throws InvalidInputException {
-
 		Block223 block223 = Block223Application.getBlock223();
-		UserRole userRole = Block223Application.getCurrentUserRole();
-
-		//Note due to the Umple bug, we needed to use block223 findgame instead
-		//of game method getwithName
 		Game game = block223.findGame(name);
-
-
+		
+		UserRole userRole = Block223Application.getCurrentUserRole();
+		
 		if(!(userRole instanceof Admin)) {
-			throw new InvalidInputException("Admin privileges are required to delete game.");
+			throw new InvalidInputException("Admin privileges are required to delete a game.");
 		}
-
-	
-		if (game == null) {
-			throw new InvalidInputException("Game with name:"+ name+ " does not exist.");
-		}
-
-		if (userRole != game.getAdmin()) {
+		
+		Admin admin = (Admin) userRole;
+		if(admin != game.getAdmin()) {
 			throw new InvalidInputException("Only the admin who created the game can delete the game.");
 		}
-
-		try{
-			game.delete();
-            Block223Persistence.save(block223);
-        }catch(RuntimeException e){
-            throw new InvalidInputException("Error saving block 223 to persistence layer");
-        }
 		
+		game.delete();
+		Block223Persistence.save(block223);
 	}
 
 	/**
@@ -609,6 +598,7 @@ public class Block223Controller {
 	}
 
 	public static void login(String username, String password) throws InvalidInputException {
+		Block223Application.resetBlock223();
 		if(Block223Application.getCurrentUserRole() != null) {
 			throw new InvalidInputException("Cannot login a user while a user is already logged in.");
 		}
@@ -624,7 +614,6 @@ public class Block223Controller {
 			if(rolePassword.equals(password)) {
 				Block223Application.setCurrentUser(user);
 				Block223Application.setCurrentUserRole(role);
-				Block223Application.resetBlock223();
 				
 				return;
 			}
@@ -648,7 +637,8 @@ public class Block223Controller {
 		}
 		
 		Admin admin = (Admin) userRole;
-		List<Game> games = admin.getGames();
+		List<Game> games = block223.getGames();
+		System.out.println("games: " + games.size());
 		
 		List<TOGame> toGames = new ArrayList<TOGame>();
 		for(Game game : games) {

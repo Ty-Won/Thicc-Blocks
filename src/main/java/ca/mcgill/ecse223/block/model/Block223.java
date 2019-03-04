@@ -29,6 +29,19 @@ public class Block223 implements Serializable
     roles = new ArrayList<UserRole>();
     games = new ArrayList<Game>();
   }
+  
+  public Game findGame(String name) {
+	    
+		// Look for the game with <name>
+		for (Game curGame : games) {
+			if (curGame.getName().equals(name)) {
+				return curGame;
+			}
+		}
+
+		// No game found
+		return null;
+  }
 
   //------------------------
   // INTERFACE
@@ -337,19 +350,6 @@ public class Block223 implements Serializable
     return wasAdded;
   }
 
-  public Game findGame(String name) {
-    
-		// Look for the game with <name>
-		for (Game curGame : games) {
-			if (curGame.getName().equals(name)) {
-				return curGame;
-			}
-		}
-
-		// No game found
-		return null;
-	}
-
   public void delete()
   {
     while (users.size() > 0)
@@ -377,7 +377,14 @@ public class Block223 implements Serializable
 
   // line 9 "../../../../../Block223Persistence.ump"
    public void reinitialize(){
-    
+    User.reinitializeUniqueUsername(this.getUsers());
+  	Game.reinitializeUniqueName(this.getGames());
+  	
+  	List<Block> blocks = new ArrayList<Block>();
+  	for(Game game : this.getGames()) {
+  		blocks.addAll(game.getBlocks());
+  	}
+  	Block.reinitializeAutouniqueID(blocks);
   }
   
   //------------------------

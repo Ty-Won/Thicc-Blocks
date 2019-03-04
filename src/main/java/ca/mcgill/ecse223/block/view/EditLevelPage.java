@@ -55,7 +55,7 @@ import javafx.collections.ObservableList;
 import javafx.event.*;
 
 
-public class EditLevelPage {
+public class EditLevelPage implements IPage {
 	
     Stage stage;
     
@@ -98,14 +98,21 @@ public class EditLevelPage {
      */
     private BlockDragType dragType = BlockDragType.POSITION_BLOCK;
 
-	public EditLevelPage(Stage stage, int levelID) {
+	public EditLevelPage(Stage stage) {
         this.stage = stage;
-        this.levelID = levelID;
+        
+        // Get the current game's block
+        try {
+            this.blocks = FXCollections.observableList(Block223Controller.getBlocksOfCurrentDesignableGame());
+        } catch (InvalidInputException e) {
+            showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
+        }
     }
-    
-    /**
-     * Display the page
-     */
+	
+	public void setLevelID(int levelID) {
+		this.levelID = levelID;
+	}
+	
 	public void display() {
 
         // Get the current game's block

@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import ca.mcgill.ecse223.block.application.Block223Application;
+import ca.mcgill.ecse223.block.application.Block223Application.Pages;
 import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
 import ca.mcgill.ecse223.block.controller.TOGame;
@@ -34,7 +35,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class UpdateGamePage {
+public class UpdateGamePage implements IPage {
 	
 	Stage stage;
 	
@@ -42,7 +43,7 @@ public class UpdateGamePage {
 		this.stage = stage;
 	}
 	
-	public void display() throws InvalidInputException {
+	public void display() {
 		// Create the create game grid pane
         GridPane gridPane = createGridPane();
         // Add the UI components to the grid pane
@@ -67,7 +68,7 @@ public class UpdateGamePage {
             backButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                	AvailableGames availableGames = new AvailableGames(stage);
+                	IPage availableGames = Block223Application.getPage(Pages.AvaliableGames);
                 	availableGames.display();
                 }
             });
@@ -126,8 +127,14 @@ public class UpdateGamePage {
         return gridPane;
     }
 
-    private void addUIComponents(GridPane gridPane) throws InvalidInputException {
-        TOGame game = Block223Controller.getCurrentDesignableGame();
+    private void addUIComponents(GridPane gridPane) {
+        TOGame game = null;
+		try {
+			game = Block223Controller.getCurrentDesignableGame();
+		} catch (InvalidInputException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
     	
         // Add Header
         Label headerLabel = new Label("Update a Game");
@@ -248,6 +255,7 @@ public class UpdateGamePage {
         GridPane.setMargin(updateButton, new Insets(20,0,20,0));
         
         
+        final int gameNrLevels = game.getNrLevels();
         updateButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -258,9 +266,9 @@ public class UpdateGamePage {
                 	int minLength = Integer.parseInt(minLengthField.getText());
                 	
                 	try {
-                    	Block223Controller.updateGame(gameNameField.getText(), game.getNrLevels(), spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
+                    	Block223Controller.updateGame(gameNameField.getText(), gameNrLevels, spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
     					
-                    	AvailableGames availableGames = new AvailableGames(stage);
+                    	IPage availableGames = Block223Application.getPage(Pages.AvaliableGames);
                     	availableGames.display();
     				} catch (InvalidInputException e) {
     					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", e.getMessage());
@@ -283,7 +291,7 @@ public class UpdateGamePage {
                 	int minLength = Integer.parseInt(minLengthField.getText());
                 	
                 	try {
-                    	Block223Controller.updateGame(gameNameField.getText(), game.getNrLevels(), spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
+                    	Block223Controller.updateGame(gameNameField.getText(), gameNrLevels, spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
     					
                     	//Currently redirects to the welcome page until other pages are added!!
                     	//TODO: Change to redirect to Available LEVELS page
@@ -310,7 +318,7 @@ public class UpdateGamePage {
                 	int minLength = Integer.parseInt(minLengthField.getText());
                 	
                 	try {
-                    	Block223Controller.updateGame(gameNameField.getText(), game.getNrLevels(), spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
+                    	Block223Controller.updateGame(gameNameField.getText(), gameNrLevels, spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
     					
                     	//Currently redirects to the welcome page until other pages are added!!
                     	//TODO Change to redirect to Available BLOCKS page

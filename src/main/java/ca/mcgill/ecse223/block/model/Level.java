@@ -9,7 +9,7 @@ import java.util.*;
  * random attribute not needed anymore
  * Each level is filled up with random blocks just before playing the level to reach the nrBlocksPerLevel defined in Game
  */
-// line 50 "../../../../../Block223Persistence.ump"
+// line 81 "../../../../../Block223Persistence.ump"
 // line 85 "../../../../../Block223.ump"
 public class Level implements Serializable
 {
@@ -197,7 +197,7 @@ public class Level implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 53 "../../../../../Block223Persistence.ump"
+  // line 84 "../../../../../Block223Persistence.ump"
   private static final long serialVersionUID = 9153802774454467836L ;
 
   

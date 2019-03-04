@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import ca.mcgill.ecse223.block.application.Block223Application;
+import ca.mcgill.ecse223.block.application.Block223Application.Pages;
 import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
 import ca.mcgill.ecse223.block.model.Block223;
@@ -33,7 +34,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class CreateGamePage {
+public class CreateGamePage implements IPage {
 	
 	Stage stage;
 	
@@ -66,7 +67,7 @@ public class CreateGamePage {
             backButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                	AvailableGames availableGames = new AvailableGames(stage);
+                	IPage availableGames = Block223Application.getPage(Pages.AvaliableGames);
                 	availableGames.display();
                 }
             });
@@ -260,7 +261,7 @@ public class CreateGamePage {
                     	
                     	Block223Controller.setGameDetails(1, spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
                     	
-                    	AvailableGames availableGames = new AvailableGames(stage);
+                    	IPage availableGames = Block223Application.getPage(Pages.AvaliableGames);
                     	availableGames.display();
     	                
     				} catch (InvalidInputException e) {

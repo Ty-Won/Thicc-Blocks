@@ -18,7 +18,7 @@ public class Block223Persistence {
 			btms = new Block223();
 		}
 		else {
-			//btms.reinitialize();
+			btms.reinitialize();
 		}
 		return btms;
 	}
