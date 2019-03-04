@@ -7,6 +7,7 @@ import ca.mcgill.ecse223.block.application.Block223Application;
 import ca.mcgill.ecse223.block.application.Block223Application.Pages;
 import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
+import ca.mcgill.ecse223.block.model.Admin;
 import ca.mcgill.ecse223.block.model.Block223;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -169,8 +170,16 @@ public class LoginPage implements IPage {
                 
                 try {
 					Block223Controller.login(usernameField.getText(), passwordField.getText());
-					IPage welcomePage = Block223Application.getPage(Pages.Welcome);
-	                welcomePage.display();
+					
+					if(Block223Application.getCurrentUserRole() instanceof Admin)
+					{
+						IPage availableGames = Block223Application.getPage(Pages.AvaliableGames);
+						availableGames.display();
+					}
+					else {
+						IPage welcomePage = Block223Application.getPage(Pages.Welcome);
+						welcomePage.display();						
+					}
 					
 				} catch (InvalidInputException e) {
 					Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Login Error", e.getMessage());
