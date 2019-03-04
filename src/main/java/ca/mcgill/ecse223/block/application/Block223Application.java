@@ -47,9 +47,10 @@ public class Block223Application extends Application {
     public void start(Stage stage) {
     	Block223Application.stage = stage;
     	
+    	/*
     	try {
 			//Block223Controller.register("Michael", "abc", "123");
-			Block223Controller.login("Michael", "123");
+			//Block223Controller.login("Michael", "123");
 			
 			//Block223Controller.createGame("Game 1");
 			//Block223Controller.createGame("ANother one");
@@ -57,15 +58,10 @@ public class Block223Application extends Application {
 		} catch (InvalidInputException e) {
 			Components.showAlert(AlertType.INFORMATION, stage.getOwner(),  "", "throw in start:\n" + e.getMessage());
 		}
+    	 */
     	
-    	IPage availableGames = Block223Application.getPage(Pages.AvaliableGames);
-    	availableGames.display();
-    	
-    	
-    	/*
-    	LoginPage loginPage = new LoginPage(stage); 
-    	loginPage.display();
-    	*/
+    	IPage login = Block223Application.getPage(Pages.Login);
+    	login.display();
     }
     
     public static IPage getPage(Pages page) {
