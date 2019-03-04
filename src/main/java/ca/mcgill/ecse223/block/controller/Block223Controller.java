@@ -410,8 +410,8 @@ public class Block223Controller {
         int maxHorizontalBlocks = x_y_capacity[0];
         int maxVerticalBlocks = x_y_capacity[1];
 
-        if(gridHorizontalPosition>0 && gridHorizontalPosition<maxHorizontalBlocks
-            && gridVerticalPosition>0 && gridVerticalPosition<maxVerticalBlocks){
+        if(gridHorizontalPosition>0 && gridHorizontalPosition<=maxHorizontalBlocks
+            && gridVerticalPosition>0 && gridVerticalPosition<=maxVerticalBlocks){
 
 			currentLevel.addBlockAssignment(gridHorizontalPosition,gridVerticalPosition, block, game);
 
