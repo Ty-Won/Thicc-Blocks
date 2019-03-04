@@ -293,10 +293,8 @@ public class UpdateGamePage implements IPage {
                 	try {
                     	Block223Controller.updateGame(gameNameField.getText(), gameNrLevels, spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
     					
-                    	//Currently redirects to the welcome page until other pages are added!!
-                    	//TODO: Change to redirect to Available LEVELS page
-                    	WelcomePage welcomePage = new WelcomePage(stage);
-    	                welcomePage.display();
+                    	IPage availableLevels = Block223Application.getPage(Pages.AvailableLevels);
+                    	availableLevels.display();
     				} catch (InvalidInputException e) {
     					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", e.getMessage());
     				}
