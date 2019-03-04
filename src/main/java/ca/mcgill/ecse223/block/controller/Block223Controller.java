@@ -717,11 +717,53 @@ public class Block223Controller {
 		return new TOBlock(block.getId(), block.getRed(), block.getGreen(), block.getBlue(), block.getPoints());
 	}
 
+	/**
+	 * Get all block assigments associated with a given level
+	 * 
+	 * @param level - level ID
+	 * @throws InvalidInputException
+	 */
 	public List<TOGridCell> getBlocksAtLevelOfCurrentDesignableGame(int level) throws InvalidInputException {
-		return null;
-	}
+		Game game = Block223Application.getCurrentGame();
 
-	
+		//Beginning of method input checks
+		if(!(Block223Application.getCurrentUserRole() instanceof Admin)) {
+			throw new InvalidInputException("Admin privileges are required to access game information.");
+		}
+
+		if(game == null) {
+			throw new InvalidInputException("A game must be selected to access its information.");
+		}
+
+		if (Block223Application.getCurrentUserRole() != game.getAdmin()) {
+			throw new InvalidInputException("Only the admin who created the game can access its information.");
+		}
+
+		List<TOGridCell> result = new ArrayList<TOGridCell>();
+
+		Level lvl;
+		try {
+			lvl = game.getLevel(level-1);
+		} catch(IndexOutOfBoundsException e) {
+			throw new InvalidInputException("Level " + level + " does not exist for the game.");
+		}
+
+		for (BlockAssignment assignment : lvl.getBlockAssignments()) {
+			TOGridCell toGridCell = new TOGridCell(
+				assignment.getGridHorizontalPosition(),
+				assignment.getGridVerticalPosition(),
+				assignment.getBlock().getId(),
+				assignment.getBlock().getRed(),
+				assignment.getBlock().getGreen(),
+				assignment.getBlock().getBlue(),
+				assignment.getBlock().getPoints()
+			);
+
+			result.add(toGridCell);
+		}
+
+		return result; 
+	}
 
 	public static TOUserMode getUserMode() {
 		TOUserMode mode;
