@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.mcgill.ecse223.block.application.Block223Application;
+import ca.mcgill.ecse223.block.application.Block223Application.Pages;
 import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
 import ca.mcgill.ecse223.block.controller.TOGame;
@@ -158,7 +159,8 @@ public class AvailableLevelsPage {
                     Components.showAlert(Alert.AlertType.INFORMATION, gridPane.getScene().getWindow(), "Edit Level",
                             "Please select a Level to edit");
                 } else {
-                    EditLevelPage editLevelPage = new EditLevelPage(stage,selectedLevelId);
+                    EditLevelPage editLevelPage = (EditLevelPage)Block223Application.getPage(Pages.EditLevel);
+                    editLevelPage.setLevelID(selectedLevelId);
                     editLevelPage.display();
                 }
             }
@@ -168,12 +170,8 @@ public class AvailableLevelsPage {
         doneButton.setOnAction(new EventHandler <ActionEvent>(){
             @Override
             public void handle(ActionEvent event){
-                try{
-                    UpdateGamePage updateGamePage = new UpdateGamePage(stage);
-                    updateGamePage.display();
-                }catch (InvalidInputException e){
-                    Components.showAlert(Alert.AlertType.ERROR,gridPane.getScene().getWindow(),"Game Error","No Game to Update");
-                }
+                UpdateGamePage updateGamePage = (UpdateGamePage) Block223Application.getPage(Pages.UpdateGame);
+                updateGamePage.display();
             }
         });
 
