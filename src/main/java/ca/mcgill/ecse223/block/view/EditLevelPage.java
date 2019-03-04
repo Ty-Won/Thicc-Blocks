@@ -225,8 +225,8 @@ public class EditLevelPage {
 
         int[] cap = Block223Controller.getMaxBlockCapacity();
 
-        for (int x = 0; x < cap[0]; x++) {
-            for (int y = 0; y < cap[1]; y++) {
+        for (int x = 0; x < cap[0]-1; x++) {
+            for (int y = 0; y < cap[1]-1; y++) {
 
                 // Allocate each cell a white rectangle
                 Rectangle rect = new Rectangle(20, 20, Color.WHITE);
