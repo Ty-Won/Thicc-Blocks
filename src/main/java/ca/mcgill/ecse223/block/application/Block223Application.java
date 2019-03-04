@@ -48,13 +48,12 @@ public class Block223Application extends Application {
     	Block223Application.stage = stage;
     	
     	try {
-			Block223Controller.register("Michael", "abc", "123");
+			//Block223Controller.register("Michael", "abc", "123");
 			Block223Controller.login("Michael", "123");
 			
-			//System.out.println(block223.getGames().size());
 			//Block223Controller.createGame("Game 1");
 			//Block223Controller.createGame("ANother one");
-			//System.out.println(block223.getGames().size());
+
 		} catch (InvalidInputException e) {
 			Components.showAlert(AlertType.INFORMATION, stage.getOwner(),  "", "throw in start:\n" + e.getMessage());
 		}
