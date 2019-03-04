@@ -641,15 +641,17 @@ public class Block223Controller {
 		
 		List<TOGame> toGames = new ArrayList<TOGame>();
 		for(Game game : games) {
-			TOGame toGame = new TOGame(game.getName(), 
-							game.getLevels().size(), 
-							game.getNrBlocksPerLevel(), 
-							game.getBall().getMinBallSpeedX(), 
-							game.getBall().getMinBallSpeedY(), 
-							game.getBall().getBallSpeedIncreaseFactor(), 
-							game.getPaddle().getMaxPaddleLength(), 
-							game.getPaddle().getMinPaddleLength());
-			toGames.add(toGame);
+			if(game.getAdmin().equals(admin)) {
+				TOGame toGame = new TOGame(game.getName(), 
+								game.getLevels().size(), 
+								game.getNrBlocksPerLevel(), 
+								game.getBall().getMinBallSpeedX(), 
+								game.getBall().getMinBallSpeedY(), 
+								game.getBall().getBallSpeedIncreaseFactor(), 
+								game.getPaddle().getMaxPaddleLength(), 
+								game.getPaddle().getMinPaddleLength());
+				toGames.add(toGame);
+			}
 		}
 		
 		return toGames;
