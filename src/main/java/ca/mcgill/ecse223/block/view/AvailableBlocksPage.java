@@ -188,8 +188,8 @@ public class AvailableBlocksPage implements IPage {
         addButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) { 
-                // IPage updateGamePage = Block223Application.getPage(Pages.UpdateGame);
-                // updateGamePage.display();
+                IPage createBlockPage = Block223Application.getPage(Pages.CreateBlock);
+                createBlockPage.display();
             }
         });
 

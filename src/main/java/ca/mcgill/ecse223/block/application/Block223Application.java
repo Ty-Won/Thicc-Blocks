@@ -13,6 +13,7 @@ import ca.mcgill.ecse223.block.view.AvailableGames;
 import ca.mcgill.ecse223.block.view.AvailableLevelsPage;
 import ca.mcgill.ecse223.block.view.AvailableBlocksPage;
 import ca.mcgill.ecse223.block.view.Components;
+import ca.mcgill.ecse223.block.view.CreateBlockPage;
 import ca.mcgill.ecse223.block.view.CreateGamePage;
 import ca.mcgill.ecse223.block.view.EditLevelPage;
 import ca.mcgill.ecse223.block.view.IPage;
@@ -32,7 +33,7 @@ public class Block223Application extends Application {
 	public static final int APPLICATION_HEIGHT = 800;
 
 	public enum Pages {
-		Login, Welcome, AvaliableGames, CreateGame, UpdateGame, EditLevel, AvailableLevels, Register, UpdateBlock, AvailableBlocks
+		Login, Welcome, AvaliableGames, CreateGame, UpdateGame, EditLevel, AvailableLevels, Register, UpdateBlock, AvailableBlocks, CreateBlock
 	}
 
 	private static HashMap<Pages, IPage> pageMap;
@@ -98,7 +99,9 @@ public class Block223Application extends Application {
 			case AvailableBlocks:
 				newPage = new AvailableBlocksPage(Block223Application.stage);
 				break;
-				
+			case CreateBlock:
+				newPage = new CreateBlockPage(Block223Application.stage);
+				break;
 			}
 
 			pageMap.put(page, newPage);

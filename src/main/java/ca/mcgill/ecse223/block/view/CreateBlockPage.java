@@ -40,16 +40,11 @@ import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpdateBlockPage implements IPage{
+public class CreateBlockPage implements IPage{
 	Stage stage;
-	int blockID;
 
-	public UpdateBlockPage(Stage stage) {
+	public CreateBlockPage(Stage stage) {
 		this.stage = stage;
-	}
-	
-	public void setBlockID(int blockID) {
-		this.blockID = blockID;
 	}
 
 	public void display() {
@@ -65,7 +60,7 @@ public class UpdateBlockPage implements IPage{
 		Scene scene = new Scene(gridPane, 1000, 600);
 
 		// Set the title scene and display it
-		stage.setTitle("Update Block");
+		stage.setTitle("Create Block");
 		stage.setScene(scene);
 		stage.show();
 
@@ -139,50 +134,35 @@ public class UpdateBlockPage implements IPage{
 
 	private void addUIComponents(GridPane gridPane) {
 		// Add Header
-		Label headerLabel = new Label("Edit Block");
+		Label headerLabel = new Label("Create Block");
 		headerLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, 50));
 		gridPane.add(headerLabel, 0,0,2,1);
 		GridPane.setHalignment(headerLabel, HPos.CENTER);
 		GridPane.setMargin(headerLabel, new Insets(20, 0,20,0));
 
 		// Add Done Button
-		Button done = new Button("Done");
-		done.setPrefHeight(40);
-		done.setDefaultButton(true);
-		done.setPrefWidth(100);
-		gridPane.add(done, 0, 4, 2, 1);
-		GridPane.setHalignment(done, HPos.CENTER);
-		GridPane.setMargin(done, new Insets(20, 0,20,0));
+		Button create = new Button("Create");
+		create.setPrefHeight(40);
+		create.setDefaultButton(true);
+		create.setPrefWidth(100);
+		gridPane.add(create, 0, 4, 2, 1);
+		GridPane.setHalignment(create, HPos.CENTER);
+		GridPane.setMargin(create, new Insets(20, 0,20,0));
 
 		// Add Value label for number of points for the block being updated
 		Label valueLabel = new Label("Value  ");
 		gridPane.add(valueLabel, 0, 3);
-
-		TOBlock block = null;
-		try {
-			block = Block223Controller.getBlockOfCurrentDesignableGame(blockID);
-		} catch (InvalidInputException e1) {
-			Components.showAlert(AlertType.ERROR, stage.getOwner(), "ERROR", "Unable to get the block with the current blockID");
-		}
 		
 		// Add Value text field
 		TextField valueField = new TextField();
 		valueField.setPrefHeight(30);
-		valueField.setText(Integer.toString(block.getPoints()));
+		valueField.setText("0");
 		gridPane.add(valueField, 1, 3);
-
-		// Add spinner component for incrementing/decrementing points for a block
-		final Spinner<Integer> upDown = new Spinner<Integer>();
-		upDown.setPrefHeight(30);
-		gridPane.add(upDown, 2, 3);
-
-		initializeSpinner(upDown, 1, 1000, 1);
 
 		
 		// Add color picker button 
 		final ColorPicker colorPicker = new ColorPicker();
-		Color curColor = Color.rgb(block.getRed(), block.getGreen(), block.getBlue());
-		colorPicker.setValue(curColor);
+		colorPicker.setValue(Color.WHITE);
 
 		final Rectangle colorSquare = new Rectangle();
 		colorSquare.setX(20);
@@ -198,7 +178,7 @@ public class UpdateBlockPage implements IPage{
 		//colorPicker.getStyleClass().add("button");
 
 		// Implementing done button function
-		done.setOnAction(new EventHandler<ActionEvent>(){
+		create.setOnAction(new EventHandler<ActionEvent>(){
 			@Override
 
 			public void handle(ActionEvent event) {
@@ -213,7 +193,7 @@ public class UpdateBlockPage implements IPage{
 	            int g = (int)( color.getGreen() * 255 );
 	            int b = (int)( color.getBlue() * 255 );
 				try {
-					Block223Controller.updateBlock(blockID, r, g, b, points);
+					Block223Controller.addBlock(r, g, b, points);
 					
 					IPage availableBlocks = Block223Application.getPage(Pages.AvailableBlocks);
 					availableBlocks.display();
