@@ -6,6 +6,7 @@ import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
 import ca.mcgill.ecse223.block.controller.TOBlock;
 import ca.mcgill.ecse223.block.model.*;
+import ca.mcgill.ecse223.block.persistence.Block223Persistence;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import javafx.geometry.HPos;

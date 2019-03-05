@@ -9,6 +9,7 @@ import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
 import ca.mcgill.ecse223.block.controller.TOGame;
 import ca.mcgill.ecse223.block.model.Block223;
+import ca.mcgill.ecse223.block.persistence.Block223Persistence;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -267,6 +268,7 @@ public class UpdateGamePage implements IPage {
                 	
                 	try {
                     	Block223Controller.updateGame(gameNameField.getText(), gameNrLevels, spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
+    					Block223Persistence.save(Block223Application.getBlock223());
     					
                     	IPage availableGames = Block223Application.getPage(Pages.AvaliableGames);
                     	availableGames.display();
