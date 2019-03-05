@@ -39,7 +39,7 @@ import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpdateBlockPage {
+public class UpdateBlockPage implements IPage{
 	Stage stage;
 	int blockID;
 
