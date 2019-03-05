@@ -43,6 +43,8 @@ public class AvailableLevelsPage implements IPage {
 
     Stage stage;
 
+    private int numberOfLevels = 0;
+
     public AvailableLevelsPage(Stage stage) {
         this.stage = stage;
     }
@@ -82,20 +84,19 @@ public class AvailableLevelsPage implements IPage {
     }
 
     private void addUIComponents(GridPane gridPane) throws FileNotFoundException {
-        ObservableList data = FXCollections.observableArrayList();
+        
+        ObservableList<String> data = FXCollections.observableArrayList();
 
-        int numberOfLevels=0;
         try {
             numberOfLevels = Block223Controller.getCurrentDesignableGame().getNrLevels();
         } catch (InvalidInputException e) {
-            // TODO Auto-generated catch block
-            System.out.println("Fix the bug you fool");
-            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
         }
 
-        for (int playableLevelNumber=0;playableLevelNumber<numberOfLevels;playableLevelNumber++){
-            data.add("Level "+playableLevelNumber);
+        for (int playableLevelNumber=1; playableLevelNumber <= numberOfLevels; playableLevelNumber++){
+            data.add("Level " + playableLevelNumber);
         }
+        
         ListView<String> listView = new ListView<String>(data);
         gridPane.add(listView, 1, 1);
 
@@ -105,15 +106,15 @@ public class AvailableLevelsPage implements IPage {
         GridPane.setHalignment(headerLabel, HPos.CENTER);
         GridPane.setMargin(headerLabel, new Insets(20, 0, 20, 0));
 
-        // Button deleteButton = new Button("DELETE");
-        // deleteButton.setPrefHeight(40);
-        // deleteButton.setDefaultButton(true);
-        // deleteButton.setPrefWidth(130);
-        // deleteButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
-        // deleteButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
-        // gridPane.add(deleteButton, 3, 1, 1, 1);
-        // GridPane.setHalignment(deleteButton, HPos.CENTER);
-        // GridPane.setMargin(deleteButton, new Insets(20, 0,20,0));
+        Button deleteButton = new Button("DELETE");
+        deleteButton.setPrefHeight(40);
+        deleteButton.setDefaultButton(true);
+        deleteButton.setPrefWidth(130);
+        deleteButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
+        deleteButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
+        gridPane.add(deleteButton, 0, 3, 1, 1);
+        GridPane.setHalignment(deleteButton, HPos.CENTER);
+        GridPane.setMargin(deleteButton, new Insets(20, 0,20,0));
 
         Button editButton = new Button("EDIT");
         editButton.setPrefHeight(40);
@@ -126,15 +127,15 @@ public class AvailableLevelsPage implements IPage {
         GridPane.setMargin(editButton, new Insets(20, 0, 20, 0));
 
 
-        // Button addButton = new Button("ADD");
-        // addButton.setPrefHeight(40);
-        // addButton.setDefaultButton(true);
-        // addButton.setPrefWidth(130);
-        // addButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
-        // addButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
-        // gridPane.add(addButton, 3, 2, 1, 1);
-        // GridPane.setHalignment(addButton, HPos.CENTER);
-        // GridPane.setMargin(addButton, new Insets(20, 0, 20, 0));
+        Button addButton = new Button("ADD");
+        addButton.setPrefHeight(40);
+        addButton.setDefaultButton(true);
+        addButton.setPrefWidth(130);
+        addButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
+        addButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
+        gridPane.add(addButton, 1, 2, 1, 1);
+        GridPane.setHalignment(addButton, HPos.CENTER);
+        GridPane.setMargin(addButton, new Insets(20, 0, 20, 0));
 
 
         Button doneButton = new Button("DONE");
@@ -152,15 +153,16 @@ public class AvailableLevelsPage implements IPage {
         editButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                int selectedLevelId = listView.getSelectionModel().getSelectedIndex();
+                int selectedId = listView.getSelectionModel().getSelectedIndex();
 
                 //Index is invalid
-                if (selectedLevelId == -1) {
+                if (selectedId == -1) {
                     Components.showAlert(Alert.AlertType.INFORMATION, gridPane.getScene().getWindow(), "Edit Level",
                             "Please select a Level to edit");
                 } else {
+                    int levelId = selectedId + 1;
                     EditLevelPage editLevelPage = (EditLevelPage)Block223Application.getPage(Pages.EditLevel);
-                    editLevelPage.setLevelID(selectedLevelId);
+                    editLevelPage.setLevelID(levelId);
                     editLevelPage.display();
                 }
             }
@@ -176,24 +178,86 @@ public class AvailableLevelsPage implements IPage {
         });
 
 
-        //To be determined until team gives their thoughts
-        // //edit
-        // deleteButton.setOnAction(new EventHandler <ActionEvent>(){
-        //     @Override
-        //     public void handle(ActionEvent event){
+        // DELETE
+        deleteButton.setOnAction(new EventHandler <ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event){
 
-        //     }
-        // });
+                if (numberOfLevels > 0) {
+                     // Decrese the number of levels
+                    numberOfLevels--;
+                    int selectedId = numberOfLevels;
+
+                    try {
+                        TOGame game = Block223Controller.getCurrentDesignableGame();
+                        
+                        Block223Controller.setGameDetails(
+                            numberOfLevels, 
+                            game.getNrBlocksPerLevel(),
+                            game.getMinBallSpeedX(),
+                            game.getMinBallSpeedY(),
+                            game.getBallSpeedIncreaseFactor(),
+                            game.getMaxPaddleLength(),
+                            game.getMinPaddleLength());
+
+                        data.remove(selectedId);
+
+                        numberOfLevels = Block223Controller.getCurrentDesignableGame().getNrLevels();
+                    } catch (InvalidInputException e) {
+                        showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
+                    }
+
+                }
+
+            }
+        });
 
     
 
-        // addButton.setOnAction(new EventHandler<ActionEvent>() {
-        //     @Override
-        //     public void handle(ActionEvent event) {
+        addButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
 
-        //     }
-        // });
+                // Increase the number of levels
+                numberOfLevels++;
 
+                if (numberOfLevels <= Game.MAX_NR_LEVELS){
+                    try {
+                        TOGame game = Block223Controller.getCurrentDesignableGame();
+                        
+                        Block223Controller.setGameDetails(
+                            numberOfLevels, 
+                            game.getNrBlocksPerLevel(),
+                            game.getMinBallSpeedX(),
+                            game.getMinBallSpeedY(),
+                            game.getBallSpeedIncreaseFactor(),
+                            game.getMaxPaddleLength(),
+                            game.getMinPaddleLength());
+
+                        numberOfLevels = Block223Controller.getCurrentDesignableGame().getNrLevels();
+                        data.add("Level " + numberOfLevels);
+
+                    } catch (InvalidInputException e) {
+                        showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
+                    }
+
+                }
+
+            }
+        });
+
+    }
+
+     /**
+     * Helper method for showing alert
+     */
+    private void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.initOwner(owner);
+        alert.show();
     }
 
 }
