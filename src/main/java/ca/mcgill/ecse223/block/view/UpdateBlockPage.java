@@ -1,6 +1,7 @@
 package ca.mcgill.ecse223.block.view;
 
 import ca.mcgill.ecse223.block.application.Block223Application;
+import ca.mcgill.ecse223.block.application.Block223Application.Pages;
 import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
 import ca.mcgill.ecse223.block.controller.TOBlock;
@@ -226,7 +227,8 @@ public class UpdateBlockPage implements IPage{
 				try {
 					Block223Controller.updateBlock(blockID, r, g, b, points);
 					
-					// TODO: switch to available blocks
+					IPage availableBlocks = Block223Application.getPage(Pages.AvailableBlocks);
+					availableBlocks.display();
 				} catch (InvalidInputException e) {
 					Components.showAlert(AlertType.ERROR, stage.getOwner(), "ERROR", "Unable to update block:\n" + e.getMessage());
 				}

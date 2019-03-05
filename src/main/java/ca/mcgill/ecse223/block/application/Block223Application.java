@@ -46,19 +46,21 @@ public class Block223Application extends Application {
 	public void start(Stage stage) {
 		Block223Application.stage = stage;
 
+		/*
 		try {
-			// //Block223Controller.register("Michael", "abc", "123");
-			Block223Controller.login("Michael", "123");
+			// Block223Controller.register("Michael", "abc", "123");
+			// Block223Controller.login("Michael", "123");
 
 			// //Block223Controller.createGame("Game 1");
 			// //Block223Controller.createGame("ANother one");
-			Block223Controller.selectGame("wow");
+			//Block223Controller.selectGame("wow");
 			currentGame.addBlock(1, 2, 3, 3);
 		} catch (InvalidInputException e) {
 			Components.showAlert(AlertType.INFORMATION, stage.getOwner(), "", "throw in start:\n" + e.getMessage());
 		}
-
-		IPage login = Block223Application.getPage(Pages.AvailableBlocks);
+		*/
+		
+		IPage login = Block223Application.getPage(Pages.Login);
 		login.display();
 	}
 
