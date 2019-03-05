@@ -554,10 +554,10 @@ public class Block223Controller {
 	public static void register(String username, String playerPassword, String adminPassword)
 			throws InvalidInputException {
 		if(Block223Application.getCurrentUserRole() != null) {
-			throw new InvalidInputException("Cannot register a new user while a user is logged in");
+			throw new InvalidInputException("Cannot register a new user while a user is logged in.");
 		}
 		if(playerPassword.equals(adminPassword)) {
-			throw new InvalidInputException("Player and Admin password have to be different.");
+			throw new InvalidInputException("The passwords have to be different.");
 		}
 		
 		Block223 block223 = Block223Application.getBlock223();
@@ -577,8 +577,8 @@ public class Block223Controller {
 			player.delete();
 			
 			String msg;
-			if(e.getMessage().equals("Cannot create due to duplicate username")) msg = "The username has already been taken";
-			else msg = "The username must be specificed";
+			if(e.getMessage().equals("Cannot create due to duplicate username")) msg = "The username has already been taken.";
+			else msg = "The username must be specificed.";
 			
 			throw new InvalidInputException(msg);
 		}
@@ -638,19 +638,20 @@ public class Block223Controller {
 		
 		Admin admin = (Admin) userRole;
 		List<Game> games = block223.getGames();
-		System.out.println("games: " + games.size());
 		
 		List<TOGame> toGames = new ArrayList<TOGame>();
 		for(Game game : games) {
-			TOGame toGame = new TOGame(game.getName(), 
-							game.getLevels().size(), 
-							game.getNrBlocksPerLevel(), 
-							game.getBall().getMinBallSpeedX(), 
-							game.getBall().getMinBallSpeedY(), 
-							game.getBall().getBallSpeedIncreaseFactor(), 
-							game.getPaddle().getMaxPaddleLength(), 
-							game.getPaddle().getMinPaddleLength());
-			toGames.add(toGame);
+			if(game.getAdmin().equals(admin)) {
+				TOGame toGame = new TOGame(game.getName(), 
+								game.getLevels().size(), 
+								game.getNrBlocksPerLevel(), 
+								game.getBall().getMinBallSpeedX(), 
+								game.getBall().getMinBallSpeedY(), 
+								game.getBall().getBallSpeedIncreaseFactor(), 
+								game.getPaddle().getMaxPaddleLength(), 
+								game.getPaddle().getMinPaddleLength());
+				toGames.add(toGame);
+			}
 		}
 		
 		return toGames;

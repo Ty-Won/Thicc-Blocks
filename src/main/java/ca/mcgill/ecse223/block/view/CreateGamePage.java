@@ -292,10 +292,8 @@ public class CreateGamePage implements IPage {
                     	
                     	Block223Controller.setGameDetails(1, spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
 
-                    	//Currently redirects to the welcome page until other pages are added!!
-                    	//TODO Change to redirect to Available Levels page
-                    	WelcomePage welcomePage = new WelcomePage(stage);
-    	                welcomePage.display();
+                    	IPage availableLevels = Block223Application.getPage(Pages.AvailableLevels);
+                    	availableLevels.display();
     	                
     				} catch (InvalidInputException e) {
     					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Create Game Error", e.getMessage());

@@ -146,7 +146,7 @@ public class LoginPage implements IPage {
         GridPane.setMargin(loginButton, new Insets(20, 0,20,0));
         
         // Add Create User Button 
-        Button createUserButon = new Button("Create User");
+        Button createUserButon = new Button("Register");
         createUserButon.setPrefHeight(40);
         createUserButon.setDefaultButton(true);
         createUserButon.setPrefWidth(130);
@@ -191,6 +191,7 @@ public class LoginPage implements IPage {
         createUserButon.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+            	/*
                 if(usernameField.getText().isEmpty()) {
                     Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Registration Error", "Please enter a username");
                     return;
@@ -199,6 +200,7 @@ public class LoginPage implements IPage {
                 	Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Registration Error", "Please enter a password");
                     return;
                 }
+                
 
                 try {
 					Block223Controller.register(usernameField.getText(), passwordField.getText(), null);
@@ -206,6 +208,9 @@ public class LoginPage implements IPage {
 				} catch (InvalidInputException e) {
 					Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Registration Error", e.getMessage());
 				}
+				*/
+            	IPage registerPage = Block223Application.getPage(Pages.Register);
+				registerPage.display();
               
             }
         });

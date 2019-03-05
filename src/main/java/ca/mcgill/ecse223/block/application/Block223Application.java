@@ -10,11 +10,13 @@ import javafx.stage.StageStyle;
 import ca.mcgill.ecse223.block.model.*;
 import ca.mcgill.ecse223.block.persistence.*;
 import ca.mcgill.ecse223.block.view.AvailableGames;
+import ca.mcgill.ecse223.block.view.AvailableLevelsPage;
 import ca.mcgill.ecse223.block.view.Components;
 import ca.mcgill.ecse223.block.view.CreateGamePage;
 import ca.mcgill.ecse223.block.view.EditLevelPage;
 import ca.mcgill.ecse223.block.view.IPage;
 import ca.mcgill.ecse223.block.view.LoginPage;
+import ca.mcgill.ecse223.block.view.RegisterPage;
 import ca.mcgill.ecse223.block.view.UpdateGamePage;
 import ca.mcgill.ecse223.block.view.WelcomePage;
 
@@ -33,7 +35,9 @@ public class Block223Application extends Application {
 			AvaliableGames,
 			CreateGame,
 			UpdateGame,
-			EditLevel
+			EditLevel,
+			AvailableLevels,
+			Register
 	}
 	
 	private static HashMap<Pages, IPage> pageMap;
@@ -86,6 +90,12 @@ public class Block223Application extends Application {
     		case EditLevel:
     			newPage = new EditLevelPage(Block223Application.stage);
     			break;
+    		case AvailableLevels:
+    			newPage = new AvailableLevelsPage(Block223Application.stage);
+    			break;
+    		case Register:
+    			newPage = new RegisterPage(Block223Application.stage);
+    			break;
     		}
     		
     		pageMap.put(page, newPage);
@@ -102,6 +112,7 @@ public class Block223Application extends Application {
     	pageMap.put(Pages.CreateGame, new CreateGamePage(stage));
     	pageMap.put(Pages.UpdateGame, new UpdateGamePage(stage));
     	pageMap.put(Pages.EditLevel, new EditLevelPage(stage));
+    	pageMap.put(Pages.Register, new RegisterPage(stage));
     }
 
     public static void main(String[] args) { 

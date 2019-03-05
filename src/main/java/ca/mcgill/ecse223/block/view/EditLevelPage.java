@@ -9,11 +9,13 @@ import javafx.util.Callback;
 import javafx.scene.shape.Rectangle;
 
 import ca.mcgill.ecse223.block.application.Block223Application;
+import ca.mcgill.ecse223.block.application.Block223Application.Pages;
 import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
 import ca.mcgill.ecse223.block.controller.TOBlock;
 import ca.mcgill.ecse223.block.controller.TOGame;
 import ca.mcgill.ecse223.block.controller.TOGridCell;
+import ca.mcgill.ecse223.block.persistence.Block223Persistence;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -151,6 +153,18 @@ public class EditLevelPage implements IPage {
         doneButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
         GridPane.setHalignment(doneButton, HPos.CENTER);
         GridPane.setMargin(doneButton, new Insets(20, 0,20,0));
+        
+        doneButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                	IPage availableLevels = Block223Application.getPage(Pages.AvailableLevels);
+                	availableLevels.display();
+                } catch (NumberFormatException n) {
+                	showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Error", "Unable to switch to available levels page");
+                }
+            }
+        });
 
         // Add Header
         Label headerLabel = new Label("THICC BLOCKS");
