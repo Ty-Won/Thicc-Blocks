@@ -459,7 +459,7 @@ public class Block223Controller {
 		// Get targeted level
 		Level targetLevel;
 		try {
-			targetLevel = game.getLevel(level);
+			targetLevel = game.getLevel(level-1);
 		} catch (Exception e) {
 			throw new InvalidInputException("Level " + level + " does not exist for the game");
 		}
@@ -513,7 +513,7 @@ public class Block223Controller {
 			throw new InvalidInputException("Only the admin who created the game can remove a block.");
 		}
 		
-		Level someLevel = game.getLevel(level);
+		Level someLevel = game.getLevel(level-1);
 		BlockAssignment assignment = findBlockAssignment(someLevel, gridHorizontalPosition, gridVerticalPosition);
 		
 		if(assignment != null){
