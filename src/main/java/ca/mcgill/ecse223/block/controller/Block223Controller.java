@@ -187,7 +187,7 @@ public class Block223Controller {
 
 		// Check to see if user created game
 		if (userRole != game.getAdmin()) {
-			throw new InvalidInputException("Only the admin who created the game can define its game settings.");
+			throw new InvalidInputException("Only the admin who created the game can select the game.");
 		}
 		
 		Block223Application.setCurrentGame(game);
@@ -215,7 +215,7 @@ public class Block223Controller {
 		
 		// User must be admin
 		if(!(userRole instanceof Admin)) {
-			throw new InvalidInputException("Admin privileges are required to define game settings");
+			throw new InvalidInputException("Admin privileges are required to define game settings.");
 		}
 
 		if (game == null) {
@@ -228,7 +228,7 @@ public class Block223Controller {
 		}
 
 		// Check to see if name is valid
-		String errMsg = "The name of a game must be specified";
+		String errMsg = "The name of a game must be specified.";
 		if (name == null) {
 			throw new InvalidInputException(errMsg);
 		} else if (name.isEmpty()) {
@@ -741,7 +741,7 @@ public class Block223Controller {
 		Block block = game.findBlock(id);
 
 		if (block == null) {
-			throw new InvalidInputException("The block does not exist");
+			throw new InvalidInputException("The block does not exist.");
 		}
 
 		return new TOBlock(block.getId(), block.getRed(), block.getGreen(), block.getBlue(), block.getPoints());
