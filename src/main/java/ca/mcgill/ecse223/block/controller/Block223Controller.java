@@ -387,7 +387,7 @@ public class Block223Controller {
         }
 
 
-        Level currentLevel = game.getLevel(level);
+        Level currentLevel = game.getLevel(level-1);
         if (currentLevel.numberOfBlockAssignments() == game.getNrBlocksPerLevel()) {
             throw new InvalidInputException("The number of blocks has reached the maximum number (" +
                     +game.getNrBlocksPerLevel() + ") allowed for this game.");
@@ -777,7 +777,7 @@ public class Block223Controller {
 		} catch(IndexOutOfBoundsException e) {
 			throw new InvalidInputException("Level " + level + " does not exist for the game.");
 		}
-
+		
 		for (BlockAssignment assignment : lvl.getBlockAssignments()) {
 			TOGridCell toGridCell = new TOGridCell(
 				assignment.getGridHorizontalPosition(),

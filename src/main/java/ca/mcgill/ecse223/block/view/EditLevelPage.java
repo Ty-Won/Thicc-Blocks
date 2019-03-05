@@ -307,7 +307,7 @@ public class EditLevelPage implements IPage {
         } catch (InvalidInputException e) {
             showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
         }
-
+        
         for (int x = 0; x < cap[0]-1; x++) {
             for (int y = 0; y < cap[1]-1; y++) {
 
@@ -330,6 +330,8 @@ public class EditLevelPage implements IPage {
                             rect.setFill(Color.rgb(assignement.getRed(), 
                                                    assignement.getGreen(),
                                                    assignement.getBlue()));
+
+                            
                         }
                     }
                 }
