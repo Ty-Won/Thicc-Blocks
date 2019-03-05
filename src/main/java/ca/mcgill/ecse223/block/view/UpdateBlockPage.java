@@ -3,6 +3,7 @@ package ca.mcgill.ecse223.block.view;
 import ca.mcgill.ecse223.block.application.Block223Application;
 import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
+import ca.mcgill.ecse223.block.controller.TOBlock;
 import ca.mcgill.ecse223.block.model.*;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
@@ -165,9 +166,17 @@ public class UpdateBlockPage {
 		Label valueLabel = new Label("Value  ");
 		gridPane.add(valueLabel, 0, 3);
 
+		TOBlock block = null;
+		try {
+			block = Block223Controller.getBlockOfCurrentDesignableGame(blockID);
+		} catch (InvalidInputException e1) {
+			Components.showAlert(AlertType.ERROR, stage.getOwner(), "ERROR", "Unable to get the block with the current blockID");
+		}
+		
 		// Add Value text field
 		TextField valueField = new TextField();
 		valueField.setPrefHeight(30);
+		valueField.setText(Integer.toString(block.getPoints()));
 		gridPane.add(valueField, 1, 3);
 
 		// Add spinner component for incrementing/decrementing points for a block
@@ -177,9 +186,11 @@ public class UpdateBlockPage {
 
 		initializeSpinner(upDown, 1, 1000, 1);
 
+		
 		// Add color picker button 
 		final ColorPicker colorPicker = new ColorPicker();
-		colorPicker.setValue(Color.WHITE);
+		Color curColor = Color.rgb(block.getRed(), block.getGreen(), block.getBlue());
+		colorPicker.setValue(curColor);
 
 		final Rectangle colorSquare = new Rectangle();
 		colorSquare.setX(20);
