@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
 
 import ca.mcgill.ecse223.block.application.Block223Application;
 import ca.mcgill.ecse223.block.application.Block223Application.Pages;
@@ -47,6 +48,9 @@ import javafx.stage.Window;
 public class AvailableBlocksPage implements IPage {
 
     Stage stage;
+    private HashMap<HBox, Integer> hboxMapping = new HashMap<HBox, Integer>();
+
+    
 
     public AvailableBlocksPage(Stage stage) {
         this.stage = stage;
@@ -162,6 +166,7 @@ public class AvailableBlocksPage implements IPage {
                 int points = blockType.getPoints();
 
                 HBox blockRow = addHBox(id, red, green, blue, points);
+                hboxMapping.put(blockRow,id);
                 VBox.setMargin(blockRow, new Insets(0, 0, 0, 8));
                 blockContainer.getChildren().add(blockRow);
             }
@@ -182,18 +187,14 @@ public class AvailableBlocksPage implements IPage {
         // doneButton.setOnAction(new EventHandler<ActionEvent>() {
         //     @Override
         //     public void handle(ActionEvent event) {       
-        //     	String selectedGameName = listView.getSelectionModel().getSelectedItem();
-        //     	if(selectedGameName == null) {
-        //         	Components.showAlert(Alert.AlertType.INFORMATION, gridPane.getScene().getWindow(), "Edit Block" , "Block is null");   
-        //     	}
-        //     	else {
-        // 			Game game = Block223Application.getBlock223().findGame(selectedGameName);
-		// 			if(game == null) Components.showAlert(Alert.AlertType.INFORMATION, gridPane.getScene().getWindow(), "Edit Game" , "selected game is null");
-            		
-		// 			Block223Application.setCurrentGame(game);
-        //         	IPage updateGamePage = Block223Application.getPage(Pages.UpdateGame);
-        //         	updateGamePage.display();
-        //     	}   
+            
+        //         HBox parentNode = (HBox)doneButton.getParent();
+        //         int id = hboxMapping.get(parentNode);
+        //         UpdateBlockPage updateBlockpage = (UpdateBlockPage)Block223Application.getPage(Pages.UpdateBlock);
+        //         // updateBlockpage.setBlockID(id);
+        //         updateBlockpage.setBlockID(id);
+        //     	updateBlockpage.display();
+
         //     }
         // });
 
@@ -217,6 +218,20 @@ public class AvailableBlocksPage implements IPage {
 
         addBlockColor(hbox, red, green, blue);
         hbox.getChildren().addAll(buttonEdit, buttonDelete);
+
+        buttonEdit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {       
+            
+                HBox parentNode = (HBox)buttonEdit.getParent();
+                int id = hboxMapping.get(parentNode);
+                UpdateBlockPage updateBlockpage = (UpdateBlockPage)Block223Application.getPage(Pages.UpdateBlock);
+                // updateBlockpage.setBlockID(id);
+                updateBlockpage.setBlockID(id);
+            	updateBlockpage.display();
+
+            }
+        });
 
         return hbox;
     }
