@@ -176,7 +176,6 @@ public class AvailableGames implements IPage {
             	}
             	else {
         			Game game = Block223Application.getBlock223().findGame(selectedGameName);
-					if(game == null) Components.showAlert(Alert.AlertType.INFORMATION, gridPane.getScene().getWindow(), "Edit Game" , "selected game is null");
             		
 					Block223Application.setCurrentGame(game);
                 	IPage updateGamePage = Block223Application.getPage(Pages.UpdateGame);
