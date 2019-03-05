@@ -117,15 +117,6 @@ public class EditLevelPage implements IPage {
 	}
 	
 	public void display() {
-
-
-        try {
-            Block223Controller.addBlock(255, 0, 0, 10);
-        } catch (InvalidInputException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-
         // Get the current game's block
         try {
             this.blocks = FXCollections.observableList(Block223Controller.getBlocksOfCurrentDesignableGame());
