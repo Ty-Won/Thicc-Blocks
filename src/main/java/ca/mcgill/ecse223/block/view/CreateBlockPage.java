@@ -22,6 +22,7 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -56,13 +57,6 @@ public class CreateBlockPage implements IPage{
 		// Add the UI components to the grid pane
 		addUIComponents(gridPane);
 
-		// Create the scene with gridPane as the root node
-		Scene scene = new Scene(gridPane, 1000, 600);
-
-		// Set the title scene and display it
-		stage.setTitle("Create Block");
-		stage.setScene(scene);
-		stage.show();
 
 		//Create an HBox to hold the back button at the top of the screen
 		HBox hbButtons = new HBox();
@@ -83,14 +77,27 @@ public class CreateBlockPage implements IPage{
 			backButton.setOnAction(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
-					//TODO Change to redirect to Available Games page
-					LoginPage loginPage = new LoginPage(stage); 
-					loginPage.display();
+					IPage availableBlocks = Block223Application.getPage(Pages.AvailableBlocks);
+					availableBlocks.display();
 				}
 			});
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found");
 		}
+		
+		
+        BorderPane root = new BorderPane();
+	    root.setPadding(new Insets(20)); // space between elements and window border
+	    root.setCenter(gridPane);
+	    root.setTop(hbButtons);
+	    
+	    // Create the scene with gridPane as the root node
+	    Scene scene = new Scene(root, Block223Application.APPLICATION_WIDTH, Block223Application.APPLICATION_HEIGHT);
+		
+		// Set the title scene and display it
+		stage.setTitle("Create Block");
+		stage.setScene(scene);
+		stage.show();
 	}
 
 
