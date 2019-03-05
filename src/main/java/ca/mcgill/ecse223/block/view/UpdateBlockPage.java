@@ -17,6 +17,7 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
@@ -39,10 +40,14 @@ import java.util.List;
 
 public class UpdateBlockPage {
 	Stage stage;
+	int blockID;
 
 	public UpdateBlockPage(Stage stage) {
 		this.stage = stage;
-
+	}
+	
+	public void setBlockID(int blockID) {
+		this.blockID = blockID;
 	}
 
 	public void display() {
@@ -200,6 +205,21 @@ public class UpdateBlockPage {
 				if(valueField.getText().isEmpty()) {
 					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Value can't be empty", "Please select a value");
 				}
+				
+				int points = Integer.parseInt(valueField.getText());
+				
+				Color color = colorPicker.getValue();
+	            int r = (int)( color.getRed() * 255 );
+	            int g = (int)( color.getGreen() * 255 );
+	            int b = (int)( color.getBlue() * 255 );
+				try {
+					Block223Controller.updateBlock(blockID, r, g, b, points);
+					
+					// TODO: switch to available blocks
+				} catch (InvalidInputException e) {
+					Components.showAlert(AlertType.ERROR, stage.getOwner(), "ERROR", "Unable to update block:\n" + e.getMessage());
+				}
+				
 				return;
 			}});     	
 
