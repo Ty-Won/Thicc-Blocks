@@ -126,7 +126,7 @@ public class Block223Controller {
 		int levelSize = levels.size();
 		
 		// If nrLevels is greater than current level size, then add sufficient number of levels
-		for (int i=levelSize-1; i<nrLevels; i++) {
+		for (int i=levelSize; i<nrLevels; i++) {
 			game.addLevel();
 		}
 		
