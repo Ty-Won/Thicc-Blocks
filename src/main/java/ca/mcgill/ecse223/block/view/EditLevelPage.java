@@ -239,7 +239,7 @@ public class EditLevelPage implements IPage {
         root.setCenter(gridPane);
         root.setTop(topPane);
 
-        Scene scene = new Scene(root, 600, 450);
+        Scene scene = new Scene(root, Block223Application.APPLICATION_WIDTH, Block223Application.APPLICATION_HEIGHT);
         stage.setScene(scene);
         stage.show();
     }
@@ -307,7 +307,7 @@ public class EditLevelPage implements IPage {
         } catch (InvalidInputException e) {
             showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
         }
-        
+
         for (int x = 0; x < cap[0]-1; x++) {
             for (int y = 0; y < cap[1]-1; y++) {
 
