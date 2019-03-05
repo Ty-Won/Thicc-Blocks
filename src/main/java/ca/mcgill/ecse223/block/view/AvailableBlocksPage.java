@@ -173,6 +173,30 @@ public class AvailableBlocksPage implements IPage {
         }
         gridPane.add(blockContainer, 5, 5, 2, 5);
 
+
+        // Add Add Block
+        Button addButton = new Button("Add Block");
+        addButton.setPrefHeight(40);
+        addButton.setDefaultButton(true);
+        addButton.setPrefWidth(130);
+        addButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
+        addButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
+        
+        GridPane.setHalignment(addButton, HPos.CENTER);
+        gridPane.add(addButton,7,10,2,1);
+
+        addButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) { 
+                // IPage updateGamePage = Block223Application.getPage(Pages.UpdateGame);
+                // updateGamePage.display();
+            }
+        });
+
+
+
+
+
         // Add Done Button
         Button doneButton = new Button("DONE");
         doneButton.setPrefHeight(40);
@@ -191,6 +215,9 @@ public class AvailableBlocksPage implements IPage {
                 updateGamePage.display();
             }
         });
+
+
+
 
 
     }
