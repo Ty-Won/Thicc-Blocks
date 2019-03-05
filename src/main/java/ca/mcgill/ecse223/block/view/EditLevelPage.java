@@ -118,6 +118,14 @@ public class EditLevelPage implements IPage {
 	
 	public void display() {
 
+
+        try {
+            Block223Controller.addBlock(255, 0, 0, 10);
+        } catch (InvalidInputException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+
         // Get the current game's block
         try {
             this.blocks = FXCollections.observableList(Block223Controller.getBlocksOfCurrentDesignableGame());
@@ -172,12 +180,67 @@ public class EditLevelPage implements IPage {
         GridPane.setHalignment(headerLabel, HPos.CENTER);
         GridPane.setMargin(headerLabel, new Insets(20, 0,20,0));
 
+
+        // Add logo
+        ImageView logo = new ImageView();   
+        logo.setFitHeight(50);
+        logo.setFitWidth(50);
+        try {
+            Image image = new Image(new FileInputStream("Images/trash.png"));
+            logo.setImage(image);
+        } catch (FileNotFoundException e) {
+            showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
+        }
+
+        logo.setOnDragOver(new EventHandler <DragEvent>() {
+            public void handle(DragEvent event) {
+                /* data is dragged over the target */
+                System.out.println("onDragOver");
+                
+                /* accept it only if it is  not dragged from the same node 
+                 * and if it has a string data */
+                if (event.getGestureSource() != logo &&
+                        event.getDragboard().hasString()) {
+                    /* allow for both copying and moving, whatever user chooses */
+                    event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                }
+                
+                event.consume();
+            }
+        });
+
+        logo.setOnDragDropped(new EventHandler <DragEvent>() {
+            public void handle(DragEvent event) {
+
+                /* data dropped */
+                System.out.println("onDragDropped");
+                /* if there is a string data on dragboard, read it and use it */
+                Dragboard db = event.getDragboard();
+                boolean success = false;
+
+                if (db.hasString()) {
+
+                    if (dragType == BlockDragType.MOVE_BLOCK) {
+                        handleRemoveBlock(sourceRectangle);
+                    }
+
+                    success = true;
+                }
+                /* let the source know whether the string was successfully 
+                 * transferred and used */
+                event.setDropCompleted(success);
+                
+                event.consume();
+            }
+        });
+
         // ---------------------
 
 
         rightPane.getChildren().add(lview);
         rightPane.getChildren().add(doneButton);
 
+        topPane.getChildren().add(logo);
         topPane.getChildren().add(headerLabel);
 
         // Set BorderPane elements
@@ -428,6 +491,24 @@ public class EditLevelPage implements IPage {
             // Set the colors for the rectangles
             Color color = (Color) source.getFill();
             target.setFill(color);
+            source.setFill(Color.WHITE);
+        } catch (InvalidInputException e) {
+            showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
+        }
+    }
+
+    /**
+     * Helper to remove block assignment
+     * 
+     * @param source - Source rectangle
+     */
+    private void handleRemoveBlock(Rectangle source) {
+
+        int gridHorizontalPosition = (int) source.getX();
+        int gridVerticalPosition = (int) source.getY();
+
+        try {
+            Block223Controller.removeBlock(levelID, gridHorizontalPosition, gridVerticalPosition);
             source.setFill(Color.WHITE);
         } catch (InvalidInputException e) {
             showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
