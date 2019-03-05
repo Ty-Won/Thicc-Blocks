@@ -184,19 +184,13 @@ public class AvailableBlocksPage implements IPage {
         GridPane.setHalignment(doneButton, HPos.CENTER);
         gridPane.add(doneButton,5,10,2,1);
 
-        // doneButton.setOnAction(new EventHandler<ActionEvent>() {
-        //     @Override
-        //     public void handle(ActionEvent event) {       
-            
-        //         HBox parentNode = (HBox)doneButton.getParent();
-        //         int id = hboxMapping.get(parentNode);
-        //         UpdateBlockPage updateBlockpage = (UpdateBlockPage)Block223Application.getPage(Pages.UpdateBlock);
-        //         // updateBlockpage.setBlockID(id);
-        //         updateBlockpage.setBlockID(id);
-        //     	updateBlockpage.display();
-
-        //     }
-        // });
+        doneButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) { 
+                IPage updateGamePage = Block223Application.getPage(Pages.UpdateGame);
+                updateGamePage.display();
+            }
+        });
 
 
     }
@@ -226,9 +220,28 @@ public class AvailableBlocksPage implements IPage {
                 HBox parentNode = (HBox)buttonEdit.getParent();
                 int id = hboxMapping.get(parentNode);
                 UpdateBlockPage updateBlockpage = (UpdateBlockPage)Block223Application.getPage(Pages.UpdateBlock);
-                // updateBlockpage.setBlockID(id);
                 updateBlockpage.setBlockID(id);
             	updateBlockpage.display();
+
+            }
+        });
+
+
+        buttonDelete.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {       
+            
+                HBox parentNode = (HBox)buttonEdit.getParent();
+                int id = hboxMapping.get(parentNode);
+                try{
+                    Block223Controller.deleteBlock(id);
+                } catch (InvalidInputException e) {
+                    Components.showAlert(AlertType.INFORMATION, stage.getOwner(), "",
+                    "Error deleting game blocks:\n" + e.getMessage());
+                }
+
+                IPage AvailableBlocksPage = Block223Application.getPage(Pages.AvailableBlocks);
+                AvailableBlocksPage.display();
 
             }
         });
