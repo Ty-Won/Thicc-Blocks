@@ -194,12 +194,9 @@ public class AvailableGames implements IPage {
             	else {
             		try {
             			Game game = Block223Application.getBlock223().findGame(selectedGameName);
-						if(game == null) Components.showAlert(Alert.AlertType.INFORMATION, gridPane.getScene().getWindow(), "Delete Game" , "game is null before delete");
-
 						Block223Controller.deleteGame(selectedGameName);
 						
 						game = Game.getWithName(selectedGameName);
-						if(game == null) Components.showAlert(Alert.AlertType.INFORMATION, gridPane.getScene().getWindow(), "Delete Game" , "game is null after delete");
 						data.remove(selectedGameName);
 	                	Components.showAlert(Alert.AlertType.INFORMATION, gridPane.getScene().getWindow(), "Delete Game" , "Successfully deleted game: " + selectedGameName);   
 						
