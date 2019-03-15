@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.*;
 
 // line 52 "../../../../../Block223Persistence.ump"
-// line 29 "../../../../../Block223.ump"
+// line 41 "../../../../../Block223.ump"
 public class Game implements Serializable
 {
 
@@ -46,6 +46,8 @@ public class Game implements Serializable
   private Ball ball;
   private Paddle paddle;
   private Block223 block223;
+  private List<PlayGame> playGames;
+  private List<HallOfFame> hallOfFames;
 
   //------------------------
   // CONSTRUCTOR
@@ -81,6 +83,8 @@ public class Game implements Serializable
     {
       throw new RuntimeException("Unable to create game due to block223");
     }
+    playGames = new ArrayList<PlayGame>();
+    hallOfFames = new ArrayList<HallOfFame>();
   }
 
   public Game(String aName, int aNrBlocksPerLevel, Admin aAdmin, int aMinBallSpeedXForBall, int aMinBallSpeedYForBall, double aBallSpeedIncreaseFactorForBall, int aMaxPaddleLengthForPaddle, int aMinPaddleLengthForPaddle, Block223 aBlock223)
@@ -102,6 +106,8 @@ public class Game implements Serializable
     {
       throw new RuntimeException("Unable to create game due to block223");
     }
+    playGames = new ArrayList<PlayGame>();
+    hallOfFames = new ArrayList<HallOfFame>();
   }
 
   //------------------------
@@ -260,6 +266,66 @@ public class Game implements Serializable
   public Block223 getBlock223()
   {
     return block223;
+  }
+  /* Code from template association_GetMany */
+  public PlayGame getPlayGame(int index)
+  {
+    PlayGame aPlayGame = playGames.get(index);
+    return aPlayGame;
+  }
+
+  public List<PlayGame> getPlayGames()
+  {
+    List<PlayGame> newPlayGames = Collections.unmodifiableList(playGames);
+    return newPlayGames;
+  }
+
+  public int numberOfPlayGames()
+  {
+    int number = playGames.size();
+    return number;
+  }
+
+  public boolean hasPlayGames()
+  {
+    boolean has = playGames.size() > 0;
+    return has;
+  }
+
+  public int indexOfPlayGame(PlayGame aPlayGame)
+  {
+    int index = playGames.indexOf(aPlayGame);
+    return index;
+  }
+  /* Code from template association_GetMany */
+  public HallOfFame getHallOfFame(int index)
+  {
+    HallOfFame aHallOfFame = hallOfFames.get(index);
+    return aHallOfFame;
+  }
+
+  public List<HallOfFame> getHallOfFames()
+  {
+    List<HallOfFame> newHallOfFames = Collections.unmodifiableList(hallOfFames);
+    return newHallOfFames;
+  }
+
+  public int numberOfHallOfFames()
+  {
+    int number = hallOfFames.size();
+    return number;
+  }
+
+  public boolean hasHallOfFames()
+  {
+    boolean has = hallOfFames.size() > 0;
+    return has;
+  }
+
+  public int indexOfHallOfFame(HallOfFame aHallOfFame)
+  {
+    int index = hallOfFames.indexOf(aHallOfFame);
+    return index;
   }
   /* Code from template association_SetOneToMany */
   public boolean setAdmin(Admin aAdmin)
@@ -551,6 +617,150 @@ public class Game implements Serializable
     wasSet = true;
     return wasSet;
   }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfPlayGames()
+  {
+    return 0;
+  }
+  /* Code from template association_AddManyToOne */
+  public PlayGame addPlayGame(int aNrLives, int aCurrScore, int aCurrLevel, double aCurrWaitTime, PlayPaddle aPlayPaddle, PlayBall aPlayBall, Block223 aBlock223, Player aPlayer)
+  {
+    return new PlayGame(aNrLives, aCurrScore, aCurrLevel, aCurrWaitTime, aPlayPaddle, aPlayBall, aBlock223, this, aPlayer);
+  }
+
+  public boolean addPlayGame(PlayGame aPlayGame)
+  {
+    boolean wasAdded = false;
+    if (playGames.contains(aPlayGame)) { return false; }
+    Game existingGame = aPlayGame.getGame();
+    boolean isNewGame = existingGame != null && !this.equals(existingGame);
+    if (isNewGame)
+    {
+      aPlayGame.setGame(this);
+    }
+    else
+    {
+      playGames.add(aPlayGame);
+    }
+    wasAdded = true;
+    return wasAdded;
+  }
+
+  public boolean removePlayGame(PlayGame aPlayGame)
+  {
+    boolean wasRemoved = false;
+    //Unable to remove aPlayGame, as it must always have a game
+    if (!this.equals(aPlayGame.getGame()))
+    {
+      playGames.remove(aPlayGame);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addPlayGameAt(PlayGame aPlayGame, int index)
+  {  
+    boolean wasAdded = false;
+    if(addPlayGame(aPlayGame))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfPlayGames()) { index = numberOfPlayGames() - 1; }
+      playGames.remove(aPlayGame);
+      playGames.add(index, aPlayGame);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMovePlayGameAt(PlayGame aPlayGame, int index)
+  {
+    boolean wasAdded = false;
+    if(playGames.contains(aPlayGame))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfPlayGames()) { index = numberOfPlayGames() - 1; }
+      playGames.remove(aPlayGame);
+      playGames.add(index, aPlayGame);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addPlayGameAt(aPlayGame, index);
+    }
+    return wasAdded;
+  }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfHallOfFames()
+  {
+    return 0;
+  }
+  /* Code from template association_AddManyToOne */
+  public HallOfFame addHallOfFame(int aFinalScore, Player aPlayer)
+  {
+    return new HallOfFame(aFinalScore, this, aPlayer);
+  }
+
+  public boolean addHallOfFame(HallOfFame aHallOfFame)
+  {
+    boolean wasAdded = false;
+    if (hallOfFames.contains(aHallOfFame)) { return false; }
+    Game existingGame = aHallOfFame.getGame();
+    boolean isNewGame = existingGame != null && !this.equals(existingGame);
+    if (isNewGame)
+    {
+      aHallOfFame.setGame(this);
+    }
+    else
+    {
+      hallOfFames.add(aHallOfFame);
+    }
+    wasAdded = true;
+    return wasAdded;
+  }
+
+  public boolean removeHallOfFame(HallOfFame aHallOfFame)
+  {
+    boolean wasRemoved = false;
+    //Unable to remove aHallOfFame, as it must always have a game
+    if (!this.equals(aHallOfFame.getGame()))
+    {
+      hallOfFames.remove(aHallOfFame);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addHallOfFameAt(HallOfFame aHallOfFame, int index)
+  {  
+    boolean wasAdded = false;
+    if(addHallOfFame(aHallOfFame))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfHallOfFames()) { index = numberOfHallOfFames() - 1; }
+      hallOfFames.remove(aHallOfFame);
+      hallOfFames.add(index, aHallOfFame);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMoveHallOfFameAt(HallOfFame aHallOfFame, int index)
+  {
+    boolean wasAdded = false;
+    if(hallOfFames.contains(aHallOfFame))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfHallOfFames()) { index = numberOfHallOfFames() - 1; }
+      hallOfFames.remove(aHallOfFame);
+      hallOfFames.add(index, aHallOfFame);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addHallOfFameAt(aHallOfFame, index);
+    }
+    return wasAdded;
+  }
 
   public void delete()
   {
@@ -600,6 +810,16 @@ public class Game implements Serializable
     {
       placeholderBlock223.removeGame(this);
     }
+    for(int i=playGames.size(); i > 0; i--)
+    {
+      PlayGame aPlayGame = playGames.get(i - 1);
+      aPlayGame.delete();
+    }
+    for(int i=hallOfFames.size(); i > 0; i--)
+    {
+      HallOfFame aHallOfFame = hallOfFames.get(i - 1);
+      aHallOfFame.delete();
+    }
   }
 
   // line 58 "../../../../../Block223Persistence.ump"
@@ -610,7 +830,7 @@ public class Game implements Serializable
   	}
   }
 
-  // line 46 "../../../../../Block223.ump"
+  // line 58 "../../../../../Block223.ump"
    public Block findBlock(int id){
     for (Block block : this.getBlocks()) {
 		  if (block.getId() == id) {

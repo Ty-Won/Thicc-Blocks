@@ -1,0 +1,47 @@
+namespace ca.mcgill.ecse223.block.model;
+use Block223.ump;
+
+  class PlayGame
+{
+  autounique sessionID;
+  int nrLives;
+  int currScore;
+  int currLevel;
+  double currWaitTime;
+  1 <@>- 1 PlayPaddle;
+  1 <@>- 1 PlayBall;
+  1 <@>- * PlayBlockAssignment;
+  * -<@> 1 Block223;
+  * -- 1 Game;
+  * -- 1 Player;
+}
+
+class PlayPaddle
+{
+  int currLength;
+  int paddlePosX;
+}
+
+class PlayBall
+{
+  int currSpeedX;
+  int currSpeedY;
+  int ballPosX;
+  int ballPosY;
+  
+}
+
+class PlayBlockAssignment
+{
+  int blockPosX;
+  int blockPosY;
+  
+  * -- 1 Block;
+}
+
+class HallOfFame
+{
+  int finalScore;
+  * -- 1 Game;
+  * -- 1 Player;
+}

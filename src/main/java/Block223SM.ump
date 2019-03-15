@@ -1,0 +1,113 @@
+namespace ca.mcgill.ecse223.block.model;
+use Block223.ump;
+use Block223PlayGame.ump;
+
+class Block223SM
+{
+   playStatus {
+      Start {
+       entry / {setUpLevel();}
+       pressPlay() / {resumeGame();} -> Play;
+
+     }
+     Pause {
+       pressPlay()/ {resumeGame();} -> Play;
+
+     }
+     Play {
+       pressPause() / {pauseGame();} -> Pause;
+       beatLevel() [!lastLevel()] / {nextLevel();} -> Start;
+       beatLevel() [lastLevel()] / {winGame();} -> GameFinished;
+       
+       moveBall() [paddleCollision()] / {collidePaddle();} -> Play;
+       moveBall() [wallCollision()] / {collideWall();} -> Play;
+       moveBall() [blockCollision()] / {collideBlock();} -> Play;
+       moveBall() [outOfBounds() && !lastLife()] / {loseLife();} -> Pause;
+       moveBall() [outOfBounds() && lastLife()] / {loseGame();} -> GameFinished;
+       moveBall() [!paddleCollision() && !wallCollision() && !blockCollision() && !outOfBounds()] / {noCollision();} -> Play;
+
+     }
+     GameFinished { 
+       retryGame() / {resetGame();} -> Start;
+       quitGame() / {returnToMenu();} -> Final;
+     }
+
+  }
+  
+  private Boolean lastLife() {
+    return true;
+  }
+  
+  private Boolean lastLevel() {
+    return true;
+  }
+  
+  private Boolean paddleCollision() {
+    return true;
+  }
+  
+  private Boolean wallCollision() {
+    return true;
+  }
+  
+  private Boolean blockCollision() {
+    return true;
+  }
+  
+  private Boolean outOfBounds() {
+    return true;
+  }
+  
+  private void setUpLevel() {
+  
+  }
+  
+  private void pauseGame() {
+    
+  }
+  
+  private void resumeGame() {
+    
+  }
+  
+  private void resetGame() {
+    
+  }
+  
+  private void returnToMenu() {
+    
+  }
+  
+  private void loseLife() {
+    
+  }
+  
+  private void loseGame() {
+    
+  }
+  
+  private void nextLevel() {
+    
+  }
+  
+  private void winGame() {
+    
+  }
+  
+  private void collidePaddle() {
+    
+  }
+  
+  private void collideWall() {
+    
+  }
+  
+  private void collideBlock() {
+    
+  }
+  
+  private void noCollision() {
+    
+  }
+  
+}

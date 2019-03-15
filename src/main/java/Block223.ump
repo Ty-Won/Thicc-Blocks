@@ -6,6 +6,18 @@ class Block223 {
    1 <@>- * User users;
    1 <@>- * UserRole roles;
    1 <@>- * Game games;
+   
+ 	public Game findGame(String name) {
+		// Look for the game with <name>
+		for (Game curGame : games) {
+			if (curGame.getName().equals(name)) {
+				return curGame;
+			}
+		}
+	
+		// No game found
+		return null;
+ 	}
 }
 
 class User {
