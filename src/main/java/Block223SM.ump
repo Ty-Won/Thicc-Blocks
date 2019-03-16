@@ -24,7 +24,7 @@ class Block223SM
        moveBall() [wallCollision()] / {collideWall();} -> Play;
        moveBall() [blockCollision()] / {collideBlock();} -> Play;
        moveBall() [outOfBounds() && !lastLife()] / {loseLife();} -> Pause;
-       moveBall() [outOfBounds() && lastLife()] / {updateHallOfFame();} -> GameFinished;
+       moveBall() [outOfBounds() && lastLife()] -> GameFinished;
        moveBall() [!paddleCollision() && !wallCollision() && !blockCollision() && !outOfBounds()] / {noCollision();} -> Play;
 
      }

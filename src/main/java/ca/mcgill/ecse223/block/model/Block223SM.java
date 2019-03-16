@@ -159,8 +159,6 @@ public class Block223SM
         }
         if (outOfBounds()&&lastLife())
         {
-        // line 27 "../../../../../Block223SM.ump"
-          updateHallOfFame();
           setPlayStatus(PlayStatus.GameFinished);
           wasEventProcessed = true;
           break;

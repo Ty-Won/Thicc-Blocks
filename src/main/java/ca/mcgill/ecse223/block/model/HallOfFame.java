@@ -14,6 +14,10 @@ public class HallOfFame
   //HallOfFame Attributes
   private int finalScore;
 
+  //HallOfFame State Machines
+  public enum Sorted { finalScore }
+  private Sorted sorted;
+
   //HallOfFame Associations
   private Game game;
   private Player player;
@@ -35,6 +39,7 @@ public class HallOfFame
     {
       throw new RuntimeException("Unable to create hallOfFame due to player");
     }
+    setSorted(Sorted.finalScore);
   }
 
   //------------------------
@@ -52,6 +57,23 @@ public class HallOfFame
   public int getFinalScore()
   {
     return finalScore;
+  }
+
+  public String getSortedFullName()
+  {
+    String answer = sorted.toString();
+    return answer;
+  }
+
+  public Sorted getSorted()
+  {
+    return sorted;
+  }
+
+  public boolean setSorted(Sorted aSorted)
+  {
+    sorted = aSorted;
+    return true;
   }
   /* Code from template association_GetOne */
   public Game getGame()
