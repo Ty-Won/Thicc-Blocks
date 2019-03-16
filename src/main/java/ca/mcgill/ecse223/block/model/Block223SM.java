@@ -53,7 +53,7 @@ public class Block223SM
         wasEventProcessed = true;
         break;
       case Pause:
-        // line 14 "../../../../../Block223SM.ump"
+        // line 15 "../../../../../Block223SM.ump"
         resumeGame();
         setPlayStatus(PlayStatus.Play);
         wasEventProcessed = true;
@@ -73,8 +73,8 @@ public class Block223SM
     switch (aPlayStatus)
     {
       case Play:
-        // line 18 "../../../../../Block223SM.ump"
-        pauseGame();
+        // line 19 "../../../../../Block223SM.ump"
+        
         setPlayStatus(PlayStatus.Pause);
         wasEventProcessed = true;
         break;
@@ -95,7 +95,7 @@ public class Block223SM
       case Play:
         if (!(lastLevel()))
         {
-        // line 19 "../../../../../Block223SM.ump"
+        // line 20 "../../../../../Block223SM.ump"
           nextLevel();
           setPlayStatus(PlayStatus.Start);
           wasEventProcessed = true;
@@ -103,7 +103,7 @@ public class Block223SM
         }
         if (lastLevel())
         {
-        // line 20 "../../../../../Block223SM.ump"
+        // line 21 "../../../../../Block223SM.ump"
           winGame();
           setPlayStatus(PlayStatus.GameFinished);
           wasEventProcessed = true;
@@ -127,7 +127,7 @@ public class Block223SM
       case Play:
         if (paddleCollision())
         {
-        // line 22 "../../../../../Block223SM.ump"
+        // line 23 "../../../../../Block223SM.ump"
           collidePaddle();
           setPlayStatus(PlayStatus.Play);
           wasEventProcessed = true;
@@ -135,7 +135,7 @@ public class Block223SM
         }
         if (wallCollision())
         {
-        // line 23 "../../../../../Block223SM.ump"
+        // line 24 "../../../../../Block223SM.ump"
           collideWall();
           setPlayStatus(PlayStatus.Play);
           wasEventProcessed = true;
@@ -143,7 +143,7 @@ public class Block223SM
         }
         if (blockCollision())
         {
-        // line 24 "../../../../../Block223SM.ump"
+        // line 25 "../../../../../Block223SM.ump"
           collideBlock();
           setPlayStatus(PlayStatus.Play);
           wasEventProcessed = true;
@@ -151,7 +151,7 @@ public class Block223SM
         }
         if (outOfBounds()&&!(lastLife()))
         {
-        // line 25 "../../../../../Block223SM.ump"
+        // line 26 "../../../../../Block223SM.ump"
           loseLife();
           setPlayStatus(PlayStatus.Pause);
           wasEventProcessed = true;
@@ -159,15 +159,15 @@ public class Block223SM
         }
         if (outOfBounds()&&lastLife())
         {
-        // line 26 "../../../../../Block223SM.ump"
-          loseGame();
+        // line 27 "../../../../../Block223SM.ump"
+          updateHOF();
           setPlayStatus(PlayStatus.GameFinished);
           wasEventProcessed = true;
           break;
         }
         if (!(paddleCollision())&&!(wallCollision())&&!(blockCollision())&&!(outOfBounds()))
         {
-        // line 27 "../../../../../Block223SM.ump"
+        // line 28 "../../../../../Block223SM.ump"
           noCollision();
           setPlayStatus(PlayStatus.Play);
           wasEventProcessed = true;
@@ -189,7 +189,7 @@ public class Block223SM
     switch (aPlayStatus)
     {
       case GameFinished:
-        // line 31 "../../../../../Block223SM.ump"
+        // line 32 "../../../../../Block223SM.ump"
         resetGame();
         setPlayStatus(PlayStatus.Start);
         wasEventProcessed = true;
@@ -209,7 +209,7 @@ public class Block223SM
     switch (aPlayStatus)
     {
       case GameFinished:
-        // line 32 "../../../../../Block223SM.ump"
+        // line 33 "../../../../../Block223SM.ump"
         returnToMenu();
         setPlayStatus(PlayStatus.Final);
         wasEventProcessed = true;
@@ -232,6 +232,10 @@ public class Block223SM
         // line 9 "../../../../../Block223SM.ump"
         setUpLevel();
         break;
+      case Pause:
+        // line 14 "../../../../../Block223SM.ump"
+        pauseGame();
+        break;
       case Final:
         delete();
         break;
@@ -241,97 +245,102 @@ public class Block223SM
   public void delete()
   {}
 
-  // line 38 "../../../../../Block223SM.ump"
+  // line 39 "../../../../../Block223SM.ump"
    private Boolean lastLife(){
     return true;
   }
 
-  // line 42 "../../../../../Block223SM.ump"
+  // line 43 "../../../../../Block223SM.ump"
    private Boolean lastLevel(){
     return true;
   }
 
-  // line 46 "../../../../../Block223SM.ump"
+  // line 47 "../../../../../Block223SM.ump"
    private Boolean paddleCollision(){
     return true;
   }
 
-  // line 50 "../../../../../Block223SM.ump"
+  // line 51 "../../../../../Block223SM.ump"
    private Boolean wallCollision(){
     return true;
   }
 
-  // line 54 "../../../../../Block223SM.ump"
+  // line 55 "../../../../../Block223SM.ump"
    private Boolean blockCollision(){
     return true;
   }
 
-  // line 58 "../../../../../Block223SM.ump"
+  // line 59 "../../../../../Block223SM.ump"
    private Boolean outOfBounds(){
     return true;
   }
 
-  // line 63 "../../../../../Block223SM.ump"
+  // line 64 "../../../../../Block223SM.ump"
+   private void updateHOF(){
+    
+  }
+
+  // line 68 "../../../../../Block223SM.ump"
    private void setUpLevel(){
     
   }
 
-  // line 67 "../../../../../Block223SM.ump"
+  // line 72 "../../../../../Block223SM.ump"
    private void pauseGame(){
     
   }
 
-  // line 71 "../../../../../Block223SM.ump"
+  // line 76 "../../../../../Block223SM.ump"
    private void resumeGame(){
     
   }
 
-  // line 75 "../../../../../Block223SM.ump"
+  // line 80 "../../../../../Block223SM.ump"
    private void resetGame(){
     
   }
 
-  // line 79 "../../../../../Block223SM.ump"
+  // line 84 "../../../../../Block223SM.ump"
    private void returnToMenu(){
     
   }
 
-  // line 83 "../../../../../Block223SM.ump"
+  // line 88 "../../../../../Block223SM.ump"
    private void loseLife(){
     
   }
 
-  // line 87 "../../../../../Block223SM.ump"
+  // line 92 "../../../../../Block223SM.ump"
    private void loseGame(){
     
   }
 
-  // line 91 "../../../../../Block223SM.ump"
+  // line 96 "../../../../../Block223SM.ump"
    private void nextLevel(){
     
   }
 
-  // line 95 "../../../../../Block223SM.ump"
+  // line 100 "../../../../../Block223SM.ump"
    private void winGame(){
     
   }
 
-  // line 99 "../../../../../Block223SM.ump"
+  // line 104 "../../../../../Block223SM.ump"
    private void collidePaddle(){
     
   }
 
-  // line 103 "../../../../../Block223SM.ump"
+  // line 108 "../../../../../Block223SM.ump"
    private void collideWall(){
     
   }
 
-  // line 107 "../../../../../Block223SM.ump"
+  // line 112 "../../../../../Block223SM.ump"
    private void collideBlock(){
     
   }
 
-  // line 111 "../../../../../Block223SM.ump"
+  // line 116 "../../../../../Block223SM.ump"
    private void noCollision(){
     
   }
