@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.*;
 
 // line 93 "../../../../../Block223Persistence.ump"
-// line 107 "../../../../../Block223.ump"
+// line 108 "../../../../../Block223.ump"
 public class Ball implements Serializable
 {
 
@@ -44,12 +44,12 @@ public class Ball implements Serializable
     game = aGame;
   }
 
-  public Ball(int aMinBallSpeedX, int aMinBallSpeedY, double aBallSpeedIncreaseFactor, String aNameForGame, int aNrBlocksPerLevelForGame, Admin aAdminForGame, Paddle aPaddleForGame, Block223 aBlock223ForGame)
+  public Ball(int aMinBallSpeedX, int aMinBallSpeedY, double aBallSpeedIncreaseFactor, String aNameForGame, int aNrBlocksPerLevelForGame, boolean aPublishedForGame, Admin aAdminForGame, Paddle aPaddleForGame, Block223 aBlock223ForGame)
   {
     minBallSpeedX = aMinBallSpeedX;
     minBallSpeedY = aMinBallSpeedY;
     ballSpeedIncreaseFactor = aBallSpeedIncreaseFactor;
-    game = new Game(aNameForGame, aNrBlocksPerLevelForGame, aAdminForGame, this, aPaddleForGame, aBlock223ForGame);
+    game = new Game(aNameForGame, aNrBlocksPerLevelForGame, aPublishedForGame, aAdminForGame, this, aPaddleForGame, aBlock223ForGame);
   }
 
   //------------------------
