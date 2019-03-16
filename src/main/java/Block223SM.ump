@@ -24,7 +24,7 @@ class Block223SM
        moveBall() [wallCollision()] / {collideWall();} -> Play;
        moveBall() [blockCollision()] / {collideBlock();} -> Play;
        moveBall() [outOfBounds() && !lastLife()] / {loseLife();} -> Pause;
-       moveBall() [outOfBounds() && lastLife()] / {updateHOF();} -> GameFinished;
+       moveBall() [outOfBounds() && lastLife()] / {updateHallOfFame();} -> GameFinished;
        moveBall() [!paddleCollision() && !wallCollision() && !blockCollision() && !outOfBounds()] / {noCollision();} -> Play;
 
      }
@@ -58,10 +58,6 @@ class Block223SM
   
   private Boolean outOfBounds() {
     return true;
-  }
-  
-  private void updateHOF() {
-  
   }
   
   private void setUpLevel() {
