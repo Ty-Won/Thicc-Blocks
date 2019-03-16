@@ -47,6 +47,7 @@ class Game {
    const Integer ROW_PADDING = 2;
    unique name;
    Integer nrBlocksPerLevel;
+   Boolean published;
    * -- 1 Admin admin;
    1 <@>- * Block blocks;
    1 <@>- 1..99 Level levels;

@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.*;
 
 // line 99 "../../../../../Block223Persistence.ump"
-// line 114 "../../../../../Block223.ump"
+// line 115 "../../../../../Block223.ump"
 public class Paddle implements Serializable
 {
 
@@ -43,11 +43,11 @@ public class Paddle implements Serializable
     game = aGame;
   }
 
-  public Paddle(int aMaxPaddleLength, int aMinPaddleLength, String aNameForGame, int aNrBlocksPerLevelForGame, Admin aAdminForGame, Ball aBallForGame, Block223 aBlock223ForGame)
+  public Paddle(int aMaxPaddleLength, int aMinPaddleLength, String aNameForGame, int aNrBlocksPerLevelForGame, boolean aPublishedForGame, Admin aAdminForGame, Ball aBallForGame, Block223 aBlock223ForGame)
   {
     maxPaddleLength = aMaxPaddleLength;
     minPaddleLength = aMinPaddleLength;
-    game = new Game(aNameForGame, aNrBlocksPerLevelForGame, aAdminForGame, aBallForGame, this, aBlock223ForGame);
+    game = new Game(aNameForGame, aNrBlocksPerLevelForGame, aPublishedForGame, aAdminForGame, aBallForGame, this, aBlock223ForGame);
   }
 
   //------------------------

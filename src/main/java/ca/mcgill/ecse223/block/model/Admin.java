@@ -66,9 +66,9 @@ public class Admin extends UserRole implements Serializable
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Game addGame(String aName, int aNrBlocksPerLevel, Ball aBall, Paddle aPaddle, Block223 aBlock223)
+  public Game addGame(String aName, int aNrBlocksPerLevel, boolean aPublished, Ball aBall, Paddle aPaddle, Block223 aBlock223)
   {
-    return new Game(aName, aNrBlocksPerLevel, this, aBall, aPaddle, aBlock223);
+    return new Game(aName, aNrBlocksPerLevel, aPublished, this, aBall, aPaddle, aBlock223);
   }
 
   public boolean addGame(Game aGame)
