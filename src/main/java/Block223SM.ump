@@ -29,6 +29,7 @@ class Block223SM
 
      }
      GameFinished { 
+       entry / {updateHallOfFame();}
        retryGame() / {resetGame();} -> Start;
        quitGame() / {returnToMenu();} -> Final;
      }
@@ -64,6 +65,10 @@ class Block223SM
   }
   
   private void setUpLevel() {
+  
+  }
+  
+  private void updateHallOfFame() {
   
   }
   

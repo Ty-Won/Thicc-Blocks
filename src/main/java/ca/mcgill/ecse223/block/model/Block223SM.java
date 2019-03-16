@@ -160,7 +160,7 @@ public class Block223SM
         if (outOfBounds()&&lastLife())
         {
         // line 27 "../../../../../Block223SM.ump"
-          updateHOF();
+          updateHallOfFame();
           setPlayStatus(PlayStatus.GameFinished);
           wasEventProcessed = true;
           break;
@@ -189,7 +189,7 @@ public class Block223SM
     switch (aPlayStatus)
     {
       case GameFinished:
-        // line 32 "../../../../../Block223SM.ump"
+        // line 33 "../../../../../Block223SM.ump"
         resetGame();
         setPlayStatus(PlayStatus.Start);
         wasEventProcessed = true;
@@ -209,7 +209,7 @@ public class Block223SM
     switch (aPlayStatus)
     {
       case GameFinished:
-        // line 33 "../../../../../Block223SM.ump"
+        // line 34 "../../../../../Block223SM.ump"
         returnToMenu();
         setPlayStatus(PlayStatus.Final);
         wasEventProcessed = true;
@@ -236,6 +236,10 @@ public class Block223SM
         // line 14 "../../../../../Block223SM.ump"
         pauseGame();
         break;
+      case GameFinished:
+        // line 32 "../../../../../Block223SM.ump"
+        updateHallOfFame();
+        break;
       case Final:
         delete();
         break;
@@ -245,102 +249,102 @@ public class Block223SM
   public void delete()
   {}
 
-  // line 39 "../../../../../Block223SM.ump"
+  // line 40 "../../../../../Block223SM.ump"
    private Boolean lastLife(){
     return true;
   }
 
-  // line 43 "../../../../../Block223SM.ump"
+  // line 44 "../../../../../Block223SM.ump"
    private Boolean lastLevel(){
     return true;
   }
 
-  // line 47 "../../../../../Block223SM.ump"
+  // line 48 "../../../../../Block223SM.ump"
    private Boolean paddleCollision(){
     return true;
   }
 
-  // line 51 "../../../../../Block223SM.ump"
+  // line 52 "../../../../../Block223SM.ump"
    private Boolean wallCollision(){
     return true;
   }
 
-  // line 55 "../../../../../Block223SM.ump"
+  // line 56 "../../../../../Block223SM.ump"
    private Boolean blockCollision(){
     return true;
   }
 
-  // line 59 "../../../../../Block223SM.ump"
+  // line 60 "../../../../../Block223SM.ump"
    private Boolean outOfBounds(){
     return true;
   }
 
-  // line 64 "../../../../../Block223SM.ump"
-   private void updateHOF(){
-    
-  }
-
-  // line 68 "../../../../../Block223SM.ump"
+  // line 65 "../../../../../Block223SM.ump"
    private void setUpLevel(){
     
   }
 
-  // line 72 "../../../../../Block223SM.ump"
+  // line 69 "../../../../../Block223SM.ump"
+   private void updateHallOfFame(){
+    
+  }
+
+  // line 73 "../../../../../Block223SM.ump"
    private void pauseGame(){
     
   }
 
-  // line 76 "../../../../../Block223SM.ump"
+  // line 77 "../../../../../Block223SM.ump"
    private void resumeGame(){
     
   }
 
-  // line 80 "../../../../../Block223SM.ump"
+  // line 81 "../../../../../Block223SM.ump"
    private void resetGame(){
     
   }
 
-  // line 84 "../../../../../Block223SM.ump"
+  // line 85 "../../../../../Block223SM.ump"
    private void returnToMenu(){
     
   }
 
-  // line 88 "../../../../../Block223SM.ump"
+  // line 89 "../../../../../Block223SM.ump"
    private void loseLife(){
     
   }
 
-  // line 92 "../../../../../Block223SM.ump"
+  // line 93 "../../../../../Block223SM.ump"
    private void loseGame(){
     
   }
 
-  // line 96 "../../../../../Block223SM.ump"
+  // line 97 "../../../../../Block223SM.ump"
    private void nextLevel(){
     
   }
 
-  // line 100 "../../../../../Block223SM.ump"
+  // line 101 "../../../../../Block223SM.ump"
    private void winGame(){
     
   }
 
-  // line 104 "../../../../../Block223SM.ump"
+  // line 105 "../../../../../Block223SM.ump"
    private void collidePaddle(){
     
   }
 
-  // line 108 "../../../../../Block223SM.ump"
+  // line 109 "../../../../../Block223SM.ump"
    private void collideWall(){
     
   }
 
-  // line 112 "../../../../../Block223SM.ump"
+  // line 113 "../../../../../Block223SM.ump"
    private void collideBlock(){
     
   }
 
-  // line 116 "../../../../../Block223SM.ump"
+  // line 117 "../../../../../Block223SM.ump"
    private void noCollision(){
     
   }
