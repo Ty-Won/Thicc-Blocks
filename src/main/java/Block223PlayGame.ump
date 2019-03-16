@@ -42,6 +42,6 @@ class PlayBlockAssignment
 class HallOfFame
 {
   int finalScore;
-  * -- 1 Game;
+  * -- 1 Game sorted {finalScore};
   * -- 1 Player;
 }
