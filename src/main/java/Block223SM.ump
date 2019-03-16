@@ -7,12 +7,12 @@ class Block223SM
    playStatus {
       Start {
        entry / {setUpLevel();}
-       pressPlay() / {resumeGame();} -> Play;
+       pressPlay() / {} -> Play;
 
      }
      Pause {
        entry / {pauseGame();}
-       pressPlay()/ {resumeGame();} -> Play;
+       pressPlay()/ {} -> Play;
 
      }
      Play {
@@ -69,10 +69,6 @@ class Block223SM
   }
   
   private void pauseGame() {
-    
-  }
-  
-  private void resumeGame() {
     
   }
   
