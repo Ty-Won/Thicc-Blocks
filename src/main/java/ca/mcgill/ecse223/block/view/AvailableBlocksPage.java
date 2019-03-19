@@ -74,19 +74,6 @@ public class AvailableBlocksPage implements IPage {
         headerLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, 50));
         GridPane.setHalignment(headerLabel, HPos.CENTER);
         GridPane.setMargin(headerLabel, new Insets(20, 0, 20, 0));
-
-        
-        // // Add Login Button
-        // Button doneButton = new Button("DONE");
-        // doneButton.setPrefHeight(40);
-        // doneButton.setDefaultButton(true);
-        // doneButton.setPrefWidth(130);
-        // doneButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
-        // doneButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
-        
-        // root.setAlignment(doneButton, Pos.CENTER);
-        // root.setMargin(doneButton, new Insets(20, 0,20,0));
-
         
 
         root.setCenter(gridPane);

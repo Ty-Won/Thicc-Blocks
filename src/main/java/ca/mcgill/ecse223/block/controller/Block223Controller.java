@@ -44,7 +44,7 @@ public class Block223Controller {
 
 		// For some reason, this umple generated constructor does not call setName,
 		// so we pass in a temp string for the name and then manually call setName
-		Game game = new Game("sometempstring", 1, adminRole, 1, 1, 1, 10, 10, block223);
+		Game game = new Game("sometempstring", 1, false, adminRole, 1, 1, 1, 10, 10, block223);
 		game.setName(name);
 		
 		Block223Persistence.save(block223);
@@ -387,7 +387,7 @@ public class Block223Controller {
         }
 
 
-        Level currentLevel = game.getLevel(level);
+        Level currentLevel = game.getLevel(level-1);
         if (currentLevel.numberOfBlockAssignments() == game.getNrBlocksPerLevel()) {
             throw new InvalidInputException("The number of blocks has reached the maximum number (" +
                     +game.getNrBlocksPerLevel() + ") allowed for this game.");
@@ -459,7 +459,7 @@ public class Block223Controller {
 		// Get targeted level
 		Level targetLevel;
 		try {
-			targetLevel = game.getLevel(level);
+			targetLevel = game.getLevel(level-1);
 		} catch (Exception e) {
 			throw new InvalidInputException("Level " + level + " does not exist for the game");
 		}
@@ -513,7 +513,7 @@ public class Block223Controller {
 			throw new InvalidInputException("Only the admin who created the game can remove a block.");
 		}
 		
-		Level someLevel = game.getLevel(level);
+		Level someLevel = game.getLevel(level-1);
 		BlockAssignment assignment = findBlockAssignment(someLevel, gridHorizontalPosition, gridVerticalPosition);
 		
 		if(assignment != null){
@@ -777,7 +777,7 @@ public class Block223Controller {
 		} catch(IndexOutOfBoundsException e) {
 			throw new InvalidInputException("Level " + level + " does not exist for the game.");
 		}
-
+		
 		for (BlockAssignment assignment : lvl.getBlockAssignments()) {
 			TOGridCell toGridCell = new TOGridCell(
 				assignment.getGridHorizontalPosition(),

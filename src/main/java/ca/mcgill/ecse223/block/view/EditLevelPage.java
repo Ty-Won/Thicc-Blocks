@@ -239,7 +239,7 @@ public class EditLevelPage implements IPage {
         root.setCenter(gridPane);
         root.setTop(topPane);
 
-        Scene scene = new Scene(root, 600, 450);
+        Scene scene = new Scene(root, Block223Application.APPLICATION_WIDTH, Block223Application.APPLICATION_HEIGHT);
         stage.setScene(scene);
         stage.show();
     }
@@ -330,6 +330,8 @@ public class EditLevelPage implements IPage {
                             rect.setFill(Color.rgb(assignement.getRed(), 
                                                    assignement.getGreen(),
                                                    assignement.getBlue()));
+
+                            
                         }
                     }
                 }

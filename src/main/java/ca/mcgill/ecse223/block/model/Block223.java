@@ -18,6 +18,7 @@ public class Block223 implements Serializable
   private List<User> users;
   private List<UserRole> roles;
   private List<Game> games;
+  private List<PlayGame> playGames;
 
   //------------------------
   // CONSTRUCTOR
@@ -28,19 +29,7 @@ public class Block223 implements Serializable
     users = new ArrayList<User>();
     roles = new ArrayList<UserRole>();
     games = new ArrayList<Game>();
-  }
-  
-  public Game findGame(String name) {
-	    
-		// Look for the game with <name>
-		for (Game curGame : games) {
-			if (curGame.getName().equals(name)) {
-				return curGame;
-			}
-		}
-
-		// No game found
-		return null;
+    playGames = new ArrayList<PlayGame>();
   }
 
   //------------------------
@@ -134,6 +123,36 @@ public class Block223 implements Serializable
   public int indexOfGame(Game aGame)
   {
     int index = games.indexOf(aGame);
+    return index;
+  }
+  /* Code from template association_GetMany */
+  public PlayGame getPlayGame(int index)
+  {
+    PlayGame aPlayGame = playGames.get(index);
+    return aPlayGame;
+  }
+
+  public List<PlayGame> getPlayGames()
+  {
+    List<PlayGame> newPlayGames = Collections.unmodifiableList(playGames);
+    return newPlayGames;
+  }
+
+  public int numberOfPlayGames()
+  {
+    int number = playGames.size();
+    return number;
+  }
+
+  public boolean hasPlayGames()
+  {
+    boolean has = playGames.size() > 0;
+    return has;
+  }
+
+  public int indexOfPlayGame(PlayGame aPlayGame)
+  {
+    int index = playGames.indexOf(aPlayGame);
     return index;
   }
   /* Code from template association_MinimumNumberOfMethod */
@@ -283,9 +302,9 @@ public class Block223 implements Serializable
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Game addGame(String aName, int aNrBlocksPerLevel, Admin aAdmin, Ball aBall, Paddle aPaddle)
+  public Game addGame(String aName, int aNrBlocksPerLevel, boolean aPublished, Admin aAdmin, Ball aBall, Paddle aPaddle)
   {
-    return new Game(aName, aNrBlocksPerLevel, aAdmin, aBall, aPaddle, this);
+    return new Game(aName, aNrBlocksPerLevel, aPublished, aAdmin, aBall, aPaddle, this);
   }
 
   public boolean addGame(Game aGame)
@@ -349,6 +368,78 @@ public class Block223 implements Serializable
     }
     return wasAdded;
   }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfPlayGames()
+  {
+    return 0;
+  }
+  /* Code from template association_AddManyToOne */
+  public PlayGame addPlayGame(int aNrLives, int aCurrScore, int aCurrLevel, double aCurrWaitTime, PlayPaddle aPlayPaddle, PlayBall aPlayBall, Game aGame, Player aPlayer)
+  {
+    return new PlayGame(aNrLives, aCurrScore, aCurrLevel, aCurrWaitTime, aPlayPaddle, aPlayBall, this, aGame, aPlayer);
+  }
+
+  public boolean addPlayGame(PlayGame aPlayGame)
+  {
+    boolean wasAdded = false;
+    if (playGames.contains(aPlayGame)) { return false; }
+    Block223 existingBlock223 = aPlayGame.getBlock223();
+    boolean isNewBlock223 = existingBlock223 != null && !this.equals(existingBlock223);
+    if (isNewBlock223)
+    {
+      aPlayGame.setBlock223(this);
+    }
+    else
+    {
+      playGames.add(aPlayGame);
+    }
+    wasAdded = true;
+    return wasAdded;
+  }
+
+  public boolean removePlayGame(PlayGame aPlayGame)
+  {
+    boolean wasRemoved = false;
+    //Unable to remove aPlayGame, as it must always have a block223
+    if (!this.equals(aPlayGame.getBlock223()))
+    {
+      playGames.remove(aPlayGame);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addPlayGameAt(PlayGame aPlayGame, int index)
+  {  
+    boolean wasAdded = false;
+    if(addPlayGame(aPlayGame))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfPlayGames()) { index = numberOfPlayGames() - 1; }
+      playGames.remove(aPlayGame);
+      playGames.add(index, aPlayGame);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMovePlayGameAt(PlayGame aPlayGame, int index)
+  {
+    boolean wasAdded = false;
+    if(playGames.contains(aPlayGame))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfPlayGames()) { index = numberOfPlayGames() - 1; }
+      playGames.remove(aPlayGame);
+      playGames.add(index, aPlayGame);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addPlayGameAt(aPlayGame, index);
+    }
+    return wasAdded;
+  }
 
   public void delete()
   {
@@ -373,6 +464,13 @@ public class Block223 implements Serializable
       games.remove(aGame);
     }
     
+    while (playGames.size() > 0)
+    {
+      PlayGame aPlayGame = playGames.get(playGames.size() - 1);
+      aPlayGame.delete();
+      playGames.remove(aPlayGame);
+    }
+    
   }
 
   // line 9 "../../../../../Block223Persistence.ump"
@@ -385,6 +483,19 @@ public class Block223 implements Serializable
   		blocks.addAll(game.getBlocks());
   	}
   	Block.reinitializeAutouniqueID(blocks);
+  }
+
+  // line 11 "../../../../../Block223.ump"
+   public Game findGame(String name){
+    // Look for the game with <name>
+		for (Game curGame : games) {
+			if (curGame.getName().equals(name)) {
+				return curGame;
+			}
+		}
+	
+		// No game found
+		return null;
   }
   
   //------------------------
