@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import ca.mcgill.ecse223.block.model.*;
 import ca.mcgill.ecse223.block.persistence.Block223Persistence;
+import ca.mcgill.ecse223.block.view.Block223PlayModeInterface;
 import ca.mcgill.ecse223.block.application.*;
 import ca.mcgill.ecse223.block.controller.TOUserMode.Mode;
 
@@ -626,6 +627,20 @@ public class Block223Controller {
 		Block223Application.setCurrentUserRole(null);
 	}
 
+	// play mode
+
+	public static void selectPlayableGame(String name, int id) throws InvalidInputException  {
+	}
+
+	public static void startGame(Block223PlayModeInterface ui) throws InvalidInputException {
+	}
+
+	public static void testGame(Block223PlayModeInterface ui) throws InvalidInputException {
+	}
+
+	public static void publishGame () throws InvalidInputException {
+	}
+	
 	// ****************************
 	// Query methods
 	// ****************************
@@ -840,4 +855,23 @@ public class Block223Controller {
 			return x_y_capacity;
 	}
 
+	// play mode
+
+	public static List<TOPlayableGame> getPlayableGames() throws InvalidInputException {
+		return null;
+	}
+
+	public static List<TOCurrentlyPlayedGame> getCurrentPlayableGame() throws InvalidInputException {
+		return null;
+	}
+
+	public static TOHallOfFame getHallOfFame(int start, int end) throws InvalidInputException {
+		return null;
+
+	}
+
+	public static TOHallOfFame getHallOfFameWithMostRecentEntry(int numberOfEntries) throws InvalidInputException {
+		return null;
+
+	}
 }
