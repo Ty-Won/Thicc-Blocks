@@ -42,6 +42,7 @@ public class Block223Application extends Application {
 	private static User currentUser;
 	private static UserRole currentUserRole;
 	private static Game currentGame;
+	private static PlayedGame playedGame;
 
 	@Override
 	public void start(Stage stage) {
@@ -168,6 +169,14 @@ public class Block223Application extends Application {
 
 	public static void setCurrentGame(Game game) {
 		currentGame = game;
+	}
+	
+	public static PlayedGame getCurrentPlayableGame() {
+		return playedGame;
+	}
+
+	public static void setCurrentPlayableGame(PlayedGame playedGame) {
+		playedGame = playedGame;
 	}
 
 }
