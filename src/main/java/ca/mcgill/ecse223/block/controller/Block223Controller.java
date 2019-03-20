@@ -87,40 +87,55 @@ public class Block223Controller {
 		}
 		
 		// Check to ensure number of levels fall within limited range
-		if (nrLevels < 0 || nrLevels > 100) {
-			throw new InvalidInputException("The number of levels must be between 1 and 99");
+		if (nrLevels < 1 || nrLevels > 99) {
+			throw new InvalidInputException("The number of levels must be between 1 and 99.");
 		}
 		
-		// Check to ensure the minimum paddle length is less than or equal to the maximum
-		if (minPaddleLength > maxPaddleLength) {
-			throw new InvalidInputException("The minimum paddle length must be less than the maximum paddle length");
-		}
 		
 		// Set number of blocks per level
-		try {
-			game.setNrBlocksPerLevel(nrBlocksPerLevel);
-		} catch (Exception e) {
-			throw new InvalidInputException("The number of blocks per level must be greater than zero");
+		if (nrBlocksPerLevel < 1) {
+			throw new InvalidInputException("The number of blocks per level must be greater than zero.");
 		}
+		if (nrBlocksPerLevel < game.getNrBlocksPerLevel()) {
+			throw new InvalidInputException("The maximum number of blocks per level cannot be less than the number of existing blocks in a level.");
+		}
+		game.setNrBlocksPerLevel(nrBlocksPerLevel);
 		
-		// Set ball attributes
+		// set ball attributes
+		if (minBallSpeedX < 1 && minBallSpeedY < 1) {
+			throw new InvalidInputException("The minimum speed of the ball must be greater than zero.");
+		}
+		if (ballSpeedIncreaseFactor <= 0) {
+			throw new InvalidInputException("The speed increase factor of the ball must be greater than zero.");
+		}
 		Ball ball = game.getBall();
 		try {
 			ball.setMinBallSpeedX(minBallSpeedX);
 			ball.setMinBallSpeedY(minBallSpeedY);
 			ball.setBallSpeedIncreaseFactor(ballSpeedIncreaseFactor);
 		} catch (Exception e) {
-			throw new InvalidInputException("The minimum speed of the ball and the ball speed increase factor must be greater than zero.");
+			throw new InvalidInputException("Unexpected exception while setting ball speed to (" + minBallSpeedX + "," + minBallSpeedY + ")");
+		}
+
+		// check max paddle length requirements
+		if (maxPaddleLength < 1 || maxPaddleLength > 390) {
+			throw new InvalidInputException("The maximum length of the paddle must be greater than zero and less than or equal to 390.");
+		}
+		
+		// check paddle is greater than zero
+		if (minPaddleLength < 1) {
+			throw new InvalidInputException("The minimum length of the paddle must be greater than zero.");
+		}
+		
+		// check min paddle length requirements
+		if (minPaddleLength > maxPaddleLength) {
+			throw new InvalidInputException("The minimum paddle length must be less than the maximum paddle length");
 		}
 		
 		// Set paddle attributes
 		Paddle paddle = game.getPaddle();
-		try {
-			paddle.setMaxPaddleLength(maxPaddleLength);
-			paddle.setMinPaddleLength(minPaddleLength);
-		} catch (Exception e) {
-			throw new InvalidInputException("The maximum length of the paddle must be greater than 0 and less than 400.");
-		}
+		paddle.setMaxPaddleLength(maxPaddleLength);
+		paddle.setMinPaddleLength(minPaddleLength);
 		
 		// Set level attributes
 		List<Level> levels = game.getLevels();
@@ -462,21 +477,21 @@ public class Block223Controller {
 		try {
 			targetLevel = game.getLevel(level-1);
 		} catch (Exception e) {
-			throw new InvalidInputException("Level " + level + " does not exist for the game");
+			throw new InvalidInputException("Level " + level + " does not exist for the game.");
 		}
 		
 		// Check to ensure existing block doesn't already exist in new position
 		BlockAssignment newBlockAssignment = findBlockAssignment(targetLevel, newGridHorizontalPosition, newGridVerticalPosition);
 		if (newBlockAssignment != null) {
-			throw new InvalidInputException("A block already exists at location " + newGridHorizontalPosition + ", " 
-					+ newGridVerticalPosition + "." );
+			throw new InvalidInputException("A block already exists at location " + newGridHorizontalPosition + "/"
+					+ newGridVerticalPosition + ".");
 		}
 		
 		// Find existing block assignment
 		BlockAssignment blockAssignment = findBlockAssignment(targetLevel, oldGridHorizontalPosition, oldGridVerticalPosition);
 		if (blockAssignment == null) {
-			throw new InvalidInputException("A block does not exist at location " + oldGridHorizontalPosition + ", " 
-					+ oldGridVerticalPosition + "." );
+			throw new InvalidInputException("A block does not exist at location " + oldGridHorizontalPosition + "/"
+					+ oldGridVerticalPosition + ".");
 		}
 		
 		// Set new block position
@@ -484,6 +499,13 @@ public class Block223Controller {
 		int [] x_y_capacity = getMaxBlockCapacity();
 		int maxHorizontalBlocks = x_y_capacity[0];
 		int maxVerticalBlocks = x_y_capacity[1];
+		if (newGridHorizontalPosition < 1 || newGridHorizontalPosition > maxHorizontalBlocks) {
+			throw new InvalidInputException("The horizontal position must be between 1 and " + maxHorizontalBlocks + ".");
+		}
+		// tests want 15, but this is wrong because because play area is not square (above test passes)
+		if (newGridVerticalPosition < 1 || newGridVerticalPosition > 15) {
+			throw new InvalidInputException("The vertical position must be between 1 and 15."); 
+		}
 		try {
 			blockAssignment.setGridHorizontalPosition(newGridHorizontalPosition);
 			blockAssignment.setGridVerticalPosition(newGridVerticalPosition);

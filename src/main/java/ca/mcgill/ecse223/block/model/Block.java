@@ -37,6 +37,7 @@ public class Block implements Serializable
   //Block Associations
   private Game game;
   private List<BlockAssignment> blockAssignments;
+  private List<PlayedBlockAssignment> playedBlockAssignments;
 
   //------------------------
   // CONSTRUCTOR
@@ -69,6 +70,7 @@ public class Block implements Serializable
       throw new RuntimeException("Unable to create block due to game");
     }
     blockAssignments = new ArrayList<BlockAssignment>();
+    playedBlockAssignments = new ArrayList<PlayedBlockAssignment>();
   }
 
   //------------------------
@@ -166,6 +168,36 @@ public class Block implements Serializable
     int index = blockAssignments.indexOf(aBlockAssignment);
     return index;
   }
+  /* Code from template association_GetMany */
+  public PlayedBlockAssignment getPlayedBlockAssignment(int index)
+  {
+    PlayedBlockAssignment aPlayedBlockAssignment = playedBlockAssignments.get(index);
+    return aPlayedBlockAssignment;
+  }
+
+  public List<PlayedBlockAssignment> getPlayedBlockAssignments()
+  {
+    List<PlayedBlockAssignment> newPlayedBlockAssignments = Collections.unmodifiableList(playedBlockAssignments);
+    return newPlayedBlockAssignments;
+  }
+
+  public int numberOfPlayedBlockAssignments()
+  {
+    int number = playedBlockAssignments.size();
+    return number;
+  }
+
+  public boolean hasPlayedBlockAssignments()
+  {
+    boolean has = playedBlockAssignments.size() > 0;
+    return has;
+  }
+
+  public int indexOfPlayedBlockAssignment(PlayedBlockAssignment aPlayedBlockAssignment)
+  {
+    int index = playedBlockAssignments.indexOf(aPlayedBlockAssignment);
+    return index;
+  }
   /* Code from template association_SetOneToMany */
   public boolean setGame(Game aGame)
   {
@@ -257,6 +289,78 @@ public class Block implements Serializable
     }
     return wasAdded;
   }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfPlayedBlockAssignments()
+  {
+    return 0;
+  }
+  /* Code from template association_AddManyToOne */
+  public PlayedBlockAssignment addPlayedBlockAssignment(int aX, int aY, PlayedGame aPlayedGame)
+  {
+    return new PlayedBlockAssignment(aX, aY, this, aPlayedGame);
+  }
+
+  public boolean addPlayedBlockAssignment(PlayedBlockAssignment aPlayedBlockAssignment)
+  {
+    boolean wasAdded = false;
+    if (playedBlockAssignments.contains(aPlayedBlockAssignment)) { return false; }
+    Block existingBlock = aPlayedBlockAssignment.getBlock();
+    boolean isNewBlock = existingBlock != null && !this.equals(existingBlock);
+    if (isNewBlock)
+    {
+      aPlayedBlockAssignment.setBlock(this);
+    }
+    else
+    {
+      playedBlockAssignments.add(aPlayedBlockAssignment);
+    }
+    wasAdded = true;
+    return wasAdded;
+  }
+
+  public boolean removePlayedBlockAssignment(PlayedBlockAssignment aPlayedBlockAssignment)
+  {
+    boolean wasRemoved = false;
+    //Unable to remove aPlayedBlockAssignment, as it must always have a block
+    if (!this.equals(aPlayedBlockAssignment.getBlock()))
+    {
+      playedBlockAssignments.remove(aPlayedBlockAssignment);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addPlayedBlockAssignmentAt(PlayedBlockAssignment aPlayedBlockAssignment, int index)
+  {  
+    boolean wasAdded = false;
+    if(addPlayedBlockAssignment(aPlayedBlockAssignment))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfPlayedBlockAssignments()) { index = numberOfPlayedBlockAssignments() - 1; }
+      playedBlockAssignments.remove(aPlayedBlockAssignment);
+      playedBlockAssignments.add(index, aPlayedBlockAssignment);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMovePlayedBlockAssignmentAt(PlayedBlockAssignment aPlayedBlockAssignment, int index)
+  {
+    boolean wasAdded = false;
+    if(playedBlockAssignments.contains(aPlayedBlockAssignment))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfPlayedBlockAssignments()) { index = numberOfPlayedBlockAssignments() - 1; }
+      playedBlockAssignments.remove(aPlayedBlockAssignment);
+      playedBlockAssignments.add(index, aPlayedBlockAssignment);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addPlayedBlockAssignmentAt(aPlayedBlockAssignment, index);
+    }
+    return wasAdded;
+  }
 
   public void delete()
   {
@@ -270,6 +374,11 @@ public class Block implements Serializable
     {
       BlockAssignment aBlockAssignment = blockAssignments.get(i - 1);
       aBlockAssignment.delete();
+    }
+    for(int i=playedBlockAssignments.size(); i > 0; i--)
+    {
+      PlayedBlockAssignment aPlayedBlockAssignment = playedBlockAssignments.get(i - 1);
+      aPlayedBlockAssignment.delete();
     }
   }
 
