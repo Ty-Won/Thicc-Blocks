@@ -1,13 +1,14 @@
 namespace ca.mcgill.ecse223.block.model;
-
 use Block223Persistence.ump;
+
+// NOTE: DO NOT GENERATE FROM THIS FILE, GENERATE Block223State.ump instead
 
 class Block223 {
    1 <@>- * User users;
    1 <@>- * UserRole roles;
    1 <@>- * Game games;
    
- 	public Game findGame(String name) {
+	public Game findGame(String name) {
 		// Look for the game with <name>
 		for (Game curGame : games) {
 			if (curGame.getName().equals(name)) {
@@ -47,7 +48,6 @@ class Game {
    const Integer ROW_PADDING = 2;
    unique name;
    Integer nrBlocksPerLevel;
-   Boolean published;
    * -- 1 Admin admin;
    1 <@>- * Block blocks;
    1 <@>- 1..99 Level levels;
@@ -55,7 +55,7 @@ class Game {
    1 <@>- 1 Ball ball;
    1 <@>- 1 Paddle paddle;
    
-	public Block findBlock(int id) {
+   	public Block findBlock(int id) {
 	  for (Block block : this.getBlocks()) {
 		  if (block.getId() == id) {
 			  return block;
@@ -77,7 +77,7 @@ class Block {
    Integer blue;
    Integer points;
    
-   before constructor {
+  before constructor {
    		if (aRed < 0 || aRed > 255) {
    			throw new RuntimeException("Red invalid");
    		}

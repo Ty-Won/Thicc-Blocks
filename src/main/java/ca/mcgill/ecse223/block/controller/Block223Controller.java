@@ -44,7 +44,7 @@ public class Block223Controller {
 
 		// For some reason, this umple generated constructor does not call setName,
 		// so we pass in a temp string for the name and then manually call setName
-		Game game = new Game("sometempstring", 1, false, adminRole, 1, 1, 1, 10, 10, block223);
+		Game game = new Game("sometempstring", 1, adminRole, 1, 1, 1, 10, 10, block223);
 		game.setName(name);
 		
 		Block223Persistence.save(block223);

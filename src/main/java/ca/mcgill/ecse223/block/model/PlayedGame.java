@@ -4,9 +4,8 @@
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 
-// line 41 "../../../../../Block223Persistence.ump"
-// line 38 "../../../../../Block223.ump"
-public class Player extends UserRole implements Serializable
+// line 100 "../../../../../Block223Persistence.ump"
+public class PlayedGame implements Serializable
 {
 
   //------------------------
@@ -17,26 +16,22 @@ public class Player extends UserRole implements Serializable
   // CONSTRUCTOR
   //------------------------
 
-  public Player(String aPassword, Block223 aBlock223)
-  {
-    super(aPassword, aBlock223);
-  }
+  public PlayedGame()
+  {}
 
   //------------------------
   // INTERFACE
   //------------------------
 
   public void delete()
-  {
-    super.delete();
-  }
+  {}
   
   //------------------------
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 44 "../../../../../Block223Persistence.ump"
-  private static final long serialVersionUID = 4495546738870249064L ;
+  // line 103 "../../../../../Block223Persistence.ump"
+  private static final long serialVersionUID = 8597675110221231714L ;
 
   
 }

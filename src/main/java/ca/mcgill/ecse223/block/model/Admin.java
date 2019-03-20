@@ -5,8 +5,8 @@ package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 import java.util.*;
 
-// line 40 "../../../../../Block223Persistence.ump"
-// line 33 "../../../../../Block223.ump"
+// line 35 "../../../../../Block223Persistence.ump"
+// line 34 "../../../../../Block223.ump"
 public class Admin extends UserRole implements Serializable
 {
 
@@ -66,9 +66,9 @@ public class Admin extends UserRole implements Serializable
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Game addGame(String aName, int aNrBlocksPerLevel, boolean aPublished, Ball aBall, Paddle aPaddle, Block223 aBlock223)
+  public Game addGame(String aName, int aNrBlocksPerLevel, Ball aBall, Paddle aPaddle, Block223 aBlock223)
   {
-    return new Game(aName, aNrBlocksPerLevel, aPublished, this, aBall, aPaddle, aBlock223);
+    return new Game(aName, aNrBlocksPerLevel, this, aBall, aPaddle, aBlock223);
   }
 
   public boolean addGame(Game aGame)
@@ -147,8 +147,8 @@ public class Admin extends UserRole implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 43 "../../../../../Block223Persistence.ump"
-  private static final long serialVersionUID = 386717977557499839L ;
+  // line 38 "../../../../../Block223Persistence.ump"
+  private static final long serialVersionUID = 1959250384912895829L ;
 
   
 }
