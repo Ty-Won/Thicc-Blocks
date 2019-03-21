@@ -658,9 +658,59 @@ public class Block223Controller {
 	}
 
 	public static void testGame(Block223PlayModeInterface ui) throws InvalidInputException {
+		UserRole userRole = Block223Application.getCurrentUserRole();
+        Game game = Block223Application.getCurrentGame();
+
+        if (!(userRole instanceof Admin)) {
+            throw new InvalidInputException("Admin privileges are required to test a game.");
+        }
+
+        if (game == null) {
+            throw new InvalidInputException("A game must be selected to test it.");
+        }
+
+        if (userRole != game.getAdmin()) {
+            throw new InvalidInputException("Only the admin who created the game can test it.");
+        }
+        
+        String username = Block223Application.getCurrentUser().getUsername();
+        Block223 block223 = Block223Application.getBlock223();
+  
+        PlayedGame playedGame = new PlayedGame(username, game, block223);
+        playedGame.setPlayer(null);
+        
+        Block223Application.setCurrentPlayableGame(playedGame);
+        
+        startGame(ui);
+
 	}
 
+	/**
+	 * Sets a game to a published state.
+	 * 
+	 * @throws InvalidInputException
+	 */
 	public static void publishGame () throws InvalidInputException {
+		UserRole userRole = Block223Application.getCurrentUserRole();
+        Game game = Block223Application.getCurrentGame();
+
+        if (!(userRole instanceof Admin)) {
+            throw new InvalidInputException("Admin privileges are required to publish a game.");
+        }
+
+        if (game == null) {
+            throw new InvalidInputException("A game must be selected to publish it.");
+        }
+
+        if (userRole != game.getAdmin()) {
+            throw new InvalidInputException("Only the admin who created the game can publish it.");
+        }
+        
+        if (game.getNrBlocksPerLevel() < 1) {
+        	throw new InvalidInputException("At least one block must be defined for a game to be published.");
+        }
+        
+        game.setPublished(true);
 	}
 	
 	// ****************************

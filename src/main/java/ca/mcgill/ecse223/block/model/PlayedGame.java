@@ -789,10 +789,11 @@ public class PlayedGame implements Serializable
 
   // line 93 "../../../../../Block223States.ump"
    private void doHitNothingAndNotOutOfBounds(){
-    // TODO implement
+    setCurrentBallX(currentBallX + ballDirectionX);
+    setCurrentBallY(currentBallY + ballDirectionY);
   }
 
-  // line 97 "../../../../../Block223States.ump"
+  // line 98 "../../../../../Block223States.ump"
    private void doGameOver(){
     // TODO implement
   }
