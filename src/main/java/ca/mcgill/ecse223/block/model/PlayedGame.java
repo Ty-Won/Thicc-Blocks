@@ -7,7 +7,7 @@ import ca.mcgill.ecse223.block.model.BouncePoint.BounceDirection;
 import java.awt.geom.Rectangle2D;
 import java.util.*;
 
-// line 100 "../../../../../Block223Persistence.ump"
+// line 106 "../../../../../Block223Persistence.ump"
 // line 14 "../../../../../Block223PlayMode.ump"
 // line 5 "../../../../../Block223States.ump"
 public class PlayedGame implements Serializable
@@ -1096,7 +1096,7 @@ public class PlayedGame implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 103 "../../../../../Block223Persistence.ump"
+  // line 109 "../../../../../Block223Persistence.ump"
   private static final long serialVersionUID = 8597675110221231714L ;
 
   
