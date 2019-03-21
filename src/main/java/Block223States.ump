@@ -90,7 +90,8 @@ class PlayedGame {
   }
 
   private void doHitNothingAndNotOutOfBounds() {
-    // TODO implement
+  	setCurrentBallX(currentBallX + ballDirectionX);
+    setCurrentBallY(currentBallY + ballDirectionY);
   }
 
   private void doGameOver() {
