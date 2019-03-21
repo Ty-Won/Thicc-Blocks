@@ -12,6 +12,9 @@ class Game {
 }
 
 class PlayedGame {
+   depend ca.mcgill.ecse223.block.model.BouncePoint.BounceDirection;
+   depend java.awt.geom.Rectangle2D;
+   
    const Integer INITIAL_WAIT_TIME = 1000; // at design time, the initial wait time may be adjusted as seen fit
    autounique id;
    const Integer NR_LIVES = 3;
@@ -45,6 +48,256 @@ class PlayedGame {
    * -- 1 Game game;
    1 <@>- * PlayedBlockAssignment blocks;
    0..1 -> 0..1 BouncePoint bounce;
+   
+   private BouncePoint calculateBouncePointPaddle() {
+	  //Get all the attributes of the current ball status
+	  Double oldBallX = this.currentBallX;
+	  Double oldBallY = this.currentBallY;
+	  Double oldDirX = this.ballDirectionX;
+	  Double oldDirY = this.ballDirectionY;
+	  
+	  //Set all the attributes of the potential future ball status
+	  Double newBallX = oldBallX + oldDirX;
+	  Double newBallY = oldBallY + oldDirY;
+	  
+	  //Get paddle attributes
+	  Double paddleX = this.currentPaddleX;
+	  Double paddleY = this.currentPaddleY;
+	  Double paddleLength = this.currentPaddleLength;
+	 
+	  Rectangle2D paddleRect = new Rectangle2D.Double(paddleX - 5, paddleY - 5, paddleLength + 10, 10);
+	  if (paddleRect.intersectsLine(oldBallX, oldBallY, newBallX, newBallY)) {
+		  BouncePoint zoneB = checkLineIntersections(oldBallX, oldBallY, newBallX, newBallY, paddleX - 5, paddleY, paddleX - 5, paddleY + 5, BounceDirection.FLIP_X);
+		  BouncePoint zoneC = checkLineIntersections(oldBallX, oldBallY, newBallX, newBallY, paddleX + paddleLength + 5, paddleY, paddleX + paddleLength + 5, paddleY + 5, BounceDirection.FLIP_X);
+		  BouncePoint zoneA = checkLineIntersections(oldBallX, oldBallY, newBallX, newBallY, paddleX, paddleY - 5, paddleX + paddleLength, paddleY - 5, BounceDirection.FLIP_Y);
+		  //TODO check zones E and F then take BP closest to ball and return that
+		  
+		  //Zone F
+		  //Circle equation: (x-a)^2 + (y-b)^2 = r^2
+		  Double a = paddleX + paddleLength;
+		  Double b = paddleY;
+		  Double r = 5.0;
+		  //Line Equation: y = mx + c
+		  Double m = (newBallY - oldBallY)/(newBallX - oldBallX);
+		  Double c = oldBallY - (m * oldBallX);
+		  BouncePoint[] zoneFList = checkCircleLineIntersection(a, b, r, m, c, oldBallX, oldBallY, newBallX, newBallY, oldDirX);
+		  
+		  //Zone E
+		  //Circle equation: (x-a)^2 + (y-b)^2 = r^2
+		  a = paddleX;
+		  b = paddleY;
+		  r = 5.0;
+		  BouncePoint[] zoneEList = checkCircleLineIntersection(a, b, r, m, c, oldBallX, oldBallY, newBallX, newBallY, oldDirX);
+		  
+		  //Find closest intersection point
+		  BouncePoint[] allZonesList = {zoneA, zoneB, zoneC, zoneEList[0], zoneEList[1], zoneFList[0], zoneFList[1]};
+		  Double minDistance = Double.MAX_VALUE;
+		  BouncePoint finalBP = null;
+		  for (int i=0; i < allZonesList.length; i++) {
+			  if (allZonesList[i] != null) {
+				  Double distance = Math.sqrt(Math.pow(Math.abs(oldBallX - allZonesList[i].getX()), 2) + Math.pow(Math.abs(oldBallY - allZonesList[i].getY()), 2));
+				  if (distance < minDistance) {
+					  minDistance = distance;
+					  finalBP = allZonesList[i];
+				  }
+			  }
+		  }
+		  return finalBP;
+	  }
+	  else {
+		  return null;
+	  }
+  }
+  
+  private BouncePoint[] checkCircleLineIntersection(Double a, Double b, Double r, Double m, Double c, Double oldBallX, Double oldBallY, Double newBallX, Double newBallY, Double oldDirX) {
+	  Double distanceToCircle = (Math.pow(Math.abs(m * a - b + c), 2)) / (m * m + 1);
+	  //Check for real solutions to intersection
+	  if (distanceToCircle <= (r*r)) {
+		  //Solve quadratic equation for X, then get Y
+		  Double quadA = 1 + (m * m);
+		  Double quadB = 2 * (((c - b) * m) - a);
+		  Double quadC = ((c - b) * (c - b)) + (a * a) - (r * r);
+		  
+		  Double solX1 = (-quadB + Math.sqrt((quadB * quadB) - (4 * quadA * quadC))) / (2*quadA);
+		  Double solX2 = (-quadB - Math.sqrt((quadB * quadB) - (4 * quadA * quadC))) / (2*quadA);
+		  Double solY1 = (m * solX1) + c;
+		  Double solY2 = (m * solX2) + c;
+		  BouncePoint[] intersectionList = new BouncePoint[2];
+		  
+		  if (!Double.isNaN(solX1) && !Double.isNaN(solY1) && Math.min(oldBallX, newBallX) <= solX1 && solX1 <= Math.max(oldBallX,  newBallX)
+        		  && Math.min(oldBallY, newBallY) <= solY1 && solY1 <= Math.max(oldBallY, newBallY)) {
+			  if (oldDirX >= 0) {
+				  BouncePoint zoneF1 = new BouncePoint(solX1, solY1, BounceDirection.FLIP_Y);
+				  intersectionList[0] = zoneF1;
+			  }
+			  else {
+				  BouncePoint zoneF1 = new BouncePoint(solX1, solY1, BounceDirection.FLIP_X);
+				  intersectionList[0] = zoneF1;
+			  }
+		  }
+		  
+		  if (!Double.isNaN(solX2) && !Double.isNaN(solY2) && Math.min(oldBallX, newBallX) <= solX2 && solX2 <= Math.max(oldBallX,  newBallX)
+        		  && Math.min(oldBallY, newBallY) <= solY2 && solY2 <= Math.max(oldBallY, newBallY)) {
+			  if (oldDirX >= 0) {
+				  BouncePoint zoneF2 = new BouncePoint(solX2, solY2, BounceDirection.FLIP_Y);
+				  intersectionList[1] = zoneF2;
+			  }
+			  else {
+				  BouncePoint zoneF2 = new BouncePoint(solX2, solY2, BounceDirection.FLIP_X);
+				  intersectionList[1] = zoneF2;
+			  }
+		  }
+		  return intersectionList;
+	  }
+	  return null;
+  }
+  
+  private BouncePoint calculateBouncePointWall() {
+	//Get all the attributes of the current ball status
+	  Double oldBallX = this.currentBallX;
+	  Double oldBallY = this.currentBallY;
+	  Double oldDirX = this.ballDirectionX;
+	  Double oldDirY = this.ballDirectionY;
+	  
+	  //Set all the attributes of the potential future ball status
+	  Double newBallX = oldBallX + oldDirX;
+	  Double newBallY = oldBallY + oldDirY;
+	  
+	  //Find intersection points with the 3 wall zones (A = left, B = top, C = right)
+	  BouncePoint zoneA = checkLineIntersections(oldBallX, oldBallY, newBallX, newBallY, 5.0, 5.0, 5.0, 385.0, BounceDirection.FLIP_X);
+	  BouncePoint zoneC = checkLineIntersections(oldBallX, oldBallY, newBallX, newBallY, 385.0, 5.0, 385.0, 385.0, BounceDirection.FLIP_X);
+	  BouncePoint zoneB = checkLineIntersections(oldBallX, oldBallY, newBallX, newBallY, 5.0, 5.0, 385.0, 5.0, BounceDirection.FLIP_Y);
+	  
+	  //Check if they are null and if not get the distance from the old ball position to the various bounce points
+	  Double zoneADistance = null;
+	  Double zoneCDistance = null;
+	  Double zoneBDistance = null;
+	  if (zoneA != null) {
+		  zoneADistance = Math.sqrt(Math.pow(Math.abs(oldBallX - zoneA.getX()), 2) + Math.pow(Math.abs(oldBallY - zoneA.getY()), 2));
+	  }
+	  if (zoneC != null) {
+		 zoneCDistance = Math.sqrt(Math.pow(Math.abs(oldBallX - zoneC.getX()), 2) + Math.pow(Math.abs(oldBallY - zoneC.getY()), 2));
+	  }
+	  if (zoneB != null) {
+		  zoneBDistance = Math.sqrt(Math.pow(Math.abs(oldBallX - zoneB.getX()), 2) + Math.pow(Math.abs(oldBallY - zoneB.getY()), 2));
+	  }
+	  
+	  //Find the closest bounce point to the ball location
+	  Double distanceArr[] = {zoneADistance, zoneBDistance, zoneCDistance};
+	  int minIndex = 10;
+	  Double minDistance = Double.MAX_VALUE;
+	  
+	  for (int i = 0; i < 3; i++) {
+		  if (distanceArr[i] != null) {
+			  if (distanceArr[i] < minDistance) {
+				  minDistance = distanceArr[i];
+				  minIndex = i;
+			  }
+		  }
+	  }
+	  
+	  //Return the closest bounce point but check for the corners
+	  if (minIndex == 0) {
+		  if (zoneA.getX() == 5 && zoneA.getY() == 5) {
+			  zoneA.setDirection(BounceDirection.FLIP_BOTH);
+		  }
+		  return zoneA;
+	  }
+	  else if (minIndex == 1) {
+		  if ((zoneB.getX() == 5 && zoneB.getY() == 5) || (zoneB.getX() == 385 && zoneB.getY() == 5)) {
+			  zoneB.setDirection(BounceDirection.FLIP_BOTH);
+		  }
+		  return zoneB;
+	  }
+	  else if (minIndex == 2) {
+		  if (zoneC.getX() == 385 && zoneC.getY() == 5) {
+			  zoneC.setDirection(BounceDirection.FLIP_BOTH);
+		  }
+		  return zoneC;
+	  }
+	  else { //minIndex stayed at 10 meaning all 3 were null (this shouldn't be possible as it was already verified that the ball hits the wall, but this is here for safety)
+		  return null;
+	  }
+  }
+  
+  private BouncePoint checkLineIntersections(Double AX, Double AY, Double BX, Double BY, Double CX, Double CY, Double DX, Double DY, BounceDirection bd) {
+	  // Line AB represented as a1x + b1y = c1 
+      double a1 = BY - AY; 
+      double b1 = AX - BX; 
+      double c1 = a1*(AX) + b1*(AY); 
+     
+      // Line CD represented as a2x + b2y = c2 
+      double a2 = DY - CY; 
+      double b2 = CX - DX; 
+      double c2 = a2*(CX)+ b2*(CY); 
+     
+      double determinant = a1*b2 - a2*b1; 
+     
+      if (determinant == 0) 
+      { 
+          // The lines are parallel so no intersection
+          return null; 
+      } 
+      else
+      { 
+          double intersectX = (b2*c1 - b1*c2)/determinant; 
+          double intersectY = (a1*c2 - a2*c1)/determinant; 
+          if (Math.min(AX, BX) <= intersectX && intersectX <= Math.max(AX,  BX)
+        		  && Math.min(AY, BY) <= intersectY && intersectY <= Math.max(AY, BY)) {
+        	  BouncePoint bp = new BouncePoint(intersectX, intersectY, bd);
+        	  return bp;
+          }
+          else {
+        	  return null;
+          }
+      } 
+  }
+  
+  private void bounceBall() {
+	  BouncePoint bp = this.getBounce();
+	  Double ballX = this.getCurrentBallX();
+	  Double ballY = this.getCurrentBallY();
+	  Double ballDirX = this.getBallDirectionX();
+	  Double ballDirY = this.getBallDirectionY();
+	  
+	  Double incomingX = Math.abs(ballX - bp.getX());
+	  Double incomingY = Math.abs(ballY - bp.getY());
+	  Double outgoingX = Math.abs(ballDirX - incomingX);
+	  Double outgoingY = Math.abs(ballDirY - incomingY);
+	  
+	  Double newBallX;
+	  Double newBallY;
+	  Double newBallDirX;
+	  Double newBallDirY;
+	  
+	  //Set new ball direction and position
+	  if (bp.getDirection() == BounceDirection.FLIP_Y) {
+		  newBallDirX = ballDirX + (Math.signum(ballDirX)*0.1*Math.abs(ballDirY));
+		  newBallDirY = ballDirY * (-1);
+
+		  newBallX = bp.getX() + (outgoingX * Math.signum(newBallDirX)) + (0.1 * outgoingY * Math.signum(newBallDirX));
+		  newBallY = bp.getY() + (outgoingY * Math.signum(newBallDirY));
+	  }
+	  else if (bp.getDirection() == BounceDirection.FLIP_X) {
+		  newBallDirX = ballDirX * (-1);
+		  newBallDirY = ballDirY + (Math.signum(ballDirY)*0.1*Math.abs(ballDirX));
+		  
+		  newBallX = bp.getX() + (outgoingX * Math.signum(newBallDirX));
+		  newBallY = bp.getY() + (outgoingY * Math.signum(newBallDirY)) + (0.1 * outgoingX * Math.signum(newBallDirY));
+	  }
+	  else {
+		  newBallDirX = ballDirX * (-1);
+		  newBallDirY = ballDirY * (-1);
+		  
+		  newBallX = bp.getX() + (outgoingX * Math.signum(newBallDirX));
+		  newBallY = bp.getY() + (outgoingY * Math.signum(newBallDirY));
+	  }
+	  
+	  this.setBallDirectionX(newBallDirX);
+	  this.setBallDirectionY(newBallDirY);
+	  this.setCurrentBallX(newBallX);
+	  this.setCurrentBallY(newBallY);
+  }
 }
 
 class PlayedBlockAssignment {

@@ -5,7 +5,7 @@ package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 
 // line 112 "../../../../../Block223Persistence.ump"
-// line 58 "../../../../../Block223PlayMode.ump"
+// line 311 "../../../../../Block223PlayMode.ump"
 public class HallOfFameEntry implements Serializable
 {
 

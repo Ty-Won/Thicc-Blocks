@@ -33,8 +33,9 @@ class PlayedGame {
   // Guards
   
   private boolean hitPaddle() {
-    // TODO implement
-    return false;
+    BouncePoint bp = this.calculateBouncePointPaddle();
+    this.setBounce(bp);
+    return bp != null;
   }
   
   private boolean isBallOutOfBounds() {
@@ -71,8 +72,9 @@ class PlayedGame {
   }
   
   private boolean hitWall() {
-    // TODO implement
-    return false;
+    BouncePoint bp = this.calculateBouncePointWall();
+    this.setBounce(bp);
+    return bp != null;
   }
   
   // Actions
@@ -82,7 +84,7 @@ class PlayedGame {
   }
   
   private void doHitPaddleOrWall() {
-    // TODO implement
+    this.bounceBall();
   }
 
   private void doOutOfBounds() {
