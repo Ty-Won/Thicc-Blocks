@@ -579,14 +579,14 @@ public class Block223Controller {
 		if(Block223Application.getCurrentUserRole() != null) {
 			throw new InvalidInputException("Cannot register a new user while a user is logged in.");
 		}
-		if(playerPassword.equals(adminPassword)) {
-			throw new InvalidInputException("The passwords have to be different.");
-		}
 		if(username == null || username.isEmpty()) {
 			throw new InvalidInputException("The username must be specified.");
 		}
 		if(playerPassword == null || playerPassword.isEmpty()) {
 			throw new InvalidInputException("The player password needs to be specified.");
+		}
+		if(playerPassword.equals(adminPassword)) {
+			throw new InvalidInputException("The passwords have to be different.");
 		}
 		
 		Block223 block223 = Block223Application.getBlock223();
