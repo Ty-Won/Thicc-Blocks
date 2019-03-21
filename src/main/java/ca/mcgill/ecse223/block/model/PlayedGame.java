@@ -723,36 +723,44 @@ public class PlayedGame implements Serializable
   }
 
   // line 41 "../../../../../Block223States.ump"
-   private boolean isOutOfBoundsAndLastLife(){
-    // TODO implement
-    return false;
+   private boolean isBallOutOfBounds(){
+    return getCurrentPaddleY() >= 390;
   }
 
   // line 46 "../../../../../Block223States.ump"
-   private boolean isOutOfBounds(){
-    // TODO implement
-    return false;
+   private boolean isOutOfBoundsAndLastLife(){
+    boolean outOfBounds = false;
+    if(lives == 1) {
+    	outOfBounds = isBallOutOfBounds();
+    }
+    
+    return outOfBounds;
   }
 
-  // line 51 "../../../../../Block223States.ump"
+  // line 55 "../../../../../Block223States.ump"
+   private boolean isOutOfBounds(){
+    return isBallOutOfBounds();
+  }
+
+  // line 59 "../../../../../Block223States.ump"
    private boolean hitLastBlockAndLastLevel(){
     // TODO implement
     return false;
   }
 
-  // line 56 "../../../../../Block223States.ump"
+  // line 64 "../../../../../Block223States.ump"
    private boolean hitLastBlock(){
     // TODO implement
     return false;
   }
 
-  // line 61 "../../../../../Block223States.ump"
+  // line 69 "../../../../../Block223States.ump"
    private boolean hitBlock(){
     // TODO implement
     return false;
   }
 
-  // line 66 "../../../../../Block223States.ump"
+  // line 74 "../../../../../Block223States.ump"
    private boolean hitWall(){
     // TODO implement
     return false;
@@ -762,38 +770,43 @@ public class PlayedGame implements Serializable
   /**
    * Actions
    */
-  // line 73 "../../../../../Block223States.ump"
+  // line 81 "../../../../../Block223States.ump"
    private void doSetup(){
     // TODO implement
   }
 
-  // line 77 "../../../../../Block223States.ump"
+  // line 85 "../../../../../Block223States.ump"
    private void doHitPaddleOrWall(){
     // TODO implement
   }
 
-  // line 81 "../../../../../Block223States.ump"
+  // line 89 "../../../../../Block223States.ump"
    private void doOutOfBounds(){
-    // TODO implement
+    setLives(lives - 1);
+    resetCurrentBallX();
+    resetCurrentBallY();
+    resetBallDirectionX();
+    resetBallDirectionY();
+    resetCurrentPaddleX();
   }
 
-  // line 85 "../../../../../Block223States.ump"
+  // line 98 "../../../../../Block223States.ump"
    private void doHitBlock(){
     // TODO implement
   }
 
-  // line 89 "../../../../../Block223States.ump"
+  // line 102 "../../../../../Block223States.ump"
    private void doHitBlockNextLevel(){
     // TODO implement
   }
 
-  // line 93 "../../../../../Block223States.ump"
+  // line 106 "../../../../../Block223States.ump"
    private void doHitNothingAndNotOutOfBounds(){
     setCurrentBallX(currentBallX + ballDirectionX);
     setCurrentBallY(currentBallY + ballDirectionY);
   }
 
-  // line 98 "../../../../../Block223States.ump"
+  // line 111 "../../../../../Block223States.ump"
    private void doGameOver(){
     // TODO implement
   }

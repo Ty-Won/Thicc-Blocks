@@ -36,15 +36,23 @@ class PlayedGame {
     // TODO implement
     return false;
   }
+  
+  private boolean isBallOutOfBounds() {
+  	return getCurrentPaddleY() >= 390;
+  }
+  
 
   private boolean isOutOfBoundsAndLastLife() {
-    // TODO implement
-    return false;
+    boolean outOfBounds = false;
+    if(lives == 1) {
+    	outOfBounds = isBallOutOfBounds();
+    }
+    
+    return outOfBounds;
   }
   
   private boolean isOutOfBounds() {
-    // TODO implement
-    return false;
+    return isBallOutOfBounds();
   }
   
   private boolean hitLastBlockAndLastLevel() {
@@ -78,7 +86,12 @@ class PlayedGame {
   }
 
   private void doOutOfBounds() {
-    // TODO implement
+    setLives(lives - 1);
+    resetCurrentBallX();
+    resetCurrentBallY();
+    resetBallDirectionX();
+    resetBallDirectionY();
+    resetCurrentPaddleX();
   }
 
   private void doHitBlock() {
