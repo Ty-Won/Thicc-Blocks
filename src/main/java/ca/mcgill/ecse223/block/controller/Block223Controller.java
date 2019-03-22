@@ -1133,8 +1133,58 @@ public class Block223Controller {
 		return playableGames;
 	}
 
-	public static List<TOCurrentlyPlayedGame> getCurrentPlayableGame() throws InvalidInputException {
-		return null;
+	/**
+	 * getCurrentPlayableGame: get the current playable game
+	 * 
+	 * @throws InvalidInputException
+	 */
+	public static TOCurrentlyPlayedGame getCurrentPlayableGame() throws InvalidInputException {
+		
+		// gets current PlayedGame 
+		PlayedGame pgame = Block223Application.getCurrentPlayableGame();
+		
+		// checking if a PlayableGame is selected
+		if(pgame == null) {
+			throw new InvalidInputException("A game must be selected to play it.");
+		}
+		
+		// gets current user role
+		UserRole userRole = Block223Application.getCurrentUserRole();
+		
+		// user role not set
+		if(userRole == null) {
+			throw new InvalidInputException("Player privleges are required to play a game.");
+		}
+		
+		if((userRole instanceof Admin) && (pgame.getPlayer() != null)) {
+			throw new InvalidInputException("Player privileges are required to play a game.");
+		}
+
+		if ( (userRole instanceof Admin) && (pgame.getGame().getAdmin() != ((Admin) userRole)) ) {
+			throw new InvalidInputException("Only the admin of a game can test the game.");
+		}
+
+		boolean paused = pgame.getPlayStatus() == PlayStatus.Ready || pgame.getPlayStatus() == PlayStatus.Paused;
+
+		TOCurrentlyPlayedGame result = new TOCurrentlyPlayedGame(pgame.getGame().getName(),
+				paused, pgame.getScore(), pgame.getLives(), pgame.getCurrentLevel(), 
+				pgame.getPlayername(), pgame.getCurrentBallX(), pgame.getCurrentBallY(), 
+				pgame.getCurrentPaddleLength(), pgame.getCurrentPaddleX());
+		
+		List<PlayedBlockAssignment> blocks = pgame.getBlocks();
+		
+		for(PlayedBlockAssignment pblock : blocks) {
+			TOCurrentBlock to = new TOCurrentBlock(
+					pblock.getBlock().getRed(),
+					pblock.getBlock().getGreen(),
+					pblock.getBlock().getBlue(),
+					pblock.getBlock().getPoints(),
+					pblock.getX(),
+					pblock.getY(),
+					result);	
+		}
+		
+		return result;
 	}
 
 	public static TOHallOfFame getHallOfFame(int start, int end) throws InvalidInputException {
