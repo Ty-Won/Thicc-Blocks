@@ -175,8 +175,8 @@ public class Block223Application extends Application {
 		return playedGame;
 	}
 
-	public static void setCurrentPlayableGame(PlayedGame playedGame) {
-		playedGame = playedGame;
+	public static void setCurrentPlayableGame(PlayedGame aGame) {
+		playedGame = aGame;
 	}
 
 }
