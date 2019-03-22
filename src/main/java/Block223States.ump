@@ -1,6 +1,4 @@
 namespace ca.mcgill.ecse223.block.model;
-use Block223.ump;
-use Block223PlayMode.ump;
 
 class PlayedGame {
 

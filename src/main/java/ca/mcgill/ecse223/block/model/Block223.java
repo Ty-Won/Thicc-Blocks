@@ -7,7 +7,6 @@ import java.util.*;
 
 /**
  * the reinitialize methods need to be added
- * NOTE: DO NOT GENERATE FROM THIS FILE, GENERATE Block223State.ump instead
  */
 // line 3 "../../../../../Block223PlayMode.ump"
 // line 5 "../../../../../Block223Persistence.ump"
