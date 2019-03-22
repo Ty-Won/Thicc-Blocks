@@ -665,9 +665,9 @@ public class Block223Controller {
 		if(!(userRole instanceof Player)) {
 			throw new InvalidInputException("Player privileges are required to play a game.");
 		}
-		Player player = (Player) userRole;
+		
+		Player player = (Player) userRole;		
 		Game game = Game.getWithName(name);
-
 		PlayedGame pgame;
 
 		if (game != null) {
@@ -680,12 +680,21 @@ public class Block223Controller {
 
 			pgame = new PlayedGame(username, game, block223);
 			pgame.setPlayer(player);
-		} else {
 
-				
+		} else {
+			pgame = block223.findPlayableGame(id);
+
+			if (pgame == null) {
+				throw new InvalidInputException("The game does not exist.");
+			}
+
+			if (pgame.getPlayer() != player) {
+				throw new InvalidInputException("Only the player that started a game can continue the game.");
+			}
 
 		}
 
+		Block223Application.setCurrentPlayableGame(pgame);
 	}
 
 	public static void startGame(Block223PlayModeInterface ui) throws InvalidInputException {
