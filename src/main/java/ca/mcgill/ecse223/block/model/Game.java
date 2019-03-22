@@ -1,5 +1,5 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.1.4262.30c9ffc7c modeling language!*/
+/*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
@@ -29,7 +29,7 @@ public class Game implements Serializable
   public static final int WALL_PADDING = 10;
   public static final int COLUMNS_PADDING = 5;
   public static final int ROW_PADDING = 2;
-  private transient static Map<String, Game> gamesByName = new HashMap<String, Game>();
+  private static Map<String, Game> gamesByName = new HashMap<String, Game>();
 
   //------------------------
   // MEMBER VARIABLES
@@ -39,8 +39,7 @@ public class Game implements Serializable
   private boolean published;
   private String name;
   private int nrBlocksPerLevel;
-
-  private transient Comparator<HallOfFameEntry> hallOfFameEntriesPriority;
+  private Comparator<HallOfFameEntry> hallOfFameEntriesPriority;
 
   //Game Associations
   private HallOfFameEntry mostRecentEntry;

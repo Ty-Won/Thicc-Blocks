@@ -1,5 +1,5 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.1.4262.30c9ffc7c modeling language!*/
+/*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
 import ca.mcgill.ecse223.block.model.BouncePoint.BounceDirection;
@@ -81,7 +81,7 @@ public class PlayedGame implements Serializable
 
   public PlayedGame(String aPlayername, Game aGame, Block223 aBlock223)
   {
-    // line 300 "../../../../../Block223PlayMode.ump"
+    // line 308 "../../../../../Block223PlayMode.ump"
     boolean didAddGameResult = setGame(aGame);
           if (!didAddGameResult)
           {
@@ -949,15 +949,23 @@ public class PlayedGame implements Serializable
 	  
 	  //Set new ball direction and position
 	  if (bp.getDirection() == BounceDirection.FLIP_Y) {
-		  newBallDirX = ballDirX + (Math.signum(ballDirX)*0.1*Math.abs(ballDirY));
+		  Double sign = Math.signum(ballDirX);
+		  	if (sign == 0) {
+				sign = 1.0;
+		  	}
+		  newBallDirX = ballDirX + (sign*0.1*Math.abs(ballDirY));
 		  newBallDirY = ballDirY * (-1);
 
 		  newBallX = bp.getX() + (outgoingX * Math.signum(newBallDirX)) + (0.1 * outgoingY * Math.signum(newBallDirX));
 		  newBallY = bp.getY() + (outgoingY * Math.signum(newBallDirY));
 	  }
 	  else if (bp.getDirection() == BounceDirection.FLIP_X) {
+	  	  Double sign = Math.signum(ballDirY);
+		  	if (sign == 0) {
+		  		sign = 1.0;
+		  	}
 		  newBallDirX = ballDirX * (-1);
-		  newBallDirY = ballDirY + (Math.signum(ballDirY)*0.1*Math.abs(ballDirX));
+		  newBallDirY = ballDirY + (sign*0.1*Math.abs(ballDirX));
 		  
 		  newBallX = bp.getX() + (outgoingX * Math.signum(newBallDirX));
 		  newBallY = bp.getY() + (outgoingY * Math.signum(newBallDirY)) + (0.1 * outgoingX * Math.signum(newBallDirY));
