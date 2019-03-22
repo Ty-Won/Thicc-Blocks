@@ -1,13 +1,13 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
+/*This code was generated using the UMPLE 1.29.1.4262.30c9ffc7c modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 import java.util.*;
 
-// line 8 "../../../../../Block223PlayMode.ump"
+// line 6 "../../../../../Block223PlayMode.ump"
 // line 53 "../../../../../Block223Persistence.ump"
-// line 56 "../../../../../Block223.ump"
+// line 69 "../../../../../Block223.ump"
 public class Game implements Serializable
 {
 
@@ -29,7 +29,7 @@ public class Game implements Serializable
   public static final int WALL_PADDING = 10;
   public static final int COLUMNS_PADDING = 5;
   public static final int ROW_PADDING = 2;
-  private static Map<String, Game> gamesByName = new HashMap<String, Game>();
+  private transient static Map<String, Game> gamesByName = new HashMap<String, Game>();
 
   //------------------------
   // MEMBER VARIABLES
@@ -39,6 +39,7 @@ public class Game implements Serializable
   private boolean published;
   private String name;
   private int nrBlocksPerLevel;
+
   private transient Comparator<HallOfFameEntry> hallOfFameEntriesPriority;
 
   //Game Associations
@@ -877,7 +878,7 @@ public class Game implements Serializable
   	}
   }
 
-  // line 73 "../../../../../Block223.ump"
+  // line 86 "../../../../../Block223.ump"
    public Block findBlock(int id){
     for (Block block : this.getBlocks()) {
 		  if (block.getId() == id) {

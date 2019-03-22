@@ -1,12 +1,12 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
+/*This code was generated using the UMPLE 1.29.1.4262.30c9ffc7c modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 import java.util.*;
 
 // line 22 "../../../../../Block223Persistence.ump"
-// line 25 "../../../../../Block223.ump"
+// line 38 "../../../../../Block223.ump"
 public class User implements Serializable
 {
 
@@ -255,7 +255,7 @@ public class User implements Serializable
   	}
   }
 
-  // line 31 "../../../../../Block223.ump"
+  // line 44 "../../../../../Block223.ump"
    public static  String findUsername(UserRole role){
     for (User user : usersByUsername.values()) {
       if (user.getRoles().contains(role)) {

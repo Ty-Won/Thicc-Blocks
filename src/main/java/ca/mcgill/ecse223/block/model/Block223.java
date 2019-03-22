@@ -1,5 +1,5 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
+/*This code was generated using the UMPLE 1.29.1.4262.30c9ffc7c modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * the reinitialize methods need to be added
  */
-// line 3 "../../../../../Block223PlayMode.ump"
+// line 1 "../../../../../Block223PlayMode.ump"
 // line 5 "../../../../../Block223Persistence.ump"
 // line 7 "../../../../../Block223.ump"
 public class Block223 implements Serializable
@@ -611,6 +611,17 @@ public class Block223 implements Serializable
 	
 		// No game found
 		return null;
+  }
+
+  // line 26 "../../../../../Block223.ump"
+   public PlayedGame findPlayableGame(int id){
+    for (PlayedGame playedGame : getPlayedGames()) {
+      if (playedGame.getId() == id) {
+        return playedGame;
+      }
+    }
+    
+    return null;
   }
   
   //------------------------

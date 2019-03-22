@@ -1,8 +1,8 @@
 namespace ca.mcgill.ecse223.block.model;
 
-use Block223States.ump;
 use Block223PlayMode.ump;
 use Block223Persistence.ump;
+use Block223States.ump;
 
 class Block223 {
    1 <@>- * User users;
@@ -20,6 +20,19 @@ class Block223 {
 		// No game found
 		return null;
  	}
+
+   public PlayedGame findPlayableGame(int id) {
+
+    for (PlayedGame playedGame : getPlayedGames()) {
+      if (playedGame.getId() == id) {
+        return playedGame;
+      }
+    }
+    
+    return null;
+  }
+
+   
 }
 
 class User {
