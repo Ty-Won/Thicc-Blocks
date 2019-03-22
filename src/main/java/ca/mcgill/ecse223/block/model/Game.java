@@ -101,6 +101,12 @@ public class Game implements Serializable
     }
   }
 
+  public Block getRandomBlock() {
+
+    
+    return null;
+  }
+
   public Game(String aName, int aNrBlocksPerLevel, Admin aAdmin, int aMinBallSpeedXForBall, int aMinBallSpeedYForBall, double aBallSpeedIncreaseFactorForBall, int aMaxPaddleLengthForPaddle, int aMinPaddleLengthForPaddle, Block223 aBlock223)
   {
     published = false;

@@ -1062,11 +1062,17 @@ public class PlayedGame implements Serializable
     for (BlockAssignment a : assignments) {
 
       PlayedBlockAssignment pBlock = new PlayedBlockAssignment(
-        Game.WALL_PADDING + (Block.SIZE + Game.COLUMNS_PADDING) * (a.getGridHorizontalPosition() -1),
-        Game.WALL_PADDING + (Block.SIZE + Game.ROW_PADDING) * (a.getGridVerticalPosition() -1),
+        Game.WALL_PADDING + (Block.SIZE + Game.COLUMNS_PADDING) * (a.getGridHorizontalPosition() - 1),
+        Game.WALL_PADDING + (Block.SIZE + Game.ROW_PADDING) * (a.getGridVerticalPosition() - 1),
         a.getBlock(), this
       );
 
+    }
+
+    // Fill up the remaining blocks
+    while (numberOfBlocks() < game.getNrBlocksPerLevel()) {
+
+      PlayedBlockAssignment pBlock = new PlayedBlockAssignment(x, y, game.getRandomBlock(), this);
     }
 
   }

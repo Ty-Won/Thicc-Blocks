@@ -1164,6 +1164,10 @@ public class Block223Controller {
 			throw new InvalidInputException("Only the admin of a game can test the game.");
 		}
 
+		if ((userRole instanceof Player) && (pgame.getPlayer() == null)) {
+			throw new InvalidInputException("Admin privileges are required to test a game.");
+		}
+
 		boolean paused = pgame.getPlayStatus() == PlayStatus.Ready || pgame.getPlayStatus() == PlayStatus.Paused;
 
 		TOCurrentlyPlayedGame result = new TOCurrentlyPlayedGame(pgame.getGame().getName(),
