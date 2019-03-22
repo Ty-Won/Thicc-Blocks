@@ -1134,7 +1134,23 @@ public class Block223Controller {
 	}
 
 	public static List<TOCurrentlyPlayedGame> getCurrentPlayableGame() throws InvalidInputException {
-		return null;
+		// gets current PlayedGame 
+		PlayedGame pgame = Block223Application.getCurrentPlayableGame();
+		
+		// gets current user role
+		UserRole userRole = Block223Application.getCurrentUserRole();
+		
+		// User must be a player to play the game
+		if(!(userRole instanceof Player)) {
+			throw new InvalidInputException("Player priviledges are required to access a game's hall of fame.");
+		}
+		
+		// checking if pgame exists
+		if(pgame == null) {
+			throw new InvalidInputException("A game must be selected to access its information.");
+		}
+
+		return new TOCurrentlyPlayableGame(pgame.getGame(), pgame, pgame.getCurrentLevel());
 	}
 
 	public static TOHallOfFame getHallOfFame(int start, int end) throws InvalidInputException {
