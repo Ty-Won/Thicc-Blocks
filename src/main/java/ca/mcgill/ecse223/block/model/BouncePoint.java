@@ -1,5 +1,5 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
+/*This code was generated using the UMPLE 1.29.1.4262.30c9ffc7c modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
 
@@ -7,7 +7,7 @@ package ca.mcgill.ecse223.block.model;
  * this class needs to be specified but the use of it is optional; it is also not added to the persistence file
  * you may implement bounce behavior differently
  */
-// line 321 "../../../../../Block223PlayMode.ump"
+// line 326 "../../../../../Block223PlayMode.ump"
 public class BouncePoint
 {
 

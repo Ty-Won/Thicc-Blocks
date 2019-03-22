@@ -1,11 +1,11 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
+/*This code was generated using the UMPLE 1.29.1.4262.30c9ffc7c modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 
 // line 35 "../../../../../Block223Persistence.ump"
-// line 29 "../../../../../Block223.ump"
+// line 56 "../../../../../Block223.ump"
 public abstract class UserRole implements Serializable
 {
 
