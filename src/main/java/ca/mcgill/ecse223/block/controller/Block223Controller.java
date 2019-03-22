@@ -1133,7 +1133,13 @@ public class Block223Controller {
 		return playableGames;
 	}
 
+	/**
+	 * getCurrentPlayableGame: get the current playable game
+	 * 
+	 * @throws InvalidInputException
+	 */
 	public static TOCurrentlyPlayedGame getCurrentPlayableGame() throws InvalidInputException {
+		
 		// gets current PlayedGame 
 		PlayedGame pgame = Block223Application.getCurrentPlayableGame();
 		
@@ -1142,26 +1148,23 @@ public class Block223Controller {
 			throw new InvalidInputException("A game must be selected to play it.");
 		}
 		
-		// boolean paused
-		boolean paused = pgame.getPlayStatus() == PlayStatus.Ready || pgame.getPlayStatus() == PlayStatus.Paused;
-		
 		// gets current user role
 		UserRole userRole = Block223Application.getCurrentUserRole();
 		
 		// user role not set
 		if(userRole == null) {
-			throw new InvalidInputException("A game must be selected to play it.");
+			throw new InvalidInputException("Player privleges are required to play a game.");
 		}
 		
-		// User must be a player to play the game
-		if(!(userRole instanceof Admin) || (pgame.getPlayer() == null)) {
-			throw new InvalidInputException("Player priviledges are required to play a game.");
+		if((userRole instanceof Admin) && (pgame.getPlayer() != null)) {
+			throw new InvalidInputException("Player privileges are required to play a game.");
 		}
-		
-		// Admin should be the admin of that specific game to test the game
-		if (Block223Application.getCurrentUserRole() != pgame.getGame().getAdmin()) {
+
+		if ( (userRole instanceof Admin) && (pgame.getGame().getAdmin() != ((Admin) userRole)) ) {
 			throw new InvalidInputException("Only the admin of a game can test the game.");
 		}
+
+		boolean paused = pgame.getPlayStatus() == PlayStatus.Ready || pgame.getPlayStatus() == PlayStatus.Paused;
 
 		TOCurrentlyPlayedGame result = new TOCurrentlyPlayedGame(pgame.getGame().getName(),
 				paused, pgame.getScore(), pgame.getLives(), pgame.getCurrentLevel(), 
