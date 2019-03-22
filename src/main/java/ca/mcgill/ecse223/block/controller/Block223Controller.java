@@ -290,10 +290,10 @@ public class Block223Controller {
 		}
 		catch(RuntimeException e) {
 			String msg;
-			if (e.getMessage().contentEquals("Red invalid")) msg = "Red must be between 0 and 255";
-			else if (e.getMessage().contentEquals("Green invalid")) msg = "Green must be between 0 and 255";
-			else if (e.getMessage().contentEquals("Blue invalid")) msg = "Blue must be between 0 and 255";
-			else if (e.getMessage().contentEquals("Points invalid")) msg = "Points must be between 1 and 1000";
+			if (e.getMessage().contentEquals("Red invalid")) msg = "Red must be between 0 and 255.";
+			else if (e.getMessage().contentEquals("Green invalid")) msg = "Green must be between 0 and 255.";
+			else if (e.getMessage().contentEquals("Blue invalid")) msg = "Blue must be between 0 and 255.";
+			else if (e.getMessage().contentEquals("Points invalid")) msg = "Points must be between 1 and 1000.";
 			else msg = "Unable to create block due to game.";
 			
 			throw new InvalidInputException(msg);

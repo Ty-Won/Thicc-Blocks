@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Before;
+import org.junit.Test;
 
 import ca.mcgill.ecse223.block.application.Block223Application;
 import ca.mcgill.ecse223.block.controller.Block223Controller;
@@ -53,7 +54,7 @@ public class StartPauseResumeTests {
 	}
 
 	// startGame
-
+	@Test
 	public void testStartGameHitPaddleAndMovePaddleLeft() throws InvalidInputException {
 
 		// Initializing fake user inputs
