@@ -24,6 +24,19 @@ class Block223 {
 class User {
    unique username;
    1 -> 1..2 UserRole roles;
+
+   public static String findUsername(UserRole role) {
+    
+    for (User user : usersByUsername.values()) {
+      if (user.getRoles().contains(role)) {
+        return user.getUsername();
+      }
+    }
+    
+    
+    // No username found
+    return null;
+  }
 }
 
 class UserRole {
