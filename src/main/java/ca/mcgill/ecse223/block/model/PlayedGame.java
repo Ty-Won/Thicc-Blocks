@@ -1046,7 +1046,29 @@ public class PlayedGame implements Serializable
    */
   // line 79 "../../../../../Block223States.ump"
    private void doSetup(){
-    // TODO implement
+
+    resetCurrentBallX();
+    resetCurrentBallY();
+    resetBallDirectionX();
+    resetBallDirectionY();
+    resetCurrentPaddleX();
+    
+    Game game = getGame();
+
+    Level level = game.getLevel(currentLevel - 1);
+
+    List<BlockAssignment> assignments = level.getBlockAssignments();
+
+    for (BlockAssignment a : assignments) {
+
+      PlayedBlockAssignment pBlock = new PlayedBlockAssignment(
+        Game.WALL_PADDING + (Block.SIZE + Game.COLUMNS_PADDING) * (a.getGridHorizontalPosition() -1),
+        Game.WALL_PADDING + (Block.SIZE + Game.ROW_PADDING) * (a.getGridVerticalPosition() -1),
+        a.getBlock(), this
+      );
+
+    }
+
   }
 
   // line 83 "../../../../../Block223States.ump"
