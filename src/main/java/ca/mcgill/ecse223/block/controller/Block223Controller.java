@@ -655,8 +655,15 @@ public class Block223Controller {
 		Block223Application.setCurrentUserRole(null);
 	}
 
-	// play mode
 
+	/**
+	 * Selects a given game to play by setting the current playable game
+	 * 
+	 * @param name - the name of the game
+	 * @param id - the id of the game
+	 * 
+	 * @throws InvalidInputException
+	 */
 	public static void selectPlayableGame(String name, int id) throws InvalidInputException  {	
 		Block223 block223 = Block223Application.getBlock223();
 		UserRole userRole = Block223Application.getCurrentUserRole();
@@ -665,7 +672,7 @@ public class Block223Controller {
 		if(!(userRole instanceof Player)) {
 			throw new InvalidInputException("Player privileges are required to play a game.");
 		}
-		
+
 		Player player = (Player) userRole;		
 		Game game = Game.getWithName(name);
 		PlayedGame pgame;
@@ -698,6 +705,7 @@ public class Block223Controller {
 	}
 
 	public static void startGame(Block223PlayModeInterface ui) throws InvalidInputException {
+
 	}
 
 	public static void testGame(Block223PlayModeInterface ui) throws InvalidInputException {
@@ -970,7 +978,11 @@ public class Block223Controller {
 			return x_y_capacity;
 	}
 
-	// play mode
+	/**
+	 * Get all playable games
+	 * 
+	 * @throws InvalidInputException
+	 */
 	public static List<TOPlayableGame> getPlayableGames() throws InvalidInputException {
 		Block223 block223 = Block223Application.getBlock223();
 		UserRole userRole = Block223Application.getCurrentUserRole();
