@@ -934,9 +934,35 @@ public class Block223Controller {
 	}
 
 	// play mode
-
 	public static List<TOPlayableGame> getPlayableGames() throws InvalidInputException {
-		return null;
+		Block223 block223 = Block223Application.getBlock223();
+		UserRole userRole = Block223Application.getCurrentUserRole();
+
+		// User must be admin
+		if(!(userRole instanceof Player)) {
+			throw new InvalidInputException("Player privileges are required to play a game.");
+		}
+		Player player = (Player) userRole;
+
+		List<TOPlayableGame> playableGames = new ArrayList<TOPlayableGame>();
+
+		// Add published games
+		for (Game game : block223.getGames()) {
+			boolean published = game.isPublished();
+
+			if (published) {
+				TOPlayableGame playableGame = new TOPlayableGame(game.getName(), -1, 0);
+				playableGames.add(playableGame);
+			}
+		}
+
+		// Add played games
+		for (PlayedGame game : player.getPlayedGames()) {
+			TOPlayableGame playableGame = new TOPlayableGame(game.getGame().getName(), game.getId(), game.getCurrentLevel());
+			playableGames.add(playableGame);
+		}
+
+		return playableGames;
 	}
 
 	public static List<TOCurrentlyPlayedGame> getCurrentPlayableGame() throws InvalidInputException {

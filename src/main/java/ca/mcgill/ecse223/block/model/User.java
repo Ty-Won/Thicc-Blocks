@@ -1,5 +1,5 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
+/*This code was generated using the UMPLE 1.29.1.4262.30c9ffc7c modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
@@ -253,6 +253,19 @@ public class User implements Serializable
   	for(User user : users) {
   		usersByUsername.put(user.getUsername(), user);
   	}
+  }
+
+  // line 30 "../../../../../Block223.ump"
+   public static  String findUsername(UserRole role){
+    for (User user : usersByUsername.values()) {
+      if (user.getRoles().contains(role)) {
+        return user.getUsername();
+      }
+    }
+    
+    
+    // No username found
+    return null;
   }
 
 
