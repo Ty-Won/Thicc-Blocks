@@ -1,5 +1,4 @@
 namespace ca.mcgill.ecse223.block.model;
-use Block223.ump;
 
 class Block223 {
    1 <@>- * PlayedGame playedGames;

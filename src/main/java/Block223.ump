@@ -1,4 +1,5 @@
 namespace ca.mcgill.ecse223.block.model;
+use Block223PlayMode.ump;
 use Block223Persistence.ump;
 
 // NOTE: DO NOT GENERATE FROM THIS FILE, GENERATE Block223State.ump instead
