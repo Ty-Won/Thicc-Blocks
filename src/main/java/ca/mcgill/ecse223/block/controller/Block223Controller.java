@@ -1092,9 +1092,7 @@ public class Block223Controller {
 	 * 
 	 */
 	public static int[] getMaxBlockCapacity(){
-			int[] x_y_capacity = { (Game.PLAY_AREA_SIDE - 2 * Game.WALL_PADDING) / (Block.SIZE + Game.COLUMNS_PADDING) + 1,
-				((Game.PLAY_AREA_SIDE - 2 * Game.WALL_PADDING) / (Block.SIZE + Game.ROW_PADDING) + 1) };
-			return x_y_capacity;
+		return Game.getMaxBlockCapacity();
 	}
 
 	/**
