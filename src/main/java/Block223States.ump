@@ -76,7 +76,80 @@ class PlayedGame {
   // Actions
   
   private void doSetup() {
-    // TODO implement
+    
+    resetCurrentBallX();
+    resetCurrentBallY();
+    resetBallDirectionX();
+    resetBallDirectionY();
+    resetCurrentPaddleX();
+    
+    Game game = getGame();
+
+    Level level = game.getLevel(currentLevel - 1);
+
+    List<BlockAssignment> assignments = level.getBlockAssignments();
+
+    for (BlockAssignment a : assignments) {
+
+      PlayedBlockAssignment pBlock = new PlayedBlockAssignment(
+        Game.WALL_PADDING + (Block.SIZE + Game.COLUMNS_PADDING) * (a.getGridHorizontalPosition() - 1),
+        Game.WALL_PADDING + (Block.SIZE + Game.ROW_PADDING) * (a.getGridVerticalPosition() - 1),
+        a.getBlock(), this
+      );
+
+    }
+
+    // Get block maximum
+    int[] x_y_capacity = Game.getMaxBlockCapacity();
+
+    int xmin = 1;
+    int xmax = x_y_capacity[0];
+
+    int ymin = 1;
+    int ymax = x_y_capacity[1];
+
+    Random rand = new Random();
+
+    // Fill up the remaining blocks
+    while (numberOfBlocks() < game.getNrBlocksPerLevel()) {
+
+      // Generate a random grid horizontal and verticle positions
+      int x = xmin + rand.nextInt(xmax - xmin + 1);
+      int y = ymin + rand.nextInt(ymax - ymin + 1);
+
+      boolean found = false;
+
+      // Find a suitable x, y location
+      while (!found) {
+        found = true;
+
+        // Convert to x and y to played block format
+        int xa = Game.WALL_PADDING + (Block.SIZE + Game.COLUMNS_PADDING) * (x - 1);
+        int ya = Game.WALL_PADDING + (Block.SIZE + Game.ROW_PADDING) * (y - 1);
+
+        for (PlayedBlockAssignment a : blocks) {
+          if (a.getX() == xa && a.getY() == ya) {
+            found = false;
+            break;
+          }
+        }
+
+        if (!found) {
+
+          // Loop-back to next row
+          if (x == xmax) {
+            y = (y % ymax) + 1;
+          }
+
+          // Advance to next column
+          x = (x % xmax) + 1;
+        }
+        
+      }
+
+      PlayedBlockAssignment pBlock = new PlayedBlockAssignment(x, y, game.getRandomBlock(), this);
+    }
+
   }
   
   private void doHitPaddleOrWall() {

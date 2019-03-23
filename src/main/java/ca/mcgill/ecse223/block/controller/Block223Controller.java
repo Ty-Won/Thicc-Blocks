@@ -1092,9 +1092,7 @@ public class Block223Controller {
 	 * 
 	 */
 	public static int[] getMaxBlockCapacity(){
-			int[] x_y_capacity = { (Game.PLAY_AREA_SIDE - 2 * Game.WALL_PADDING) / (Block.SIZE + Game.COLUMNS_PADDING) + 1,
-				((Game.PLAY_AREA_SIDE - 2 * Game.WALL_PADDING) / (Block.SIZE + Game.ROW_PADDING) + 1) };
-			return x_y_capacity;
+		return Game.getMaxBlockCapacity();
 	}
 
 	/**
@@ -1162,6 +1160,10 @@ public class Block223Controller {
 
 		if ( (userRole instanceof Admin) && (pgame.getGame().getAdmin() != ((Admin) userRole)) ) {
 			throw new InvalidInputException("Only the admin of a game can test the game.");
+		}
+
+		if ((userRole instanceof Player) && (pgame.getPlayer() == null)) {
+			throw new InvalidInputException("Admin privileges are required to test a game.");
 		}
 
 		boolean paused = pgame.getPlayStatus() == PlayStatus.Ready || pgame.getPlayStatus() == PlayStatus.Paused;
