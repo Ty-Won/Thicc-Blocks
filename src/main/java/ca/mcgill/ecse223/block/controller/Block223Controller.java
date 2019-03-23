@@ -1188,8 +1188,47 @@ public class Block223Controller {
 	}
 
 	public static TOHallOfFame getHallOfFame(int start, int end) throws InvalidInputException {
-		return null;
-
+		// getting current PlayableGame
+		PlayedGame pgame = Block223Application.getCurrentPlayableGame();		
+		Game game = pgame.getGame();
+		
+		// checking if a PlayableGame is selected
+		if(pgame == null) {
+			throw new InvalidInputException("A game must be selected to view its hall of fame.");
+		}
+		
+		// User must be admin
+		if(!(Block223Application.getCurrentUserRole() instanceof Player)) {
+			throw new InvalidInputException("Player privileges are required to play a game's hall of fame.");
+		}
+		
+		// creating Hall of Fame Transfer Object
+		TOHallOfFame result = new TOHallOfFame(game.getName());
+		
+		// start-end value checks
+		
+		if (start < 1) {
+			start = 1;	
+		}else {
+			start = start - 1;
+		}
+		
+		if (end > game.numberOfHallOfFameEntries()) {
+			end = game.numberOfHallOfFameEntries();
+		}else {
+			end = end - 1;
+		}
+		
+		// creating hall of fame entries
+		for (int index = start; index <= end; index++) {
+			TOHallOfFameEntry to = new TOHallOfFameEntry(
+					index+1,
+					game.getHallOfFameEntry(index).getPlayername(),
+					game.getHallOfFameEntry(index).getScore(),
+					result);
+		}
+			
+		return result;
 	}
 
 	public static TOHallOfFame getHallOfFameWithMostRecentEntry(int numberOfEntries) throws InvalidInputException {
