@@ -1,5 +1,5 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
+/*This code was generated using the UMPLE 1.29.1.4262.30c9ffc7c modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
@@ -29,7 +29,7 @@ public class Game implements Serializable
   public static final int WALL_PADDING = 10;
   public static final int COLUMNS_PADDING = 5;
   public static final int ROW_PADDING = 2;
-  private static Map<String, Game> gamesByName = new HashMap<String, Game>();
+  private transient static Map<String, Game> gamesByName = new HashMap<String, Game>();
 
   //------------------------
   // MEMBER VARIABLES
@@ -99,12 +99,6 @@ public class Game implements Serializable
     {
       throw new RuntimeException("Unable to create game due to block223");
     }
-  }
-
-  public Block getRandomBlock() {
-
-    
-    return null;
   }
 
   public Game(String aName, int aNrBlocksPerLevel, Admin aAdmin, int aMinBallSpeedXForBall, int aMinBallSpeedYForBall, double aBallSpeedIncreaseFactorForBall, int aMaxPaddleLengthForPaddle, int aMinPaddleLengthForPaddle, Block223 aBlock223)
@@ -891,6 +885,20 @@ public class Game implements Serializable
 		  }
 	  }
 	  return null;
+  }
+
+  // line 95 "../../../../../Block223.ump"
+   public static  int[] getMaxBlockCapacity(){
+    int[] x_y_capacity = { (Game.PLAY_AREA_SIDE - 2 * Game.WALL_PADDING) / (Block.SIZE + Game.COLUMNS_PADDING) + 1,
+      ((Game.PLAY_AREA_SIDE - 2 * Game.WALL_PADDING) / (Block.SIZE + Game.ROW_PADDING) + 1) };
+    return x_y_capacity;
+  }
+
+  // line 101 "../../../../../Block223.ump"
+   public Block getRandomBlock(){
+    List<Block> blocks = getBlocks();
+    int i = new Random().nextInt(blocks.size());
+    return getBlock(i);
   }
 
 

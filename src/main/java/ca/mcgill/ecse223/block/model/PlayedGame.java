@@ -1,5 +1,5 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
+/*This code was generated using the UMPLE 1.29.1.4262.30c9ffc7c modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
 import ca.mcgill.ecse223.block.model.BouncePoint.BounceDirection;
@@ -1044,9 +1044,8 @@ public class PlayedGame implements Serializable
   /**
    * Actions
    */
-  // line 79 "../../../../../Block223States.ump"
+  // line 80 "../../../../../Block223States.ump"
    private void doSetup(){
-
     resetCurrentBallX();
     resetCurrentBallY();
     resetBallDirectionX();
@@ -1069,20 +1068,64 @@ public class PlayedGame implements Serializable
 
     }
 
+    // Get block maximum
+    int[] x_y_capacity = Game.getMaxBlockCapacity();
+
+    int xmin = 1;
+    int xmax = x_y_capacity[0];
+
+    int ymin = 1;
+    int ymax = x_y_capacity[1];
+
+    Random rand = new Random();
+
     // Fill up the remaining blocks
     while (numberOfBlocks() < game.getNrBlocksPerLevel()) {
 
+      // Generate a random grid horizontal and verticle positions
+      int x = xmin + rand.nextInt(xmax - xmin + 1);
+      int y = ymin + rand.nextInt(ymax - ymin + 1);
+
+      boolean found = false;
+
+      // Find a suitable x, y location
+      while (!found) {
+        found = true;
+
+        // Convert to x and y to played block format
+        int xa = Game.WALL_PADDING + (Block.SIZE + Game.COLUMNS_PADDING) * (x - 1);
+        int ya = Game.WALL_PADDING + (Block.SIZE + Game.ROW_PADDING) * (y - 1);
+
+        for (PlayedBlockAssignment a : blocks) {
+          if (a.getX() == xa && a.getY() == ya) {
+            found = false;
+            break;
+          }
+        }
+
+        if (!found) {
+
+          // Loop-back to next row
+          if (x == xmax) {
+            y = (y % ymax) + 1;
+          }
+
+          // Advance to next column
+          x = (x % xmax) + 1;
+        }
+        
+      }
+
       PlayedBlockAssignment pBlock = new PlayedBlockAssignment(x, y, game.getRandomBlock(), this);
     }
-
   }
 
-  // line 83 "../../../../../Block223States.ump"
+  // line 156 "../../../../../Block223States.ump"
    private void doHitPaddleOrWall(){
     this.bounceBall();
   }
 
-  // line 87 "../../../../../Block223States.ump"
+  // line 160 "../../../../../Block223States.ump"
    private void doOutOfBounds(){
     setLives(lives - 1);
     resetCurrentBallX();
@@ -1092,23 +1135,23 @@ public class PlayedGame implements Serializable
     resetCurrentPaddleX();
   }
 
-  // line 96 "../../../../../Block223States.ump"
+  // line 169 "../../../../../Block223States.ump"
    private void doHitBlock(){
     // TODO implement
   }
 
-  // line 100 "../../../../../Block223States.ump"
+  // line 173 "../../../../../Block223States.ump"
    private void doHitBlockNextLevel(){
     // TODO implement
   }
 
-  // line 104 "../../../../../Block223States.ump"
+  // line 177 "../../../../../Block223States.ump"
    private void doHitNothingAndNotOutOfBounds(){
     setCurrentBallX(currentBallX + ballDirectionX);
     setCurrentBallY(currentBallY + ballDirectionY);
   }
 
-  // line 109 "../../../../../Block223States.ump"
+  // line 182 "../../../../../Block223States.ump"
    private void doGameOver(){
     // TODO implement
   }
