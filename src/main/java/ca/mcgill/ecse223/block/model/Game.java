@@ -888,17 +888,17 @@ public class Game implements Serializable
   }
 
   // line 95 "../../../../../Block223.ump"
-   public static  int[] getMaxBlockCapacity(){
-    int[] x_y_capacity = { (Game.PLAY_AREA_SIDE - 2 * Game.WALL_PADDING) / (Block.SIZE + Game.COLUMNS_PADDING) + 1,
-      ((Game.PLAY_AREA_SIDE - 2 * Game.WALL_PADDING) / (Block.SIZE + Game.ROW_PADDING) + 1) };
-    return x_y_capacity;
-  }
-
-  // line 101 "../../../../../Block223.ump"
    public Block getRandomBlock(){
     List<Block> blocks = getBlocks();
     int i = new Random().nextInt(blocks.size());
     return getBlock(i);
+  }
+
+  // line 101 "../../../../../Block223.ump"
+   public static  int[] getMaxBlockCapacity(){
+    int[] x_y_capacity = { (Game.PLAY_AREA_SIDE - 2 * Game.WALL_PADDING) / (Block.SIZE + Game.COLUMNS_PADDING) + 1,
+      ((Game.PLAY_AREA_SIDE - 2 * Game.WALL_PADDING) / (Block.SIZE + Game.ROW_PADDING) + 1) };
+    return x_y_capacity;
   }
 
 
