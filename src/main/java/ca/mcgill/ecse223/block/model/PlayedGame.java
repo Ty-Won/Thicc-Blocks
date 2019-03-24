@@ -1325,7 +1325,16 @@ public class PlayedGame implements Serializable
 
   // line 358 "../../../../../Block223States.ump"
    private void doGameOver(){
-    // TODO implement
+    Block223 block223 = getBlock223();
+    Player p = getPlayer();
+    
+    if(p != null) {
+    	Game game = getGame();
+    	HallOfFameEntry hof = new HallOfFameEntry(score, playername, p, game, block223);
+    	game.setMostRecentEntry(hof);
+    }
+    
+    delete();
   }
 
 
