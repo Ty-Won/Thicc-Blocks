@@ -216,6 +216,10 @@ public class Block223Controller {
 			throw new InvalidInputException("A game with name " + name + " does not exist.");
 		}
 
+		if (game.isPublished()) {
+			throw new InvalidInputException("A published game cannot be changed.");
+		}
+
 		// Check to see if user created game
 		if (userRole != game.getAdmin()) {
 			throw new InvalidInputException("Only the admin who created the game can select the game.");
