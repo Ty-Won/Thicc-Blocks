@@ -365,13 +365,16 @@ public class Block223Controller {
 		}
 
 		if (red < 0 || red > 255)
-			throw new InvalidInputException("Red must be between 0 and 255");
+			throw new InvalidInputException("Red must be between 0 and 255.");
 
 		if (green < 0 || green > 255)
-			throw new InvalidInputException("Green must be between 0 and 255");
+			throw new InvalidInputException("Green must be between 0 and 255.");
 
 		if (blue < 0 || blue > 255)
-			throw new InvalidInputException("Blue must be between 0 and 255");
+			throw new InvalidInputException("Blue must be between 0 and 255.");
+
+		if (points < 1 || points > 1000) 
+			throw new InvalidInputException("Points must be between 1 and 1000.");
 
 		Block block = game.findBlock(id);
 		// Checking if block is set
@@ -383,8 +386,9 @@ public class Block223Controller {
 					block.setRed(red);
 					block.setGreen(green);
 					block.setBlue(blue);
+					block.setPoints(points);
 				} else {
-					throw new InvalidInputException("A block with the same color already exists in the game.");
+					throw new InvalidInputException("A block with the same color already exists for the game.");
 				}
 			}
 		} else {
