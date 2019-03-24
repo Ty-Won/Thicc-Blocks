@@ -13,6 +13,7 @@ import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.TEST_GAME
 import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.TEST_GAME_NAME_2;
 import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.USER_NAME;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -28,17 +29,20 @@ import ca.mcgill.ecse223.block.controller.InvalidInputException;
 import ca.mcgill.ecse223.block.controller.TOGame;
 import ca.mcgill.ecse223.block.model.Admin;
 import ca.mcgill.ecse223.block.model.Block223;
+import ca.mcgill.ecse223.block.model.Game;
 import ca.mcgill.ecse223.block.model.Level;
 import ca.mcgill.ecse223.block.model.Player;
 import ca.mcgill.ecse223.block.tests.util.Block223TestUtil;
 
 public class UpdateGameTests {
 
+	private Game testGame;
+
 	@Before
 	public void setUp() {
 		Block223 block223 = Block223TestUtil.initializeTestBlock223();
 		Admin admin = Block223TestUtil.createAndAssignAdminRoleToBlock223(block223);
-		Block223TestUtil.initializeTestGame(block223, admin);
+		testGame = Block223TestUtil.initializeTestGame(block223, admin);
 	}
 
 	// selectGame
@@ -46,8 +50,10 @@ public class UpdateGameTests {
 	@Test
 	public void testSelectGameSuccess() throws InvalidInputException {
 		Block223Controller.selectGame(TEST_GAME_NAME_1);
-		String currentGameName = Block223Application.getCurrentGame().getName();
+		Game currentGame = Block223Application.getCurrentGame();
+		String currentGameName = currentGame.getName();
 		assertEquals(TEST_GAME_NAME_1, currentGameName);
+		assertFalse(currentGame.isPublished());
 	}
 
 	@Test
@@ -81,6 +87,18 @@ public class UpdateGameTests {
 		String errorGameNonExisting = "A game with name " + TEST_GAME_NAME_2 + " does not exist.";
 		try {
 			Block223Controller.selectGame(TEST_GAME_NAME_2);
+			fail(MISSING_EXPECTED_EXCEPTION + errorGameNonExisting);
+		} catch (InvalidInputException e) {
+			assertEquals(errorGameNonExisting, e.getMessage().trim());
+		}
+	}
+	
+	@Test
+	public void testSelectGamePublishedGame() {
+		testGame.setPublished(true);
+		String errorGameNonExisting = "A published game cannot be changed.";
+		try {
+			Block223Controller.selectGame(TEST_GAME_NAME_1);
 			fail(MISSING_EXPECTED_EXCEPTION + errorGameNonExisting);
 		} catch (InvalidInputException e) {
 			assertEquals(errorGameNonExisting, e.getMessage().trim());
@@ -233,7 +251,16 @@ public class UpdateGameTests {
 	}
 
 	@Test
-	public void testUpdateGameNameNonUnique() throws InvalidInputException {
+	public void testUpdateGameSameGameNameNonUniqueSuccess() throws InvalidInputException {
+		try {
+			doUpdateGame(TEST_GAME_NAME_1);
+		} catch (InvalidInputException e) {
+			fail();
+		}
+	}
+	
+	@Test
+	public void testUpdateGameDifferentGameNameNonUnique() throws InvalidInputException {
 		Block223Controller.createGame(TEST_GAME_NAME_2);
 		String errorNameNonUnique = "The name of a game must be unique.";
 		try {

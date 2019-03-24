@@ -1,6 +1,7 @@
 package ca.mcgill.ecse223.block.tests.f03;
 
 import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.ADMIN_PASS;
+import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.BALL_SPEED_INCREASE_FACTOR;
 import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.BLOCKS_PER_LEVEL;
 import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.LEVELS;
 import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.MAX_PADDLE_LENGTH;
@@ -26,16 +27,21 @@ import ca.mcgill.ecse223.block.controller.InvalidInputException;
 import ca.mcgill.ecse223.block.controller.TOGame;
 import ca.mcgill.ecse223.block.model.Admin;
 import ca.mcgill.ecse223.block.model.Block223;
+import ca.mcgill.ecse223.block.model.Game;
 import ca.mcgill.ecse223.block.model.Player;
 import ca.mcgill.ecse223.block.tests.util.Block223TestUtil;
 
 public class DeleteGameTests {
 
+	private Block223 block223;
+	private Admin admin;
+	private Game testGame;
+
 	@Before
 	public void setUp() {
-		Block223 block223 = Block223TestUtil.initializeTestBlock223();
-		Admin admin = Block223TestUtil.createAndAssignAdminRoleToBlock223(block223);
-		Block223TestUtil.initializeTestGame(block223, admin);
+		block223 = Block223TestUtil.initializeTestBlock223();
+		admin = Block223TestUtil.createAndAssignAdminRoleToBlock223(block223);
+		testGame = Block223TestUtil.initializeTestGame(block223, admin);
 	}
 
 	// getDesignableGames
@@ -57,6 +63,7 @@ public class DeleteGameTests {
 		assertEquals(BLOCKS_PER_LEVEL, toGame.getNrBlocksPerLevel());
 		assertEquals(MIN_BALL_SPEED_X, toGame.getMinBallSpeedX());
 		assertEquals(MIN_BALL_SPEED_Y, toGame.getMinBallSpeedY());
+		assertEquals(BALL_SPEED_INCREASE_FACTOR, toGame.getBallSpeedIncreaseFactor(), 0.01);
 		assertEquals(MAX_PADDLE_LENGTH, toGame.getMaxPaddleLength());
 		assertEquals(MIN_PADDLE_LENGTH, toGame.getMinPaddleLength());
 
@@ -74,6 +81,23 @@ public class DeleteGameTests {
 		} catch (InvalidInputException e) {
 			assertTrue(e.getMessage().trim().contains(errorNoAdminRights));
 		}
+	}
+
+	@Test
+	public void testGetDesignableGamesDifferentAdmin() throws InvalidInputException {
+		Admin admin = new Admin(ADMIN_PASS, new Block223());
+		Block223Application.setCurrentUserRole(admin);
+		List<TOGame> designableGames = Block223Controller.getDesignableGames();
+		assertEquals(0, designableGames.size());
+	}
+
+	@Test
+	public void testGetDesignableGamesPublishedGame() throws InvalidInputException {
+		Game publishedGame = new Game(TEST_GAME_NAME_2, BLOCKS_PER_LEVEL, admin, MIN_BALL_SPEED_X, MIN_BALL_SPEED_Y,
+				BALL_SPEED_INCREASE_FACTOR, MAX_PADDLE_LENGTH, MIN_PADDLE_LENGTH, block223);
+		publishedGame.setPublished(true);
+		List<TOGame> designableGames = Block223Controller.getDesignableGames();
+		assertEquals(1, designableGames.size());
 	}
 
 	// deleteGame
@@ -119,6 +143,18 @@ public class DeleteGameTests {
 			Block223Controller.deleteGame(TEST_GAME_NAME_2);
 		} catch (InvalidInputException e) {
 			fail("There was an exception while deleting a non-existing game.");
+		}
+	}
+	
+	@Test
+	public void testDeleteGamePublishedGame() throws InvalidInputException {
+		testGame.setPublished(true);
+		String errorPublished = "A published game cannot be deleted.";
+		try {
+			Block223Controller.deleteGame(TEST_GAME_NAME_1);
+			fail(MISSING_EXPECTED_EXCEPTION + errorPublished);
+		} catch (InvalidInputException e) {
+			assertEquals(errorPublished, e.getMessage());
 		}
 	}
 

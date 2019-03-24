@@ -3,7 +3,6 @@ package ca.mcgill.ecse223.block.tests;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import ca.mcgill.ecse223.block.statemachine.tests.p01.StartPauseResumeTests;
 import ca.mcgill.ecse223.block.tests.f01.AddGameTests;
 import ca.mcgill.ecse223.block.tests.f02.DefineGameSettingsTests;
 import ca.mcgill.ecse223.block.tests.f03.DeleteGameTests;
@@ -32,7 +31,6 @@ import ca.mcgill.ecse223.block.tests.f12.LogInLogOutTests;
    RemoveBlockTests.class,
    SaveGameTests.class,
    LogInLogOutTests.class,
-   StartPauseResumeTests.class,
 })
 public class Block223TestSuite {
 

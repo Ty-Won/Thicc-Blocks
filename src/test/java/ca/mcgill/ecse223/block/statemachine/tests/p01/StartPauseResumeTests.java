@@ -3,6 +3,7 @@ package ca.mcgill.ecse223.block.statemachine.tests.p01;
 import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.BALL_SPEED_INCREASE_FACTOR;
 import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.LEVELS;
 import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.TEST_GAME_NAME_1;
+import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.USER_PASS;
 import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
@@ -46,6 +47,7 @@ public class StartPauseResumeTests {
 		block = new Block(1, 1, 1, 1, game);
 		new BlockAssignment(1, 1, game.getLevel(0), block, game);
 		game.setPublished(true);
+        player = new Player(USER_PASS, block223);
 		playedGame = new PlayedGame("TestPlayer", game, block223);
 		playedGame.setPlayer(player);
 		playedGame.setWaitTime(0);
@@ -54,7 +56,8 @@ public class StartPauseResumeTests {
 	}
 
 	// startGame
-	@Test
+
+    @Test
 	public void testStartGameHitPaddleAndMovePaddleLeft() throws InvalidInputException {
 
 		// Initializing fake user inputs

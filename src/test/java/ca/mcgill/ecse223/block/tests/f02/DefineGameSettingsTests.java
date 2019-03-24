@@ -77,9 +77,10 @@ public class DefineGameSettingsTests {
 	public void testSetGameDetailsNoRights() {
 		Player playerRole = new Player(USER_NAME, new Block223());
 		Block223Application.setCurrentUserRole(playerRole);
-		String errorNoAdminRights = "Admin privileges are required to create a game.";
+		String errorNoAdminRights = "Admin privileges are required to define game settings.";
 		try {
-			Block223Controller.createGame(TEST_GAME_NAME_1);
+			Block223Controller.setGameDetails(LEVELS, BLOCKS_PER_LEVEL, MIN_BALL_SPEED_X, MIN_BALL_SPEED_Y,
+					BALL_SPEED_INCREASE_FACTOR, MAX_PADDLE_LENGTH, MIN_PADDLE_LENGTH);
 			fail(MISSING_EXPECTED_EXCEPTION + errorNoAdminRights);
 		} catch (InvalidInputException e) {
 			assertTrue(e.getMessage().trim().contains(errorNoAdminRights));
