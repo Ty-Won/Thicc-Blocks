@@ -1,5 +1,5 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
+/*This code was generated using the UMPLE 1.29.1.4262.30c9ffc7c modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
 import ca.mcgill.ecse223.block.model.BouncePoint.BounceDirection;
@@ -1001,7 +1001,7 @@ public class PlayedGame implements Serializable
 
   // line 38 "../../../../../Block223States.ump"
    private boolean isBallOutOfBounds(){
-    return getCurrentPaddleY() >= 390;
+    return getCurrentBallY() >= 390;
   }
 
   // line 43 "../../../../../Block223States.ump"

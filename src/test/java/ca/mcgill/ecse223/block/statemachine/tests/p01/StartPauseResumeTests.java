@@ -56,7 +56,6 @@ public class StartPauseResumeTests {
 	}
 
 	// startGame
-	/*
     @Test
 	public void testStartGameHitPaddleAndMovePaddleLeft() throws InvalidInputException {
 		// Initializing fake user inputs
@@ -97,7 +96,6 @@ public class StartPauseResumeTests {
 		assertEquals(Game.PLAY_AREA_SIDE - Paddle.VERTICAL_DISTANCE - Paddle.PADDLE_WIDTH,
 				playedGame.getCurrentPaddleY(), 0.01);
 	}
-    */
 
 	// TODO further test cases
     @Test
