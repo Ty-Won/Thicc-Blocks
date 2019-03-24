@@ -120,3 +120,9 @@ class HallOfFameEntry {
   isA Serializable;
   private static final long serialVersionUID = 6404159261985579849L;
 }
+
+class BouncePoint {
+  depend java.io.Serializable;
+  isA Serializable;
+  private static final long serialVersionUID = 6304159361985579849L;
+}
