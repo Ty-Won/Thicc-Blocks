@@ -174,6 +174,7 @@ public class Block223Controller {
 	public static void deleteGame(String name) throws InvalidInputException {
 		Block223 block223 = Block223Application.getBlock223();
 		Game game = block223.findGame(name);
+		if(game == null) return;
 
 		UserRole userRole = Block223Application.getCurrentUserRole();
 
@@ -429,7 +430,7 @@ public class Block223Controller {
 				gridVerticalPosition);
 		if (levelBlockAssignment != null) {
 			throw new InvalidInputException(
-					"A block already exists at location" + gridHorizontalPosition + "/" + gridVerticalPosition + ".");
+					"A block already exists at location " + gridHorizontalPosition + "/" + gridVerticalPosition + ".");
 		}
 
 		Block block = game.findBlock(id);
@@ -589,7 +590,7 @@ public class Block223Controller {
 		}
 
 		if (userRole != game.getAdmin()) {
-			throw new InvalidInputException("Only the admin who created the game can position a block.");
+			throw new InvalidInputException("Only the admin who created the game can save it.");
 		}
 
 		try {
