@@ -35,7 +35,7 @@ class PlayedGame {
   }
   
   private boolean isBallOutOfBounds() {
-  	return getCurrentPaddleY() >= 390;
+  	return getCurrentBallY() >= 390;
   }
   
 
