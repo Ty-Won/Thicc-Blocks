@@ -405,7 +405,7 @@ public class Block223Controller {
 		UserRole userRole = Block223Application.getCurrentUserRole();
 
 		if (!(userRole instanceof Admin)) {
-			throw new InvalidInputException("Admin privileges are required to access game information.");
+			throw new InvalidInputException("Admin privileges are required to position a block.");
 		}
 
 		if (game == null) {
@@ -423,7 +423,7 @@ public class Block223Controller {
 		Level currentLevel = game.getLevel(level - 1);
 		if (currentLevel.numberOfBlockAssignments() == game.getNrBlocksPerLevel()) {
 			throw new InvalidInputException("The number of blocks has reached the maximum number ("
-					+ +game.getNrBlocksPerLevel() + ") allowed for this game.");
+					+ game.getNrBlocksPerLevel() + ") allowed for this game.");
 		}
 
 		BlockAssignment levelBlockAssignment = findBlockAssignment(currentLevel, gridHorizontalPosition,
@@ -435,7 +435,7 @@ public class Block223Controller {
 
 		Block block = game.findBlock(id);
 		if (block == null) {
-			throw new InvalidInputException("The Block does not exist.");
+			throw new InvalidInputException("The block does not exist.");
 		}
 
 		// x_y_capacity contains the max blocks available in x (array position 0) and y
