@@ -176,6 +176,10 @@ public class Block223Controller {
 		Game game = block223.findGame(name);
 		if(game == null) return;
 
+		if (game.isPublished()) {
+			throw new InvalidInputException("A published game cannot be deleted.");
+		}
+
 		UserRole userRole = Block223Application.getCurrentUserRole();
 
 		if (!(userRole instanceof Admin)) {
@@ -899,7 +903,7 @@ public class Block223Controller {
 		
 		List<TOGame> toGames = new ArrayList<TOGame>();
 		for(Game game : games) {
-			if(game.getAdmin().equals(admin)) {
+			if(game.getAdmin().equals(admin) && !game.isPublished()) {
 				TOGame toGame = new TOGame(game.getName(), 
 								game.getLevels().size(), 
 								game.getNrBlocksPerLevel(), 
