@@ -856,7 +856,7 @@ public class Block223Controller {
             throw new InvalidInputException("Only the admin who created the game can test it.");
         }
         
-        String username = Block223Application.getCurrentUser().getUsername();
+        String username =  User.findUsername(userRole); 
         Block223 block223 = Block223Application.getBlock223();
   
         PlayedGame playedGame = new PlayedGame(username, game, block223);
@@ -889,7 +889,7 @@ public class Block223Controller {
             throw new InvalidInputException("Only the admin who created the game can publish it.");
         }
         
-        if (game.getNrBlocksPerLevel() < 1) {
+        if (game.getBlocks().size() < 1) { 
         	throw new InvalidInputException("At least one block must be defined for a game to be published.");
         }
         
