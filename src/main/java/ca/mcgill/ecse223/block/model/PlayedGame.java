@@ -1,5 +1,5 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.1.4262.30c9ffc7c modeling language!*/
+/*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
 import ca.mcgill.ecse223.block.model.BouncePoint.BounceDirection;
@@ -1015,25 +1015,207 @@ public class PlayedGame implements Serializable
     return isBallOutOfBounds();
   }
 
-  // line 56 "../../../../../Block223States.ump"
+  // line 57 "../../../../../Block223States.ump"
    private boolean hitLastBlockAndLastLevel(){
-    // TODO implement
+    Game game = getGame();
+    
+    int nrLevels = game.numberOfLevels();
+    
+    setBounce(null);
+    
+    if(nrLevels == currentLevel){
+    	int nrBlocks = numberOfBlocks();
+    	
+    	if(nrBlocks == 1){
+    		PlayedBlockAssignment block = getBlock(0);
+    		BouncePoint bp = calculateBouncePointBlock(block);
+    		setBounce(bp);
+    		return bp!=null;
+    	}
+    }
     return false;
   }
 
-  // line 61 "../../../../../Block223States.ump"
+  // line 77 "../../../../../Block223States.ump"
+   private BouncePoint calculateBouncePointBlock(PlayedBlockAssignment block){
+    int ballRadius = 5;
+
+    Double oldBallX = this.currentBallX;
+    Double oldBallY = this.currentBallY;
+
+    Double ballDirX = this.ballDirectionX;
+    Double ballDirY = this.ballDirectionY;
+
+    Double newBallX = this.currentBallX + ballDirX;
+    Double newBallY = this.currentBallY + ballDirY;
+
+    Double blockX = Double.valueOf(block.getX());
+    Double blockY = Double.valueOf(block.getY());
+    Double blockSize = Double.valueOf(block.getBlock().SIZE);
+
+    Rectangle2D blockRectangle = new Rectangle2D.Double(blockX - ballRadius, blockY - ballRadius,
+        blockSize + 2 * ballRadius, blockSize + 2 * ballRadius);
+    if (blockRectangle.intersectsLine(oldBallX,oldBallY,newBallX,newBallY)){
+      //top
+      BouncePoint zoneA = checkLineIntersections(oldBallX, oldBallY, newBallX, newBallY, blockX, blockY-ballRadius, blockX+blockSize, blockY-ballRadius, BounceDirection.FLIP_Y);
+
+      //left
+      BouncePoint zoneB = checkLineIntersections(oldBallX, oldBallY, newBallX, newBallY, blockX-ballRadius, blockY, blockX-ballRadius, blockY+blockSize, BounceDirection.FLIP_X);
+
+      //right
+      BouncePoint zoneC = checkLineIntersections(oldBallX, oldBallY, newBallX, newBallY, blockX+ballRadius+blockSize, blockY, blockX+ballRadius+blockSize, blockY+blockSize, BounceDirection.FLIP_X);
+
+      //bottom
+      BouncePoint zoneD = checkLineIntersections(oldBallX, oldBallY, newBallX, newBallY, blockX, blockY-blockSize-ballRadius, blockX+blockSize, blockY-blockSize-ballRadius, BounceDirection.FLIP_Y);
+
+      // Circle equation: (x-a)^2 + (y-b)^2 = r^2
+      Double a;
+      Double b;
+      Double r = Double.valueOf(ballRadius);
+
+      // Line Equation: y = mx + c
+      Double m = (newBallY-oldBallY)/(newBallX-oldBallX);
+      Double c = oldBallY - m*oldBallX;
+
+      //TopLeftCorner
+      a=blockX;
+      b=blockY;
+      BouncePoint [] zoneE = checkCircleLineIntersection(a,b,r,m,c,oldBallX,oldBallY,newBallX,newBallY, ballDirectionX);
+
+      //TopRightCorner
+      a=blockX+blockSize;
+      b=blockY;
+      BouncePoint [] zoneF = checkCircleLineIntersection(a,b,r,m,c,oldBallX,oldBallY,newBallX,newBallY, ballDirectionX);
+
+      //BottomLeftCorner
+      a=blockX;
+      b=blockY+blockSize;
+      BouncePoint [] zoneG = checkCircleLineIntersection(a,b,r,m,c,oldBallX,oldBallY,newBallX,newBallY, ballDirectionX);
+
+      //BottomRightCorner
+      a=blockX + blockSize;
+      b=blockY + blockSize;
+      BouncePoint [] zoneH = checkCircleLineIntersection(a,b,r,m,c,oldBallX,oldBallY,newBallX,newBallY, ballDirectionX);
+
+      // Find closest intersection point
+      BouncePoint[] allZonesList = { zoneA, zoneB, zoneC, zoneD, zoneE[0], zoneE[1], zoneF[0], zoneF[1],
+                                    zoneG[0], zoneG[1], zoneH[0], zoneH[1] };
+      Double minDistance = Double.MAX_VALUE;
+      BouncePoint finalBP = null;
+      for (int i = 0; i < allZonesList.length; i++) {
+        if (allZonesList[i] != null) {
+          Double distance = Math.sqrt(Math.pow(Math.abs(oldBallX - allZonesList[i].getX()), 2)
+              + Math.pow(Math.abs(oldBallY - allZonesList[i].getY()), 2));
+          if (distance < minDistance) {
+            minDistance = distance;
+            finalBP = allZonesList[i];
+          }
+        }
+      }
+      return finalBP;
+    } else {
+      return null;
+    }
+  }
+
+  // line 161 "../../../../../Block223States.ump"
+   private void doHitBlock(){
+    int score = getScore();
+    BouncePoint bounce = getBounce();
+    
+    PlayedBlockAssignment pblock = bounce.getHitBlock();
+    
+    Block block = pblock.getBlock();
+    
+    int points = block.getPoints();
+    
+    setScore(score+points);
+    
+    pblock.delete();
+    
+    bounceBall();
+  }
+
+  // line 178 "../../../../../Block223States.ump"
    private boolean hitLastBlock(){
-    // TODO implement
+    int nrBlocks = numberOfBlocks();
+
+    setBounce(null);
+
+    if(nrBlocks ==1){
+        PlayedBlockAssignment block = getBlock(0);
+
+        BouncePoint bp = calculateBouncePointBlock(block);
+        
+        setBounce(bp);
+        return bp!=null;
+    }
     return false;
   }
 
-  // line 66 "../../../../../Block223States.ump"
+  // line 194 "../../../../../Block223States.ump"
+   private void doHitBlockNextLevel(){
+    doHitBlock();
+  	int level = getCurrentLevel();
+  	setCurrentLevel(level+1);
+  	
+  	setCurrentPaddleLength(getGame().getPaddle().getMaxPaddleLength()-
+  	(getGame().getPaddle().getMaxPaddleLength()-getGame().getPaddle().getMinPaddleLength())/
+  	(getGame().numberOfLevels()-1)*(getCurrentLevel()-1));
+  	
+  	setWaitTime(Math.pow(INITIAL_WAIT_TIME * getGame().getBall().getBallSpeedIncreaseFactor(),(getCurrentLevel()-1)));
+  }
+
+  // line 207 "../../../../../Block223States.ump"
+   private boolean isCloser(BouncePoint first, BouncePoint second){
+    if (first == null) {
+      return false;
+    } else if (second == null) {
+      return true;
+    } else {
+      // ball position
+      double xPos = getCurrentBallX();
+      double yPos = getCurrentBallY();
+
+      double deltaDistFirst = euclideanDistance(xPos, yPos, first.getX(), first.getY());
+      double deltaDistSecond = euclideanDistance(xPos, yPos, second.getX(), second.getY());
+
+      if (deltaDistFirst >= deltaDistSecond) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  // line 229 "../../../../../Block223States.ump"
+   public double euclideanDistance(double x1, double y1, double x2, double y2){
+    double deltaX = Math.pow(x1-x2,2);
+    double deltaY = Math.pow(y1-y2,2);
+    return Math.sqrt(deltaX+deltaY);
+  }
+
+  // line 235 "../../../../../Block223States.ump"
    private boolean hitBlock(){
-    // TODO implement
-    return false;
+    int nrBlocks = numberOfBlocks();
+    setBounce(null);
+    
+    for(int i =0; i<numberOfBlocks()-1; i++){
+    	PlayedBlockAssignment block = getBlock(i);
+    	BouncePoint bp = calculateBouncePointBlock(block);
+    	BouncePoint bounce = getBounce();
+    	boolean closer = isCloser(bp,bounce);
+    	
+    	if(closer){
+    		setBounce(bp);
+    	}
+    }
+    
+    
+    return getBounce()!=null;
   }
 
-  // line 71 "../../../../../Block223States.ump"
+  // line 254 "../../../../../Block223States.ump"
    private boolean hitWall(){
     BouncePoint bp = this.calculateBouncePointWall();
     this.setBounce(bp);
@@ -1044,7 +1226,7 @@ public class PlayedGame implements Serializable
   /**
    * Actions
    */
-  // line 80 "../../../../../Block223States.ump"
+  // line 263 "../../../../../Block223States.ump"
    private void doSetup(){
     resetCurrentBallX();
     resetCurrentBallY();
@@ -1120,12 +1302,12 @@ public class PlayedGame implements Serializable
     }
   }
 
-  // line 156 "../../../../../Block223States.ump"
+  // line 339 "../../../../../Block223States.ump"
    private void doHitPaddleOrWall(){
     this.bounceBall();
   }
 
-  // line 160 "../../../../../Block223States.ump"
+  // line 343 "../../../../../Block223States.ump"
    private void doOutOfBounds(){
     setLives(lives - 1);
     resetCurrentBallX();
@@ -1135,23 +1317,13 @@ public class PlayedGame implements Serializable
     resetCurrentPaddleX();
   }
 
-  // line 169 "../../../../../Block223States.ump"
-   private void doHitBlock(){
-    // TODO implement
-  }
-
-  // line 173 "../../../../../Block223States.ump"
-   private void doHitBlockNextLevel(){
-    // TODO implement
-  }
-
-  // line 177 "../../../../../Block223States.ump"
+  // line 353 "../../../../../Block223States.ump"
    private void doHitNothingAndNotOutOfBounds(){
     setCurrentBallX(currentBallX + ballDirectionX);
     setCurrentBallY(currentBallY + ballDirectionY);
   }
 
-  // line 182 "../../../../../Block223States.ump"
+  // line 358 "../../../../../Block223States.ump"
    private void doGameOver(){
     // TODO implement
   }
