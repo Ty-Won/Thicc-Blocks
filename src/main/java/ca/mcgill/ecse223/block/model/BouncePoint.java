@@ -2,13 +2,15 @@
 /*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
+import java.io.Serializable;
 
 /**
  * this class needs to be specified but the use of it is optional; it is also not added to the persistence file
  * you may implement bounce behavior differently
  */
-// line 334 "../../../../../Block223PlayMode.ump"
-public class BouncePoint
+// line 338 "../../../../../Block223PlayMode.ump"
+// line 124 "../../../../../Block223Persistence.ump"
+public class BouncePoint implements Serializable
 {
 
   //------------------------
@@ -115,5 +117,13 @@ public class BouncePoint
             "y" + ":" + getY()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "direction" + "=" + (getDirection() != null ? !getDirection().equals(this)  ? getDirection().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "hitBlock = "+(getHitBlock()!=null?Integer.toHexString(System.identityHashCode(getHitBlock())):"null");
-  }
+  }  
+  //------------------------
+  // DEVELOPER CODE - PROVIDED AS-IS
+  //------------------------
+  
+  // line 127 "../../../../../Block223Persistence.ump"
+  private static final long serialVersionUID = 6304159361985579849L ;
+
+  
 }
