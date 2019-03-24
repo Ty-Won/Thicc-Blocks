@@ -39,7 +39,7 @@ public class StartPauseResumeTests {
 	public void createGame() {
 		block223 = Block223TestUtil.initializeTestBlock223();
 		admin = Block223TestUtil.createAndAssignAdminRoleToBlock223(block223);
-		game = new Game(TEST_GAME_NAME_1, 1, admin, 1, -1, BALL_SPEED_INCREASE_FACTOR, 20, 10, block223);
+		game = new Game(TEST_GAME_NAME_1, 1, admin, -2, 21, BALL_SPEED_INCREASE_FACTOR, 20, 10, block223);
 		for (int i = 0; i < LEVELS; i++) {
 			game.addLevel();
 		}
@@ -59,7 +59,6 @@ public class StartPauseResumeTests {
 	/*
     @Test
 	public void testStartGameHitPaddleAndMovePaddleLeft() throws InvalidInputException {
-
 		// Initializing fake user inputs
 		Map<Integer, String> inputs = new HashMap<Integer, String>();
 		// Create input to move the paddle
@@ -115,7 +114,7 @@ public class StartPauseResumeTests {
 		// moving down 155 pixels (iterations 1-155). After moving one more pixel (i.e.,
 		// iteration 156), the ball should bounce back. In the next iteration (i.e.,
 		// iteration 157), the game is paused
-		inputs.put(191, builder.toString());
+		inputs.put(8, builder.toString());
 
 		// Provide the inputs to the test object substituting the actual UI object
 		Block223PlayModeTest testInputProvider = new Block223PlayModeTest(inputs);
@@ -123,8 +122,8 @@ public class StartPauseResumeTests {
 		Block223Controller.startGame(testInputProvider);
 
 		//Check that the ball properly bounced off the paddle, checking X and Y coordinates
-		assertEquals(6, playedGame.getCurrentBallY(), 0.01);
-		assertEquals(384, playedGame.getCurrentBallX(), 0.01);
+		assertEquals(337, playedGame.getCurrentBallY(), 0.01);
+		assertEquals(177.7, playedGame.getCurrentBallX(), 0.01);
 	}
     
     
