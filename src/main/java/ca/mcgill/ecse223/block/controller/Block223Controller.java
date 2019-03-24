@@ -208,7 +208,7 @@ public class Block223Controller {
 
 		// User must be admin
 		if (!(userRole instanceof Admin)) {
-			throw new InvalidInputException("Admin privileges are required to create a game.");
+			throw new InvalidInputException("Admin privileges are required to select a game.");
 		}
 
 		Game game = block223.findGame(name);
