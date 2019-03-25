@@ -1189,7 +1189,7 @@ public class Block223Controller {
 		List<PlayedBlockAssignment> blocks = pgame.getBlocks();
 		
 		for(PlayedBlockAssignment pblock : blocks) {
-			TOCurrentBlock to = new TOCurrentBlock(
+			new TOCurrentBlock(
 					pblock.getBlock().getRed(),
 					pblock.getBlock().getGreen(),
 					pblock.getBlock().getBlue(),
@@ -1205,12 +1205,14 @@ public class Block223Controller {
 	public static TOHallOfFame getHallOfFame(int start, int end) throws InvalidInputException {
 		// getting current PlayableGame
 		PlayedGame pgame = Block223Application.getCurrentPlayableGame();		
-		Game game = pgame.getGame();
 		
 		// checking if a PlayableGame is selected
 		if(pgame == null) {
 			throw new InvalidInputException("A game must be selected to view its hall of fame.");
 		}
+		
+		// declaring instance of a game for the current PlayableGame
+		Game game = pgame.getGame();
 		
 		// User must be admin
 		if(!(Block223Application.getCurrentUserRole() instanceof Player)) {
@@ -1219,6 +1221,12 @@ public class Block223Controller {
 		
 		// creating Hall of Fame Transfer Object
 		TOHallOfFame result = new TOHallOfFame(game.getName());
+		
+		// checking if the number of hof entries is less or equal to zero
+		// in which case we return an empty hof
+		if(game.numberOfHallOfFameEntries() <= 0) {
+			return result;
+		}
 		
 		// start-end value checks
 		
@@ -1236,7 +1244,7 @@ public class Block223Controller {
 		
 		// creating hall of fame entries
 		for (int index = start; index <= end; index++) {
-			TOHallOfFameEntry to = new TOHallOfFameEntry(
+			new TOHallOfFameEntry(
 					index+1,
 					game.getHallOfFameEntry(index).getPlayername(),
 					game.getHallOfFameEntry(index).getScore(),
@@ -1249,15 +1257,23 @@ public class Block223Controller {
 	public static TOHallOfFame getHallOfFameWithMostRecentEntry(int numberOfEntries) throws InvalidInputException {
 		// getting current PlayableGame
 		PlayedGame pgame = Block223Application.getCurrentPlayableGame();		
-		Game game = pgame.getGame();
 		
 		// checking if a PlayableGame is selected
 		if(pgame == null) {
 			throw new InvalidInputException("A game must be selected to view its hall of fame.");
 		}
 		
+		// declaring instance of a game for the current PlayableGame
+		Game game = pgame.getGame();
+		
 		// creating Hall of Fame Transfer Object
 		TOHallOfFame result = new TOHallOfFame(game.getName());
+		
+		// checking if the number of hof entries is less or equal to zero
+		// in which case we return an empty hof
+		if(game.numberOfHallOfFameEntries() <= 0) {
+			return result;
+		}
 		
 		// getting most recent hof entry
 		HallOfFameEntry mostRecent = game.getMostRecentEntry();
@@ -1282,7 +1298,7 @@ public class Block223Controller {
 		
 		// creating hall of fame entries
 		for (int index = start; index <= end; index++) {
-			TOHallOfFameEntry to = new TOHallOfFameEntry(
+			new TOHallOfFameEntry(
 					index+1,
 					game.getHallOfFameEntry(index).getPlayername(),
 					game.getHallOfFameEntry(index).getScore(),
