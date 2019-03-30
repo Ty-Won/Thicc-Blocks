@@ -1,9 +1,9 @@
 package ca.mcgill.ecse223.block.tests.f12;
 
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.ADMIN_PASS;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.MISSING_EXPECTED_EXCEPTION;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.USER_NAME;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.USER_PASS;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.ADMIN_PASS;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.MISSING_EXPECTED_EXCEPTION;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.USER_NAME;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.USER_PASS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -25,7 +25,7 @@ import ca.mcgill.ecse223.block.model.Player;
 import ca.mcgill.ecse223.block.model.User;
 import ca.mcgill.ecse223.block.model.UserRole;
 import ca.mcgill.ecse223.block.persistence.Block223Persistence;
-import ca.mcgill.ecse223.block.tests.util.Block223TestUtil;
+import ca.mcgill.ecse223.block.util.Block223TestUtil;
 
 public class LogInLogOutTests {
 
@@ -33,7 +33,7 @@ public class LogInLogOutTests {
 
 	@Before
 	public void setUp() {
-		block223 = Block223TestUtil.initializeTestBlock223();
+		block223 = Block223TestUtil.initializeBlock223();
 		Block223Application.setCurrentUserRole(null);
 	}
 

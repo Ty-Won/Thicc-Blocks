@@ -1,23 +1,23 @@
 package ca.mcgill.ecse223.block.tests.f11;
 
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.ADMIN_PASS;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.BALL_SPEED_INCREASE_FACTOR;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.BLOCKS_PER_LEVEL;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.BLOCK_LEVEL;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.BLUE;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.GREEN;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.LEVELS;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.MAX_PADDLE_LENGTH;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.MIN_BALL_SPEED_X;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.MIN_BALL_SPEED_Y;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.MIN_PADDLE_LENGTH;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.MISSING_EXPECTED_EXCEPTION;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.POINTS;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.RED;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.TEST_GAME_NAME_1;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.TEST_GAME_NAME_2;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.USER_NAME;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.USER_PASS;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.ADMIN_PASS;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.BALL_SPEED_INCREASE_FACTOR;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.BLOCKS_PER_LEVEL;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.BLOCK_LEVEL;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.BLUE;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.GREEN;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.LEVELS;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.MAX_PADDLE_LENGTH;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.MIN_BALL_SPEED_X;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.MIN_BALL_SPEED_Y;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.MIN_PADDLE_LENGTH;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.MISSING_EXPECTED_EXCEPTION;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.POINTS;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.RED;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.TEST_GAME_NAME_1;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.TEST_GAME_NAME_2;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.USER_NAME;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.USER_PASS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -40,7 +40,7 @@ import ca.mcgill.ecse223.block.model.Game;
 import ca.mcgill.ecse223.block.model.Player;
 import ca.mcgill.ecse223.block.model.User;
 import ca.mcgill.ecse223.block.persistence.Block223Persistence;
-import ca.mcgill.ecse223.block.tests.util.Block223TestUtil;
+import ca.mcgill.ecse223.block.util.Block223TestUtil;
 
 public class SaveGameTests {
 
@@ -48,9 +48,9 @@ public class SaveGameTests {
 
 	@Before
 	public void setUp() {
-		block223 = Block223TestUtil.initializeTestBlock223();
+		block223 = Block223TestUtil.initializeBlock223();
 		Admin admin = Block223TestUtil.createAndAssignAdminRoleToBlock223(block223);
-		Game game = Block223TestUtil.initializeTestGame(block223, admin);
+		Game game = Block223TestUtil.initializeGame(block223, admin);
 		Block testBlock = new Block(RED, GREEN, BLUE, POINTS, game);
 		new BlockAssignment(1, 1, game.getLevel(BLOCK_LEVEL - 1), testBlock, game);
 	}

@@ -1,10 +1,10 @@
 package ca.mcgill.ecse223.block.tests.f01;
 
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.EMPTY_NAME;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.MISSING_EXPECTED_EXCEPTION;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.TEST_GAME_NAME_1;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.TEST_GAME_NAME_2;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.USER_NAME;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.EMPTY_NAME;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.MISSING_EXPECTED_EXCEPTION;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.TEST_GAME_NAME_1;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.TEST_GAME_NAME_2;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.USER_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -20,7 +20,7 @@ import ca.mcgill.ecse223.block.controller.TOGame;
 import ca.mcgill.ecse223.block.model.Admin;
 import ca.mcgill.ecse223.block.model.Block223;
 import ca.mcgill.ecse223.block.model.Player;
-import ca.mcgill.ecse223.block.tests.util.Block223TestUtil;
+import ca.mcgill.ecse223.block.util.Block223TestUtil;
 
 public class AddGameTests {
 
@@ -28,7 +28,7 @@ public class AddGameTests {
 
 	@Before
 	public void setUp() {
-		Block223 block223 = Block223TestUtil.initializeTestBlock223();
+		Block223 block223 = Block223TestUtil.initializeBlock223();
 		testAdminRole = Block223TestUtil.createAndAssignAdminRoleToBlock223(block223);
 	}
 

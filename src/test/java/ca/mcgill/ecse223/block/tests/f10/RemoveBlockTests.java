@@ -1,15 +1,15 @@
 package ca.mcgill.ecse223.block.tests.f10;
 
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.ADMIN_PASS;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.BLOCK_LEVEL;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.BLUE;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.GREEN;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.HORIZONTAL_POS;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.MISSING_EXPECTED_EXCEPTION;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.POINTS;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.RED;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.USER_NAME;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.VERTICAL_POS;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.ADMIN_PASS;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.BLOCK_LEVEL;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.BLUE;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.GREEN;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.HORIZONTAL_POS;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.MISSING_EXPECTED_EXCEPTION;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.POINTS;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.RED;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.USER_NAME;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.VERTICAL_POS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -28,7 +28,7 @@ import ca.mcgill.ecse223.block.model.Block223;
 import ca.mcgill.ecse223.block.model.BlockAssignment;
 import ca.mcgill.ecse223.block.model.Game;
 import ca.mcgill.ecse223.block.model.Player;
-import ca.mcgill.ecse223.block.tests.util.Block223TestUtil;
+import ca.mcgill.ecse223.block.util.Block223TestUtil;
 
 
 public class RemoveBlockTests {
@@ -38,9 +38,9 @@ public class RemoveBlockTests {
 
 	@Before
 	public void setUp() {
-		Block223 block223 = Block223TestUtil.initializeTestBlock223();
+		Block223 block223 = Block223TestUtil.initializeBlock223();
 		Admin admin = Block223TestUtil.createAndAssignAdminRoleToBlock223(block223);
-		game = Block223TestUtil.initializeTestGame(block223, admin);
+		game = Block223TestUtil.initializeGame(block223, admin);
 		testBlock = new Block(RED, GREEN, BLUE, POINTS, game);
 		new BlockAssignment(HORIZONTAL_POS, VERTICAL_POS, game.getLevel(BLOCK_LEVEL - 1), testBlock, game);
 	}

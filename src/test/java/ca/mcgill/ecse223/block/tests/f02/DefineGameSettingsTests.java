@@ -1,20 +1,20 @@
 package ca.mcgill.ecse223.block.tests.f02;
 
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.ADMIN_PASS;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.BALL_SPEED_INCREASE_FACTOR;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.BLOCKS_PER_LEVEL;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.BLUE;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.GREEN;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.LEVELS;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.MAX_PADDLE_LENGTH;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.MIN_BALL_SPEED_X;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.MIN_BALL_SPEED_Y;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.MIN_PADDLE_LENGTH;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.MISSING_EXPECTED_EXCEPTION;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.POINTS;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.RED;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.TEST_GAME_NAME_1;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.USER_NAME;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.ADMIN_PASS;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.BALL_SPEED_INCREASE_FACTOR;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.BLOCKS_PER_LEVEL;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.BLUE;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.GREEN;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.LEVELS;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.MAX_PADDLE_LENGTH;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.MIN_BALL_SPEED_X;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.MIN_BALL_SPEED_Y;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.MIN_PADDLE_LENGTH;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.MISSING_EXPECTED_EXCEPTION;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.POINTS;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.RED;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.TEST_GAME_NAME_1;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.USER_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -35,13 +35,13 @@ import ca.mcgill.ecse223.block.model.BlockAssignment;
 import ca.mcgill.ecse223.block.model.Game;
 import ca.mcgill.ecse223.block.model.Level;
 import ca.mcgill.ecse223.block.model.Player;
-import ca.mcgill.ecse223.block.tests.util.Block223TestUtil;
+import ca.mcgill.ecse223.block.util.Block223TestUtil;
 
 public class DefineGameSettingsTests {
 
 	@Before
 	public void setUp() {
-		Block223 block223 = Block223TestUtil.initializeTestBlock223();
+		Block223 block223 = Block223TestUtil.initializeBlock223();
 		Admin admin = Block223TestUtil.createAndAssignAdminRoleToBlock223(block223);
 		block223.addGame(new Game(TEST_GAME_NAME_1, 2, admin, 1, 1, 1, 10, 10, block223));
 		Block223Application.setCurrentGame(block223.getGames().get(0));
@@ -59,7 +59,7 @@ public class DefineGameSettingsTests {
 		assertEquals(BLOCKS_PER_LEVEL, currentGame.getNrBlocksPerLevel());
 		assertEquals(MIN_BALL_SPEED_X, currentGame.getBall().getMinBallSpeedX());
 		assertEquals(MIN_BALL_SPEED_Y, currentGame.getBall().getMinBallSpeedY());
-		assertEquals(BALL_SPEED_INCREASE_FACTOR, currentGame.getBall().getBallSpeedIncreaseFactor(), 0.01);
+		assertEquals(BALL_SPEED_INCREASE_FACTOR, currentGame.getBall().getBallSpeedIncreaseFactor(), 0.00001);
 		assertEquals(MAX_PADDLE_LENGTH, currentGame.getPaddle().getMaxPaddleLength());
 		assertEquals(MIN_PADDLE_LENGTH, currentGame.getPaddle().getMinPaddleLength());
 

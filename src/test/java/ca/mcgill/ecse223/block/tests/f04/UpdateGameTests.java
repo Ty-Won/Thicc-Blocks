@@ -1,17 +1,17 @@
 package ca.mcgill.ecse223.block.tests.f04;
 
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.ADMIN_PASS;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.BALL_SPEED_INCREASE_FACTOR;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.BLOCKS_PER_LEVEL;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.LEVELS;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.MAX_PADDLE_LENGTH;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.MIN_BALL_SPEED_X;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.MIN_BALL_SPEED_Y;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.MIN_PADDLE_LENGTH;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.MISSING_EXPECTED_EXCEPTION;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.TEST_GAME_NAME_1;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.TEST_GAME_NAME_2;
-import static ca.mcgill.ecse223.block.tests.util.Block223TestConstants.USER_NAME;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.ADMIN_PASS;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.BALL_SPEED_INCREASE_FACTOR;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.BLOCKS_PER_LEVEL;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.LEVELS;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.MAX_PADDLE_LENGTH;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.MIN_BALL_SPEED_X;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.MIN_BALL_SPEED_Y;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.MIN_PADDLE_LENGTH;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.MISSING_EXPECTED_EXCEPTION;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.TEST_GAME_NAME_1;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.TEST_GAME_NAME_2;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.USER_NAME;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -32,7 +32,7 @@ import ca.mcgill.ecse223.block.model.Block223;
 import ca.mcgill.ecse223.block.model.Game;
 import ca.mcgill.ecse223.block.model.Level;
 import ca.mcgill.ecse223.block.model.Player;
-import ca.mcgill.ecse223.block.tests.util.Block223TestUtil;
+import ca.mcgill.ecse223.block.util.Block223TestUtil;
 
 public class UpdateGameTests {
 
@@ -40,9 +40,9 @@ public class UpdateGameTests {
 
 	@Before
 	public void setUp() {
-		Block223 block223 = Block223TestUtil.initializeTestBlock223();
+		Block223 block223 = Block223TestUtil.initializeBlock223();
 		Admin admin = Block223TestUtil.createAndAssignAdminRoleToBlock223(block223);
-		testGame = Block223TestUtil.initializeTestGame(block223, admin);
+		testGame = Block223TestUtil.initializeGame(block223, admin);
 	}
 
 	// selectGame
@@ -174,7 +174,7 @@ public class UpdateGameTests {
 		assertEquals(nrBlocksPerLevel, cdg.getNrBlocksPerLevel());
 		assertEquals(minBallSpeedX, cdg.getMinBallSpeedX());
 		assertEquals(minBallSpeedY, cdg.getMinBallSpeedY());
-		assertEquals(ballSpeedIncreaseFactor, cdg.getBallSpeedIncreaseFactor(), 0.01);
+		assertEquals(ballSpeedIncreaseFactor, cdg.getBallSpeedIncreaseFactor(), 0.00001);
 		assertEquals(maxPaddleLength, cdg.getMaxPaddleLength());
 		assertEquals(minPaddleLength, cdg.getMinPaddleLength());
 		assertLevels(allOldLevels);
