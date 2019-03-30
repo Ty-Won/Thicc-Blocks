@@ -1164,7 +1164,7 @@ public class Block223Controller {
 		
 		// user role not set
 		if(userRole == null) {
-			throw new InvalidInputException("Player privleges are required to play a game.");
+			throw new InvalidInputException("Player privileges are required to play a game.");
 		}
 		
 		if((userRole instanceof Admin) && (pgame.getPlayer() != null)) {
