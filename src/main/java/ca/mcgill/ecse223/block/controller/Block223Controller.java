@@ -712,7 +712,7 @@ public class Block223Controller {
 		}
 
 		Player player = (Player) userRole;
-		Game game = Game.getWithName(name);
+		Game game = Block223Controller.getGameByName(name);
 		PlayedGame pgame;
 
 		if (game != null) {
@@ -894,6 +894,21 @@ public class Block223Controller {
         }
         
         game.setPublished(true);
+	}
+	
+	
+	public static Game getGameByName(String name) {
+		Game game = null;
+		
+		Block223 block223 = Block223Application.getBlock223();
+		for(Game g : block223.getGames()) {
+			if(g.getName().equals(name)) {
+				game = g;
+				break;
+			}
+		}
+		
+		return game;
 	}
 	
 	// ****************************
