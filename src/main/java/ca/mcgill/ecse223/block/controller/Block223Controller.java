@@ -1139,7 +1139,7 @@ public class Block223Controller {
 		Block223 block223 = Block223Application.getBlock223();
 		UserRole userRole = Block223Application.getCurrentUserRole();
 
-		// User must be admin
+		// User must be player
 		if(!(userRole instanceof Player)) {
 			throw new InvalidInputException("Player privileges are required to play a game.");
 		}

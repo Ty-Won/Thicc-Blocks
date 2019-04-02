@@ -24,7 +24,9 @@ import ca.mcgill.ecse223.block.view.UpdateBlockPage;
 import ca.mcgill.ecse223.block.view.UpdateGamePage;
 import ca.mcgill.ecse223.block.view.WelcomePage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import ca.mcgill.ecse223.block.controller.*;
 
@@ -63,8 +65,19 @@ public class Block223Application extends Application {
 		}
 		*/
 		
-		IPage login = Block223Application.getPage(Pages.Login);
-		login.display();
+		// IPage login = Block223Application.getPage(Pages.Login);
+		// login.display();
+		
+		try {
+			Block223Controller.login("user", "pass");
+		} catch (InvalidInputException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		List<PlayedGame> games = null;
+		games = Block223Application.getBlock223().getPlayedGames();
+		
+		System.out.println(games.size());
 	}
 
 	public static IPage getPage(Pages page) {
