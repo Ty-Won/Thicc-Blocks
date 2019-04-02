@@ -41,11 +41,11 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public class AvailableGames implements IPage {
+public class AvailableGamesAdmin implements IPage {
 	
 	Stage stage;
 	
-	public AvailableGames(Stage stage) {
+	public AvailableGamesAdmin(Stage stage) {
 		this.stage = stage;
 	}
 	

@@ -69,7 +69,7 @@ public class UpdateGamePage implements IPage {
             backButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                	IPage availableGames = Block223Application.getPage(Pages.AvaliableGames);
+                	IPage availableGames = Block223Application.getPage(Pages.AvaliableGamesAdmin);
                 	availableGames.display();
                 }
             });
@@ -270,7 +270,7 @@ public class UpdateGamePage implements IPage {
                     	Block223Controller.updateGame(gameNameField.getText(), gameNrLevels, spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
     					Block223Persistence.save(Block223Application.getBlock223());
     					
-                    	IPage availableGames = Block223Application.getPage(Pages.AvaliableGames);
+                    	IPage availableGames = Block223Application.getPage(Pages.AvaliableGamesAdmin);
                     	availableGames.display();
     				} catch (InvalidInputException e) {
     					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", e.getMessage());

@@ -173,12 +173,12 @@ public class LoginPage implements IPage {
 					
 					if(Block223Application.getCurrentUserRole() instanceof Admin)
 					{
-						IPage availableGames = Block223Application.getPage(Pages.AvaliableGames);
-						availableGames.display();
+						IPage availableGamesAdmin = Block223Application.getPage(Pages.AvaliableGamesAdmin);
+						availableGamesAdmin.display();
 					}
 					else {
-						IPage welcomePage = Block223Application.getPage(Pages.Welcome);
-						welcomePage.display();						
+						IPage availableGamesPlayer = Block223Application.getPage(Pages.AvaliableGamesPlayer);
+						availableGamesPlayer.display();						
 					}
 					
 				} catch (InvalidInputException e) {

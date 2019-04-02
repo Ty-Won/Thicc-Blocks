@@ -9,7 +9,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import ca.mcgill.ecse223.block.model.*;
 import ca.mcgill.ecse223.block.persistence.*;
-import ca.mcgill.ecse223.block.view.AvailableGames;
+import ca.mcgill.ecse223.block.view.AvailableGamesAdmin;
+import ca.mcgill.ecse223.block.view.AvailableGamesPlayer;
 import ca.mcgill.ecse223.block.view.AvailableLevelsPage;
 import ca.mcgill.ecse223.block.view.AvailableBlocksPage;
 import ca.mcgill.ecse223.block.view.Components;
@@ -33,7 +34,7 @@ public class Block223Application extends Application {
 	public static final int APPLICATION_HEIGHT = 800;
 
 	public enum Pages {
-		Login, Welcome, AvaliableGames, CreateGame, UpdateGame, EditLevel, AvailableLevels, Register, UpdateBlock, AvailableBlocks, CreateBlock
+		Login, Welcome, AvaliableGamesAdmin, AvaliableGamesPlayer,  CreateGame, UpdateGame, EditLevel, AvailableLevels, Register, UpdateBlock, AvailableBlocks, CreateBlock
 	}
 
 	private static HashMap<Pages, IPage> pageMap;
@@ -76,8 +77,11 @@ public class Block223Application extends Application {
 			case Welcome:
 				newPage = new WelcomePage(Block223Application.stage);
 				break;
-			case AvaliableGames:
-				newPage = new AvailableGames(Block223Application.stage);
+			case AvaliableGamesAdmin:
+				newPage = new AvailableGamesAdmin(Block223Application.stage);
+				break;
+			case AvaliableGamesPlayer:
+				newPage = new AvailableGamesPlayer(Block223Application.stage);
 				break;
 			case CreateGame:
 				newPage = new CreateGamePage(Block223Application.stage);
@@ -115,7 +119,8 @@ public class Block223Application extends Application {
 		pageMap = new HashMap<Pages, IPage>();
 		pageMap.put(Pages.Login, new LoginPage(stage));
 		pageMap.put(Pages.Welcome, new WelcomePage(stage));
-		pageMap.put(Pages.AvaliableGames, new AvailableGames(stage));
+		pageMap.put(Pages.AvaliableGamesAdmin, new AvailableGamesAdmin(stage));
+		pageMap.put(Pages.AvaliableGamesPlayer, new AvailableGamesPlayer(stage));
 		pageMap.put(Pages.CreateGame, new CreateGamePage(stage));
 		pageMap.put(Pages.UpdateGame, new UpdateGamePage(stage));
 		pageMap.put(Pages.EditLevel, new EditLevelPage(stage));
