@@ -26,6 +26,7 @@ import ca.mcgill.ecse223.block.controller.TOPlayableGame;
 import ca.mcgill.ecse223.block.model.Admin;
 import ca.mcgill.ecse223.block.model.Block223;
 import ca.mcgill.ecse223.block.model.Game;
+import ca.mcgill.ecse223.block.model.Paddle;
 import ca.mcgill.ecse223.block.model.PlayedGame;
 import ca.mcgill.ecse223.block.model.Player;
 import ca.mcgill.ecse223.block.model.User;
@@ -175,8 +176,132 @@ public class StartPauseResumeTests {
 		assertEquals(game.getBall().getMinBallSpeedY(), playedGame.getBallDirectionY(), 0.00001);
 		// Paddle
 		assertEquals(game.getPaddle().getMaxPaddleLength(), playedGame.getCurrentPaddleLength(), 0.00001);
-//		assertEquals((Game.PLAY_AREA_SIDE - game.getPaddle().getMaxPaddleLength()) / 2 - 100, playedGame.getCurrentPaddleX(), 0.00001);
-//		assertEquals(Game.PLAY_AREA_SIDE - Paddle.VERTICAL_DISTANCE - Paddle.PADDLE_WIDTH, playedGame.getCurrentPaddleY(), 0.00001);
+		assertEquals((Game.PLAY_AREA_SIDE - game.getPaddle().getMaxPaddleLength()) / 2, playedGame.getCurrentPaddleX(),
+				0.00001);
+		assertEquals(Game.PLAY_AREA_SIDE - Paddle.VERTICAL_DISTANCE - Paddle.PADDLE_WIDTH,
+				playedGame.getCurrentPaddleY(), 0.00001);
+	}
+
+	@Test(timeout = 1000)
+	public void testStartGameMovePaddleRight() throws InvalidInputException {
+		int paddleOffsetToTheRight = 50;
+		Map<Integer, String> inputs = new HashMap<Integer, String>();
+		// Create input to move the paddle right paddleOffsetToTheRight pixels
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < paddleOffsetToTheRight; i++) {
+			builder.append("r");
+		}
+		builder.append(" ");
+		// At the first processed input, we simulate that the user presses 'r'
+		// paddleOffsetToTheRight times and also pauses the game
+		inputs.put(1, builder.toString());
+
+		// Provide the inputs to the test object substituting the actual UI object
+		Block223PlayModeTest testInputProvider = new Block223PlayModeTest(inputs);
+
+		Block223Controller.startGame(testInputProvider);
+
+		assertEquals(Game.PLAY_AREA_SIDE / 2, playedGame.getCurrentBallX(), 0.00001);
+		assertEquals(Game.PLAY_AREA_SIDE / 2 + 1, playedGame.getCurrentBallY(), 0.00001);
+		assertEquals(game.getBall().getMinBallSpeedX(), playedGame.getBallDirectionX(), 0.00001);
+		assertEquals(game.getBall().getMinBallSpeedY(), playedGame.getBallDirectionY(), 0.00001);
+		assertEquals(game.getPaddle().getMaxPaddleLength(), playedGame.getCurrentPaddleLength(), 0.00001);
+		assertEquals((Game.PLAY_AREA_SIDE - game.getPaddle().getMaxPaddleLength()) / 2 + paddleOffsetToTheRight,
+				playedGame.getCurrentPaddleX(), 0.00001);
+		assertEquals(Game.PLAY_AREA_SIDE - Paddle.VERTICAL_DISTANCE - Paddle.PADDLE_WIDTH,
+				playedGame.getCurrentPaddleY(), 0.00001);
+		assertEquals(PlayedGame.PlayStatus.Paused, playedGame.getPlayStatus());
+	}
+
+	@Test(timeout = 1000)
+	public void testStartGameMovePaddleRightBeyondLimits() throws InvalidInputException {
+		int paddleOffsetToTheRight = 186;
+		Map<Integer, String> inputs = new HashMap<Integer, String>();
+		// Create input to move the paddle right paddleOffsetToTheRight pixels
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < paddleOffsetToTheRight; i++) {
+			builder.append("r");
+		}
+		builder.append(" ");
+		// At the first processed input, we simulate that the user presses 'r'
+		// paddleOffsetToTheRight times and also pauses the game
+		inputs.put(1, builder.toString());
+
+		// Provide the inputs to the test object substituting the actual UI object
+		Block223PlayModeTest testInputProvider = new Block223PlayModeTest(inputs);
+
+		Block223Controller.startGame(testInputProvider);
+
+		assertEquals(Game.PLAY_AREA_SIDE / 2, playedGame.getCurrentBallX(), 0.00001);
+		assertEquals(Game.PLAY_AREA_SIDE / 2 + 1, playedGame.getCurrentBallY(), 0.00001);
+		assertEquals(game.getBall().getMinBallSpeedX(), playedGame.getBallDirectionX(), 0.00001);
+		assertEquals(game.getBall().getMinBallSpeedY(), playedGame.getBallDirectionY(), 0.00001);
+		assertEquals(game.getPaddle().getMaxPaddleLength(), playedGame.getCurrentPaddleLength(), 0.00001);
+		assertEquals(370, playedGame.getCurrentPaddleX(), 0.00001);
+		assertEquals(Game.PLAY_AREA_SIDE - Paddle.VERTICAL_DISTANCE - Paddle.PADDLE_WIDTH,
+				playedGame.getCurrentPaddleY(), 0.00001);
+		assertEquals(PlayedGame.PlayStatus.Paused, playedGame.getPlayStatus());
+	}
+
+	@Test(timeout = 1000)
+	public void testStartGameMovePaddleLeft() throws InvalidInputException {
+		int paddleOffsetToTheLeft = 50;
+		Map<Integer, String> inputs = new HashMap<Integer, String>();
+		// Create input to move the paddle left paddleOffsetToTheRight pixels
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < paddleOffsetToTheLeft; i++) {
+			builder.append("l");
+		}
+		builder.append(" ");
+		// At the first processed input, we simulate that the user presses 'l'
+		// paddleOffsetToTheLeft times and also pauses the game
+		inputs.put(1, builder.toString());
+
+		// Provide the inputs to the test object substituting the actual UI object
+		Block223PlayModeTest testInputProvider = new Block223PlayModeTest(inputs);
+
+		Block223Controller.startGame(testInputProvider);
+
+		assertEquals(Game.PLAY_AREA_SIDE / 2, playedGame.getCurrentBallX(), 0.00001);
+		assertEquals(Game.PLAY_AREA_SIDE / 2 + 1, playedGame.getCurrentBallY(), 0.00001);
+		assertEquals(game.getBall().getMinBallSpeedX(), playedGame.getBallDirectionX(), 0.00001);
+		assertEquals(game.getBall().getMinBallSpeedY(), playedGame.getBallDirectionY(), 0.00001);
+		assertEquals(game.getPaddle().getMaxPaddleLength(), playedGame.getCurrentPaddleLength(), 0.00001);
+		assertEquals((Game.PLAY_AREA_SIDE - game.getPaddle().getMaxPaddleLength()) / 2 - paddleOffsetToTheLeft,
+				playedGame.getCurrentPaddleX(), 0.00001);
+		assertEquals(Game.PLAY_AREA_SIDE - Paddle.VERTICAL_DISTANCE - Paddle.PADDLE_WIDTH,
+				playedGame.getCurrentPaddleY(), 0.00001);
+		assertEquals(PlayedGame.PlayStatus.Paused, playedGame.getPlayStatus());
+	}
+
+	@Test(timeout = 1000)
+	public void testStartGameMovePaddleLeftBeyondLimits() throws InvalidInputException {
+		int paddleOffsetToTheLeft = 186;
+		Map<Integer, String> inputs = new HashMap<Integer, String>();
+		// Create input to move the paddle left paddleOffsetToTheRight pixels
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < paddleOffsetToTheLeft; i++) {
+			builder.append("l");
+		}
+		builder.append(" ");
+		// At the first processed input, we simulate that the user presses 'l'
+		// paddleOffsetToTheLeft times and also pauses the game
+		inputs.put(1, builder.toString());
+
+		// Provide the inputs to the test object substituting the actual UI object
+		Block223PlayModeTest testInputProvider = new Block223PlayModeTest(inputs);
+
+		Block223Controller.startGame(testInputProvider);
+
+		assertEquals(Game.PLAY_AREA_SIDE / 2, playedGame.getCurrentBallX(), 0.00001);
+		assertEquals(Game.PLAY_AREA_SIDE / 2 + 1, playedGame.getCurrentBallY(), 0.00001);
+		assertEquals(game.getBall().getMinBallSpeedX(), playedGame.getBallDirectionX(), 0.00001);
+		assertEquals(game.getBall().getMinBallSpeedY(), playedGame.getBallDirectionY(), 0.00001);
+		assertEquals(game.getPaddle().getMaxPaddleLength(), playedGame.getCurrentPaddleLength(), 0.00001);
+		assertEquals(0, playedGame.getCurrentPaddleX(), 0.00001);
+		assertEquals(Game.PLAY_AREA_SIDE - Paddle.VERTICAL_DISTANCE - Paddle.PADDLE_WIDTH,
+				playedGame.getCurrentPaddleY(), 0.00001);
+		assertEquals(PlayedGame.PlayStatus.Paused, playedGame.getPlayStatus());
 	}
 
 	@Test(timeout = 3000)
@@ -259,8 +384,10 @@ public class StartPauseResumeTests {
 		assertEquals(game.getBall().getMinBallSpeedY(), playedGame.getBallDirectionY(), 0.00001);
 		assertEquals(1, playedGame.getBlocks().size());
 		assertEquals(game.getPaddle().getMaxPaddleLength(), playedGame.getCurrentPaddleLength(), 0.00001);
-//		assertEquals((Game.PLAY_AREA_SIDE - game.getPaddle().getMaxPaddleLength()) / 2, playedGame.getCurrentPaddleX(), 0.00001);
-//		assertEquals(Game.PLAY_AREA_SIDE - Paddle.VERTICAL_DISTANCE - Paddle.PADDLE_WIDTH, playedGame.getCurrentPaddleY(), 0.00001);
+		assertEquals((Game.PLAY_AREA_SIDE - game.getPaddle().getMaxPaddleLength()) / 2, playedGame.getCurrentPaddleX(),
+				0.00001);
+		assertEquals(Game.PLAY_AREA_SIDE - Paddle.VERTICAL_DISTANCE - Paddle.PADDLE_WIDTH,
+				playedGame.getCurrentPaddleY(), 0.00001);
 	}
 
 	@Test
@@ -287,8 +414,8 @@ public class StartPauseResumeTests {
 		assertEquals(Game.PLAY_AREA_SIDE / 2, cpg.getCurrentBallX(), 0.00001);
 		assertEquals(Game.PLAY_AREA_SIDE / 2, cpg.getCurrentBallY(), 0.00001);
 		assertEquals(game.getPaddle().getMaxPaddleLength(), cpg.getCurrentPaddleLength(), 0.00001);
-//		assertEquals((Game.PLAY_AREA_SIDE - game.getPaddle().getMaxPaddleLength()) / 2, cpg.getCurrentPaddleX(), 0.00001);
-//		assertEquals(Game.PLAY_AREA_SIDE - Paddle.VERTICAL_DISTANCE - Paddle.PADDLE_WIDTH, playedGame.getCurrentPaddleY(), 0.00001);
+		assertEquals((Game.PLAY_AREA_SIDE - game.getPaddle().getMaxPaddleLength()) / 2, cpg.getCurrentPaddleX(),
+				0.00001);
 	}
 
 	@Test

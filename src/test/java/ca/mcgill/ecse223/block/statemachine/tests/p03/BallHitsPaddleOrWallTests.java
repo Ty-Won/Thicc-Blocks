@@ -71,4 +71,166 @@ public class BallHitsPaddleOrWallTests {
 		assertEquals(PlayedGame.PlayStatus.Paused, playedGame.getPlayStatus());
 	}
 
+	// bounce on paddle
+
+	@Test
+	public void testHitPaddleZoneB() throws InvalidInputException {
+		double x = 179;
+		double y = 356;
+		double dirX = 1;
+		double dirY = 1;
+		perpareBallAndStepGameTwice(x, y, dirX, dirY);
+
+		verifyBounce(x, y + 2 + dirX / 10, -dirX, computeNewDir(dirY, dirX));
+	}
+
+	@Test
+	public void testHitPaddleZoneERight() throws InvalidInputException {
+		double x = 181.5;
+		double y = 351;
+		double dirX = -0.5;
+		double dirY = 1;
+		perpareBallAndStepGameTwice(x, y, dirX, dirY);
+
+		verifyBounce(x - 1 - dirY / 10, y, computeNewDir(dirX, dirY), -dirY);
+	}
+
+	@Test
+	public void testHitPaddleZoneELeft() throws InvalidInputException {
+		double x = 180;
+		double y = 352.5;
+		double dirX = 1;
+		double dirY = -0.5;
+		perpareBallAndStepGameTwice(x, y, dirX, dirY);
+
+		verifyBounce(x, y - 1 - dirX / 10, -dirX, computeNewDir(dirY, dirX));
+	}
+
+	@Test
+	public void testHitPaddleZoneA() throws InvalidInputException {
+		double x = 194;
+		double y = 349;
+		double dirX = 1;
+		double dirY = 1;
+		perpareBallAndStepGameTwice(x, y, dirX, dirY);
+
+		verifyBounce(x + 2 + dirY / 10, y, computeNewDir(dirX, dirY), -dirY);
+	}
+
+	@Test
+	public void testHitPaddleZoneFRight() throws InvalidInputException {
+		double x = 210;
+		double y = 351.5;
+		double dirX = -1;
+		double dirY = 0.5;
+		perpareBallAndStepGameTwice(x, y, dirX, dirY);
+
+		verifyBounce(x, y + 1 - dirX / 10, -dirX, computeNewDir(dirY, dirX));
+	}
+
+	@Test
+	public void testHitPaddleZoneFLeft() throws InvalidInputException {
+		double x = 208.5;
+		double y = 351;
+		double dirX = 0.5;
+		double dirY = 1;
+		perpareBallAndStepGameTwice(x, y, dirX, dirY);
+
+		verifyBounce(x + 1 + dirY / 10, y, computeNewDir(dirX, dirY), -dirY);
+	}
+
+	@Test
+	public void testHitPaddleZoneC() throws InvalidInputException {
+		double x = 211;
+		double y = 356;
+		double dirX = -1;
+		double dirY = 1;
+		perpareBallAndStepGameTwice(x, y, dirX, dirY);
+
+		verifyBounce(x, y + 2 - dirX / 10, -dirX, computeNewDir(dirY, dirX));
+	}
+
+	// bounce on wall
+
+	@Test
+	public void testHitLeftWall() throws InvalidInputException {
+		double x = 6;
+		double y = 195;
+		double dirX = -1;
+		double dirY = 1;
+		perpareBallAndStepGameTwice(x, y, dirX, dirY);
+
+		verifyBounce(x, y + 2 - dirX / 10, -dirX, computeNewDir(dirY, dirX));
+	}
+
+	@Test
+	public void testHitTopLeftCornerWall() throws InvalidInputException {
+		double x = 6;
+		double y = 6;
+		double dirX = -1;
+		double dirY = -1;
+		perpareBallAndStepGameTwice(x, y, dirX, dirY);
+
+		verifyBounce(6, 6, 1, 1);
+	}
+
+	@Test
+	public void testHitTopWall() throws InvalidInputException {
+		double x = 100;
+		double y = 6;
+		double dirX = 1;
+		double dirY = -1;
+		perpareBallAndStepGameTwice(x, y, dirX, dirY);
+
+		verifyBounce(x + 2 - dirY / 10, y, computeNewDir(dirX, dirY), -dirY);
+	}
+
+	@Test
+	public void testHitTopRightCornerWall() throws InvalidInputException {
+		double x = 384;
+		double y = 6;
+		double dirX = 1;
+		double dirY = -1;
+		perpareBallAndStepGameTwice(x, y, dirX, dirY);
+
+		verifyBounce(384, 6, -1, 1);
+	}
+
+	@Test
+	public void testHitRightWall() throws InvalidInputException {
+		double x = 384;
+		double y = 195;
+		double dirX = 1;
+		double dirY = 1;
+		perpareBallAndStepGameTwice(x, y, dirX, dirY);
+
+		verifyBounce(x, y + 2 + dirX / 10, -dirX, computeNewDir(dirY, dirX));
+	}
+
+	// extracted methods
+
+	private double computeNewDir(double dir1, double dir2) {
+		return dir1 + Math.signum(dir1) * 0.1 * Math.abs(dir2);
+	}
+
+	private void verifyBounce(double expectedX, double expectedY, double expectedDirX, double expectedDirY) {
+		assertEquals(expectedDirX, playedGame.getBallDirectionX(), 0.00001);
+		assertEquals(expectedDirY, playedGame.getBallDirectionY(), 0.00001);
+		assertEquals(expectedX, playedGame.getCurrentBallX(), 0.00001);
+		assertEquals(expectedY, playedGame.getCurrentBallY(), 0.00001);
+		assertEquals(PlayedGame.PlayStatus.Paused, playedGame.getPlayStatus());
+	}
+
+	private void perpareBallAndStepGameTwice(double x, double y, double dirX, double dirY)
+			throws InvalidInputException {
+		playedGame.setCurrentBallX(x);
+		playedGame.setCurrentBallY(y);
+		playedGame.setBallDirectionX(dirX);
+		playedGame.setBallDirectionY(dirY);
+		Map<Integer, String> inputs = new HashMap<>();
+		inputs.put(2, " ");
+		Block223PlayModeTest uiMock = new Block223PlayModeTest(inputs);
+		Block223Controller.startGame(uiMock);
+	}
+
 }

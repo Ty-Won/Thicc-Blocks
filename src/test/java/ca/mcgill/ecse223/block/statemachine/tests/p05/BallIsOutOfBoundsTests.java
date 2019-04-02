@@ -11,6 +11,7 @@ import ca.mcgill.ecse223.block.controller.InvalidInputException;
 import ca.mcgill.ecse223.block.model.Admin;
 import ca.mcgill.ecse223.block.model.Block223;
 import ca.mcgill.ecse223.block.model.Game;
+import ca.mcgill.ecse223.block.model.Paddle;
 import ca.mcgill.ecse223.block.model.PlayedGame;
 import ca.mcgill.ecse223.block.model.Player;
 import ca.mcgill.ecse223.block.statemachine.tests.Block223PlayModeTest;
@@ -46,8 +47,8 @@ public class BallIsOutOfBoundsTests {
 		assertEquals(game.getBall().getMinBallSpeedX(), playedGame.getBallDirectionX(), 0.00001);
 		assertEquals(game.getBall().getMinBallSpeedY(), playedGame.getBallDirectionY(), 0.00001);
 		assertEquals(game.getPaddle().getMaxPaddleLength(), playedGame.getCurrentPaddleLength(), 0.00001);
-//		assertEquals((Game.PLAY_AREA_SIDE - game.getPaddle().getMaxPaddleLength()) / 2, playedGame.getCurrentPaddleX(), 0.00001);
-//		assertEquals(Game.PLAY_AREA_SIDE - Paddle.VERTICAL_DISTANCE - Paddle.PADDLE_WIDTH, playedGame.getCurrentPaddleY(), 0.00001);
+		assertEquals((Game.PLAY_AREA_SIDE - game.getPaddle().getMaxPaddleLength()) / 2, playedGame.getCurrentPaddleX(), 0.00001);
+		assertEquals(Game.PLAY_AREA_SIDE - Paddle.VERTICAL_DISTANCE - Paddle.PADDLE_WIDTH, playedGame.getCurrentPaddleY(), 0.00001);
 
 		positionBallAndStartGame(uiMock);
 
