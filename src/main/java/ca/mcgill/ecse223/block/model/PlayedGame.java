@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.*;
 
 // line 11 "../../../../../Block223PlayMode.ump"
-// line 106 "../../../../../Block223Persistence.ump"
+// line 114 "../../../../../Block223Persistence.ump"
 // line 1 "../../../../../Block223States.ump"
 public class PlayedGame implements Serializable
 {
@@ -945,7 +945,7 @@ public class PlayedGame implements Serializable
 	  Double newBallY;
 	  Double newBallDirX;
 	  Double newBallDirY;
-	  if (!(outgoingX < 0.000001 && outgoingY < 0.000001)) {
+	  if (!(outgoingX == 0 && outgoingY == 0)) {
 		  //Set new ball direction and position
 		  if (bp.getDirection() == BounceDirection.FLIP_Y) {
 			  Double sign = Math.signum(ballDirX);
@@ -1367,7 +1367,7 @@ public class PlayedGame implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 109 "../../../../../Block223Persistence.ump"
+  // line 117 "../../../../../Block223Persistence.ump"
   private static final long serialVersionUID = 8597675110221231714L ;
 
   

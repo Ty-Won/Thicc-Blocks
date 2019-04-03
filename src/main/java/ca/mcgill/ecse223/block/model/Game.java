@@ -874,6 +874,14 @@ public class Game implements Serializable
     gamesByName = new HashMap<String, Game>();
   	for(Game game : games) {
   		gamesByName.put(game.getName(), game);
+
+      game.setHallOfFameEntriesPriority(new Comparator<HallOfFameEntry>(){
+        @Override
+        public int compare(HallOfFameEntry arg0, HallOfFameEntry arg1)
+        {
+          return ((Integer)arg0.getScore()).compareTo(((Integer)arg1.getScore()));
+        }
+      });
   	}
   }
 

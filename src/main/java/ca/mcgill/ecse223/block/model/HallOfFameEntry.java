@@ -5,7 +5,7 @@ package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 
 // line 328 "../../../../../Block223PlayMode.ump"
-// line 118 "../../../../../Block223Persistence.ump"
+// line 126 "../../../../../Block223Persistence.ump"
 public class HallOfFameEntry implements Serializable
 {
 
@@ -188,7 +188,7 @@ public class HallOfFameEntry implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 121 "../../../../../Block223Persistence.ump"
+  // line 129 "../../../../../Block223Persistence.ump"
   private static final long serialVersionUID = 6404159261985579849L ;
 
   
