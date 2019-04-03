@@ -945,7 +945,7 @@ public class PlayedGame implements Serializable
 	  Double newBallY;
 	  Double newBallDirX;
 	  Double newBallDirY;
-	  if (!(outgoingX == 0 && outgoingY == 0)) {
+	  if (!(outgoingX < 0.000001 && outgoingY < 0.000001)) {
 		  //Set new ball direction and position
 		  if (bp.getDirection() == BounceDirection.FLIP_Y) {
 			  Double sign = Math.signum(ballDirX);
