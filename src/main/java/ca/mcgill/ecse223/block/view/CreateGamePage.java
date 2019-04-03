@@ -8,6 +8,7 @@ import ca.mcgill.ecse223.block.application.Block223Application.Pages;
 import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
 import ca.mcgill.ecse223.block.model.Block223;
+import ca.mcgill.ecse223.block.model.Game;
 import ca.mcgill.ecse223.block.persistence.Block223Persistence;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -198,32 +199,42 @@ public class CreateGamePage implements IPage {
         StackPane.setAlignment(ballLabel, Pos.CENTER);
         gridPane.add(ballPane,0,5,4,1);
         
-        // Add Ball Min Speed Label
-        Label minSpeedLabel = new Label("Min Speed: ");
-        gridPane.add(minSpeedLabel,0,6);
+        // Add Ball Min Speed X Label
+        Label minSpeedXLabel = new Label("Min Speed X: ");
+        gridPane.add(minSpeedXLabel,0,6);
 
-        // Add Ball Min Speed Field
-        TextField minSpeedField = new TextField();
-        minSpeedField.setAlignment(Pos.CENTER);
-        minSpeedField.setPrefHeight(40);
-        gridPane.add(minSpeedField,1,6);
+        // Add Ball Min Speed X Field
+        TextField minSpeedXField = new TextField();
+        minSpeedXField.setAlignment(Pos.CENTER);
+        minSpeedXField.setPrefHeight(40);
+        gridPane.add(minSpeedXField,1,6);
+        
+        // Add Ball Min Speed Y Label
+        Label minSpeedYLabel = new Label("Min Speed Y: ");
+        gridPane.add(minSpeedYLabel,2,6);
+
+        // Add Ball Min Speed Y Field
+        TextField minSpeedYField = new TextField();
+        minSpeedYField.setAlignment(Pos.CENTER);
+        minSpeedYField.setPrefHeight(40);
+        gridPane.add(minSpeedYField,3,6);
         
         // Add Ball Speed Up Factor Label
-        Label speedUpLabel = new Label("Speed Up\nFactor:");
-        gridPane.add(speedUpLabel,2,6);
+        Label speedUpLabel = new Label("Speed Up Factor:");
+        gridPane.add(speedUpLabel,0,7);
         
         // Add Ball Speed Up Factor Field
         TextField speedUpField = new TextField();
         speedUpField.setAlignment(Pos.CENTER);
         speedUpField.setPrefHeight(40);
-        gridPane.add(speedUpField,3,6);
+        gridPane.add(speedUpField,1,7);
         
         // Add Levels Button
         Button levelsButton = new Button("Levels");
         levelsButton.setPrefHeight(60);
         levelsButton.setDefaultButton(true);
         levelsButton.setPrefWidth(150);
-        gridPane.add(levelsButton, 0, 7, 2, 1);
+        gridPane.add(levelsButton, 0, 8, 2, 1);
         GridPane.setHalignment(levelsButton, HPos.CENTER);
         GridPane.setMargin(levelsButton, new Insets(20,0,20,0));
         
@@ -232,7 +243,7 @@ public class CreateGamePage implements IPage {
         blocksButton.setPrefHeight(60);
         blocksButton.setDefaultButton(true);
         blocksButton.setPrefWidth(150);
-        gridPane.add(blocksButton, 2, 7, 2, 1);
+        gridPane.add(blocksButton, 2, 8, 2, 1);
         GridPane.setHalignment(blocksButton, HPos.CENTER);
         GridPane.setMargin(blocksButton, new Insets(20,0,20,0));
         
@@ -241,7 +252,7 @@ public class CreateGamePage implements IPage {
         createButton.setPrefHeight(60);
         createButton.setDefaultButton(true);
         createButton.setPrefWidth(150);
-        gridPane.add(createButton, 0, 8, 4, 1);
+        gridPane.add(createButton, 0, 9, 4, 1);
         GridPane.setHalignment(createButton, HPos.CENTER);
         GridPane.setMargin(createButton, new Insets(20,0,20,0));
         
@@ -250,7 +261,8 @@ public class CreateGamePage implements IPage {
             @Override
             public void handle(ActionEvent event) {
                 try {
-                	int minSpeed = Integer.parseInt(minSpeedField.getText());
+                	int minSpeedX = Integer.parseInt(minSpeedXField.getText());
+                	int minSpeedY = Integer.parseInt(minSpeedYField.getText());
                 	double speedUpFactor = Double.parseDouble(speedUpField.getText());
                 	int maxLength = Integer.parseInt(maxLengthField.getText());
                 	int minLength = Integer.parseInt(minLengthField.getText());
@@ -260,14 +272,21 @@ public class CreateGamePage implements IPage {
                     	
                     	Block223Controller.selectGame(gameNameField.getText());
                     	
-                    	Block223Controller.setGameDetails(1, spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
+                    	Block223Controller.setGameDetails(1, spinner.getValue(), minSpeedX, minSpeedY, speedUpFactor, maxLength, minLength);
     					Block223Persistence.save(Block223Application.getBlock223());
     					
                     	IPage availableGames = Block223Application.getPage(Pages.AvaliableGamesAdmin);
                     	availableGames.display();
     	                
     				} catch (InvalidInputException e) {
-    					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Create Game Error", e.getMessage());
+    					try {
+    						String selectedGameName = gameNameField.getText();
+    						Block223Controller.deleteGame(selectedGameName);
+        					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Create Game Error", e.getMessage());
+    					}
+    					catch (InvalidInputException f) {
+        					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Create Game Error", e.getMessage());
+    					}
     				}
                 	
                 } catch (NumberFormatException n) {
@@ -281,7 +300,8 @@ public class CreateGamePage implements IPage {
             @Override
             public void handle(ActionEvent event) {
                 try {
-                	int minSpeed = Integer.parseInt(minSpeedField.getText());
+                	int minSpeedX = Integer.parseInt(minSpeedXField.getText());
+                	int minSpeedY = Integer.parseInt(minSpeedYField.getText());
                 	double speedUpFactor = Double.parseDouble(speedUpField.getText());
                 	int maxLength = Integer.parseInt(maxLengthField.getText());
                 	int minLength = Integer.parseInt(minLengthField.getText());
@@ -292,7 +312,7 @@ public class CreateGamePage implements IPage {
                     	//Selects the game that was just made as the currentDesignableGame so that the available levels page can access the right one
                     	Block223Controller.selectGame(gameNameField.getText());
                     	
-                    	Block223Controller.setGameDetails(1, spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
+                    	Block223Controller.setGameDetails(1, spinner.getValue(), minSpeedX, minSpeedY, speedUpFactor, maxLength, minLength);
 
                     	IPage availableLevels = Block223Application.getPage(Pages.AvailableLevels);
                     	availableLevels.display();
@@ -312,7 +332,8 @@ public class CreateGamePage implements IPage {
             @Override
             public void handle(ActionEvent event) {
                 try {
-                	int minSpeed = Integer.parseInt(minSpeedField.getText());
+                	int minSpeedX = Integer.parseInt(minSpeedXField.getText());
+                	int minSpeedY = Integer.parseInt(minSpeedYField.getText());
                 	double speedUpFactor = Double.parseDouble(speedUpField.getText());
                 	int maxLength = Integer.parseInt(maxLengthField.getText());
                 	int minLength = Integer.parseInt(minLengthField.getText());
@@ -323,7 +344,7 @@ public class CreateGamePage implements IPage {
                     	//Selects the game that was just made as the currentDesignableGame so that the available levels page can access the right one
                     	Block223Controller.selectGame(gameNameField.getText());
                     	
-                    	Block223Controller.setGameDetails(1, spinner.getValue(), minSpeed, minSpeed, speedUpFactor, maxLength, minLength);
+                    	Block223Controller.setGameDetails(1, spinner.getValue(), minSpeedX, minSpeedY, speedUpFactor, maxLength, minLength);
                     	
     					IPage availableBlocks = Block223Application.getPage(Pages.AvailableBlocks);
     					availableBlocks.display();
