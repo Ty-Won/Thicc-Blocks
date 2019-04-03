@@ -10,8 +10,10 @@ import ca.mcgill.ecse223.block.application.Block223Application.Pages;
 import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
 import ca.mcgill.ecse223.block.controller.TOGame;
+import ca.mcgill.ecse223.block.controller.TOPlayableGame;
 import ca.mcgill.ecse223.block.model.Block223;
 import ca.mcgill.ecse223.block.model.Game;
+import ca.mcgill.ecse223.block.model.PlayedGame;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -57,6 +59,8 @@ public class AvailableGamesPlayer implements IPage {
         try {
 			addUIComponents(gridPane);
 		} catch (FileNotFoundException e) {
+			Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Error loading page:", e.getMessage());
+		} catch (Exception e) {
 			Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Error loading page:", e.getMessage());
 		}
         
@@ -112,15 +116,13 @@ public class AvailableGamesPlayer implements IPage {
         return gridPane;
     }
 
-    private void addUIComponents(GridPane gridPane) throws FileNotFoundException {
+    private void addUIComponents(GridPane gridPane) throws FileNotFoundException, Exception {
     	ObservableList data = 
     	        FXCollections.observableArrayList();
     	
-    	List<TOGame> toGames = new ArrayList<TOGame>();
-		// TODO: fill the list with all games that the player can play
-		//toGames = Block223Controller.getDesignableGames();
+    	List<TOPlayableGame> games = Block223Controller.getPlayableGames();
     	
-    	for(TOGame game : toGames) {
+    	for(TOPlayableGame game : games) {
     		data.add(game.getName());
     	}
     	ListView<String> listView = new ListView<String>(data);
@@ -131,85 +133,38 @@ public class AvailableGamesPlayer implements IPage {
         gridPane.add(headerLabel, 0,0,2,1);
         GridPane.setHalignment(headerLabel, HPos.CENTER);
         GridPane.setMargin(headerLabel, new Insets(20, 0,20,0));
-    	
-        Button editButton = new Button("EDIT");
-        editButton.setPrefHeight(40);
-        editButton.setDefaultButton(true);
-        editButton.setPrefWidth(130);
-        editButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
-        editButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
-        gridPane.add(editButton, 1, 1, 1, 1);
-        GridPane.setHalignment(editButton, HPos.CENTER);
-        GridPane.setMargin(editButton, new Insets(20, 0,20,0));
         
-        Button deleteButton = new Button("DELETE");
-        deleteButton.setPrefHeight(40);
-        deleteButton.setDefaultButton(true);
-        deleteButton.setPrefWidth(130);
-        deleteButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
-        deleteButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
-        gridPane.add(deleteButton, 3, 1, 1, 1);
-        GridPane.setHalignment(deleteButton, HPos.CENTER);
-        GridPane.setMargin(deleteButton, new Insets(20, 0,20,0));
+        Button playButton = new Button("PLAY");
+        playButton.setPrefHeight(40);
+        playButton.setDefaultButton(true);
+        playButton.setPrefWidth(130);
+        playButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
+        playButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
+        gridPane.add(playButton, 3, 1, 1, 1);
+        GridPane.setHalignment(playButton, HPos.CENTER);
+        GridPane.setMargin(playButton, new Insets(20, 0,20,0));
         
-        Button addButton = new Button("ADD");
-        addButton.setPrefHeight(40);
-        addButton.setDefaultButton(true);
-        addButton.setPrefWidth(130);
-        addButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
-        addButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
-        gridPane.add(addButton, 3, 2, 1, 1);
-        GridPane.setHalignment(addButton, HPos.CENTER);
-        GridPane.setMargin(addButton, new Insets(20, 0,20,0));
-        
-        editButton.setOnAction(new EventHandler<ActionEvent>() {
+        playButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {       
-            	String selectedGameName = listView.getSelectionModel().getSelectedItem();
-            	if(selectedGameName == null) {
-                	Components.showAlert(Alert.AlertType.INFORMATION, gridPane.getScene().getWindow(), "Edit Game" , "Please select a game to edit");   
+            	int selectedIndex = listView.getSelectionModel().getSelectedIndex();
+            	if (selectedIndex == -1) {
+            		Components.showAlert(Alert.AlertType.INFORMATION, gridPane.getScene().getWindow(), "Play Game" , "Please select a game to play");
             	}
-            	else {
-        			Game game = Block223Application.getBlock223().findGame(selectedGameName);
-            		
-					Block223Application.setCurrentGame(game);
-                	IPage updateGamePage = Block223Application.getPage(Pages.UpdateGame);
-                	updateGamePage.display();
-            	}   
-            }
-        });
-        
-        deleteButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {       
-            	String selectedGameName = listView.getSelectionModel().getSelectedItem();
-            	if(selectedGameName == null) {
-                	Components.showAlert(Alert.AlertType.INFORMATION, gridPane.getScene().getWindow(), "Delete Game" , "Please select a game to delete");   
+            	TOPlayableGame selectedGame = games.get(selectedIndex);
+            	int selectedGameId = selectedGame.getNumber();
+            	PlayedGame selectedPlayedGame = null;
+            	if (selectedGameId == -1) { // game id is -1 if playedGame doesn't exist yet
+            		Game game = Block223Application.getBlock223().findGame(selectedGame.getName());
+            		selectedPlayedGame = new PlayedGame(Block223Application.getCurrentUser().getUsername(), game, Block223Application.getBlock223());
+            	} else {
+            		selectedPlayedGame = Block223Application.getBlock223().findPlayableGame(selectedGameId);
             	}
-            	else {
-            		try {
-            			Game game = Block223Application.getBlock223().findGame(selectedGameName);
-						Block223Controller.deleteGame(selectedGameName);
-						
-						game = Game.getWithName(selectedGameName);
-						data.remove(selectedGameName);
-	                	Components.showAlert(Alert.AlertType.INFORMATION, gridPane.getScene().getWindow(), "Delete Game" , "Successfully deleted game: " + selectedGameName);   
-						
-					} catch (InvalidInputException e) {
-	                	Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Delete Game" , "Unable to delete the selected game:\n" + e.getMessage());   
-					}
-            		
-            	}   
-            }
+            	Block223Application.setCurrentPlayableGame(selectedPlayedGame);
+            	// TODO: Add transition to game playing page 
+            } 
         });
         
-        addButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {       
-            	IPage createGamePage = Block223Application.getPage(Pages.CreateGame);
-            	createGamePage.display();
-            }
-        });
     }
 
 }
