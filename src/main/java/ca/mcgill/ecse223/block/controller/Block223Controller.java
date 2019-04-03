@@ -825,9 +825,9 @@ public class Block223Controller {
 		for (char c : userInputs.toCharArray()) {
 			int delta = 0;
 
-			if (c == 'l') {
+			if (c == 'l' && (game.getCurrentPaddleX() + PlayedGame.PADDLE_MOVE_LEFT) >= 0) {
 				delta = PlayedGame.PADDLE_MOVE_LEFT;
-			} else if (c == 'r') {
+			} else if (c == 'r' && (game.getCurrentPaddleX() + PlayedGame.PADDLE_MOVE_RIGHT) <= Game.PLAY_AREA_SIDE)  {
 				delta = PlayedGame.PADDLE_MOVE_RIGHT;
 			
 			// space
