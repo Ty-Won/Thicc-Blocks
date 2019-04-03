@@ -155,7 +155,7 @@ public class AvailableGamesPlayer implements IPage {
             	int selectedGameId = selectedGame.getNumber();
             	PlayedGame selectedPlayedGame = null;
             	if (selectedGameId == -1) { // game id is -1 if playedGame doesn't exist yet
-            		Game game = Block223Application.getBlock223().findGame(selectedGame.getName());
+            		Game game = Block223Controller.getGameByName(selectedGame.getName());
             		selectedPlayedGame = new PlayedGame(Block223Application.getCurrentUser().getUsername(), game, Block223Application.getBlock223());
             	} else {
             		selectedPlayedGame = Block223Application.getBlock223().findPlayableGame(selectedGameId);
