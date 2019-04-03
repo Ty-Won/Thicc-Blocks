@@ -150,17 +150,18 @@ public class AvailableGamesPlayer implements IPage {
             	int selectedIndex = listView.getSelectionModel().getSelectedIndex();
             	if (selectedIndex == -1) {
             		Components.showAlert(Alert.AlertType.INFORMATION, gridPane.getScene().getWindow(), "Play Game" , "Please select a game to play");
-            	}
-            	TOPlayableGame selectedGame = games.get(selectedIndex);
-            	int selectedGameId = selectedGame.getNumber();
-            	PlayedGame selectedPlayedGame = null;
-            	if (selectedGameId == -1) { // game id is -1 if playedGame doesn't exist yet
-            		Game game = Block223Controller.getGameByName(selectedGame.getName());
-            		selectedPlayedGame = new PlayedGame(Block223Application.getCurrentUser().getUsername(), game, Block223Application.getBlock223());
             	} else {
-            		selectedPlayedGame = Block223Application.getBlock223().findPlayableGame(selectedGameId);
+	            	TOPlayableGame selectedGame = games.get(selectedIndex);
+	            	int selectedGameId = selectedGame.getNumber();
+	            	PlayedGame selectedPlayedGame = null;
+	            	if (selectedGameId == -1) { // game id is -1 if playedGame doesn't exist yet
+	            		Game game = Block223Controller.getGameByName(selectedGame.getName());
+	            		selectedPlayedGame = new PlayedGame(Block223Application.getCurrentUser().getUsername(), game, Block223Application.getBlock223());
+	            	} else {
+	            		selectedPlayedGame = Block223Application.getBlock223().findPlayableGame(selectedGameId);
+	            	}
+	            	Block223Application.setCurrentPlayableGame(selectedPlayedGame);
             	}
-            	Block223Application.setCurrentPlayableGame(selectedPlayedGame);
             	// TODO: Add transition to game playing page 
             } 
         });
