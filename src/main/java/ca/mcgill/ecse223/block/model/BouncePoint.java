@@ -9,7 +9,7 @@ import java.io.Serializable;
  * you may implement bounce behavior differently
  */
 // line 338 "../../../../../Block223PlayMode.ump"
-// line 124 "../../../../../Block223Persistence.ump"
+// line 132 "../../../../../Block223Persistence.ump"
 public class BouncePoint implements Serializable
 {
 
@@ -122,7 +122,7 @@ public class BouncePoint implements Serializable
   // DEVELOPER CODE - PROVIDED AS-IS
   //------------------------
   
-  // line 127 "../../../../../Block223Persistence.ump"
+  // line 135 "../../../../../Block223Persistence.ump"
   private static final long serialVersionUID = 6304159361985579849L ;
 
   
