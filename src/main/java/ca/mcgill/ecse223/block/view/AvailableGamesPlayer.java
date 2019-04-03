@@ -161,8 +161,8 @@ public class AvailableGamesPlayer implements IPage {
 	            		selectedPlayedGame = Block223Application.getBlock223().findPlayableGame(selectedGameId);
 	            	}
 	            	Block223Application.setCurrentPlayableGame(selectedPlayedGame);
+	            	// TODO: Add transition to game playing page 
             	}
-            	// TODO: Add transition to game playing page 
             } 
         });
         
