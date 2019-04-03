@@ -216,7 +216,7 @@ class PlayedGame {
       double deltaDistFirst = euclideanDistance(xPos, yPos, first.getX(), first.getY());
       double deltaDistSecond = euclideanDistance(xPos, yPos, second.getX(), second.getY());
 
-      if (deltaDistFirst >= deltaDistSecond) {
+      if (deltaDistFirst <= deltaDistSecond) {
         return true;
       } else {
         return false;

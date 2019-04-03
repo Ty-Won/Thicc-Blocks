@@ -1151,7 +1151,6 @@ public class PlayedGame implements Serializable
     BouncePoint bounce = getBounce();
     
     PlayedBlockAssignment pblock = bounce.getHitBlock();
-    
     Block block = pblock.getBlock();
     
     int points = block.getPoints();
@@ -1161,6 +1160,7 @@ public class PlayedGame implements Serializable
     pblock.delete();
     
     bounceBall();
+    
   }
 
   // line 178 "../../../../../Block223States.ump"
@@ -1207,7 +1207,7 @@ public class PlayedGame implements Serializable
       double deltaDistFirst = euclideanDistance(xPos, yPos, first.getX(), first.getY());
       double deltaDistSecond = euclideanDistance(xPos, yPos, second.getX(), second.getY());
 
-      if (deltaDistFirst >= deltaDistSecond) {
+      if (deltaDistFirst <= deltaDistSecond) {
         return true;
       } else {
         return false;
