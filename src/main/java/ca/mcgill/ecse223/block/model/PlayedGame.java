@@ -1073,8 +1073,8 @@ public class PlayedGame implements Serializable
     Double ballDirX = this.ballDirectionX;
     Double ballDirY = this.ballDirectionY;
 
-    Double newBallX = this.currentBallX + ballDirX;
-    Double newBallY = this.currentBallY + ballDirY;
+    Double newBallX = oldBallX  + ballDirX;
+    Double newBallY = oldBallY + ballDirY;
 
     Double blockX = Double.valueOf(block.getX());
     Double blockY = Double.valueOf(block.getY());
@@ -1139,11 +1139,12 @@ public class PlayedGame implements Serializable
           }
         }
       }
-      finalBP.setHitBlock(block);
-      return finalBP;
-    } else {
-      return null;
+      if(finalBP.getX() != newBallX && finalBP.getY() != newBallY) {
+          finalBP.setHitBlock(block);
+          return finalBP;
+      }
     }
+    return null;
   }
 
   // line 161 "../../../../../Block223States.ump"
