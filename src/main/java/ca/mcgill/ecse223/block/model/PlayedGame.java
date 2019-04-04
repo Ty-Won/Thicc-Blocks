@@ -1093,7 +1093,7 @@ public class PlayedGame implements Serializable
       BouncePoint zoneC = checkLineIntersections(oldBallX, oldBallY, newBallX, newBallY, blockX+ballRadius+blockSize, blockY, blockX+ballRadius+blockSize, blockY+blockSize, BounceDirection.FLIP_X);
 
       //bottom
-      BouncePoint zoneD = checkLineIntersections(oldBallX, oldBallY, newBallX, newBallY, blockX, blockY-blockSize-ballRadius, blockX+blockSize, blockY-blockSize-ballRadius, BounceDirection.FLIP_Y);
+      BouncePoint zoneD = checkLineIntersections(oldBallX, oldBallY, newBallX, newBallY, blockX, blockY+blockSize+ballRadius, blockX+blockSize, blockY+blockSize+ballRadius, BounceDirection.FLIP_Y);
 
       // Circle equation: (x-a)^2 + (y-b)^2 = r^2
       Double a;
@@ -1139,6 +1139,7 @@ public class PlayedGame implements Serializable
           }
         }
       }
+      finalBP.setHitBlock(block);
       return finalBP;
     } else {
       return null;
