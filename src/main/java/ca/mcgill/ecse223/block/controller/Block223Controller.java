@@ -1238,7 +1238,7 @@ public class Block223Controller {
 		
 		// User must be admin
 		if(!(Block223Application.getCurrentUserRole() instanceof Player)) {
-			throw new InvalidInputException("Player privileges are required to play a game's hall of fame.");
+			throw new InvalidInputException("Player privileges are required to access a game's hall of fame.");
 		}
 		
 		// creating Hall of Fame Transfer Object
@@ -1254,18 +1254,18 @@ public class Block223Controller {
 		
 		if (start < 1) {
 			start = 1;	
-		}else {
-			start = start - 1;
 		}
-		
+
 		if (end > game.numberOfHallOfFameEntries()) {
 			end = game.numberOfHallOfFameEntries();
-		}else {
-			end = end - 1;
 		}
+
+		start = game.numberOfHallOfFameEntries() - start;
+		end = game.numberOfHallOfFameEntries() - end;
+	
 		
 		// creating hall of fame entries
-		for (int index = start; index <= end; index++) {
+		for (int index = start; index >= end; index--) {
 			new TOHallOfFameEntry(
 					index+1,
 					game.getHallOfFameEntry(index).getPlayername(),
@@ -1283,6 +1283,11 @@ public class Block223Controller {
 		// checking if a PlayableGame is selected
 		if(pgame == null) {
 			throw new InvalidInputException("A game must be selected to view its hall of fame.");
+		}
+
+		// User must be admin
+		if(!(Block223Application.getCurrentUserRole() instanceof Player)) {
+			throw new InvalidInputException("Player privileges are required to access a game's hall of fame.");
 		}
 		
 		// declaring instance of a game for the current PlayableGame
