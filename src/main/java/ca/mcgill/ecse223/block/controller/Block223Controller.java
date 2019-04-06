@@ -825,9 +825,9 @@ public class Block223Controller {
 		for (char c : userInputs.toCharArray()) {
 			int delta = 0;
 
-			if (c == 'l') {
+			if (c == 'l' && (game.getCurrentPaddleX() + PlayedGame.PADDLE_MOVE_LEFT) >= 0) {
 				delta = PlayedGame.PADDLE_MOVE_LEFT;
-			} else if (c == 'r') {
+			} else if (c == 'r' && (game.getCurrentPaddleX() + game.getCurrentPaddleLength() + PlayedGame.PADDLE_MOVE_RIGHT) <= Game.PLAY_AREA_SIDE)  {
 				delta = PlayedGame.PADDLE_MOVE_RIGHT;
 			
 			// space
@@ -1238,7 +1238,7 @@ public class Block223Controller {
 		
 		// User must be admin
 		if(!(Block223Application.getCurrentUserRole() instanceof Player)) {
-			throw new InvalidInputException("Player privileges are required to play a game's hall of fame.");
+			throw new InvalidInputException("Player privileges are required to access a game's hall of fame.");
 		}
 		
 		// creating Hall of Fame Transfer Object
@@ -1254,18 +1254,18 @@ public class Block223Controller {
 		
 		if (start < 1) {
 			start = 1;	
-		}else {
-			start = start - 1;
 		}
-		
+
 		if (end > game.numberOfHallOfFameEntries()) {
 			end = game.numberOfHallOfFameEntries();
-		}else {
-			end = end - 1;
 		}
+
+		start = game.numberOfHallOfFameEntries() - start;
+		end = game.numberOfHallOfFameEntries() - end;
+	
 		
 		// creating hall of fame entries
-		for (int index = start; index <= end; index++) {
+		for (int index = start; index >= end; index--) {
 			new TOHallOfFameEntry(
 					index+1,
 					game.getHallOfFameEntry(index).getPlayername(),
@@ -1283,6 +1283,11 @@ public class Block223Controller {
 		// checking if a PlayableGame is selected
 		if(pgame == null) {
 			throw new InvalidInputException("A game must be selected to view its hall of fame.");
+		}
+
+		// User must be admin
+		if(!(Block223Application.getCurrentUserRole() instanceof Player)) {
+			throw new InvalidInputException("Player privileges are required to access a game's hall of fame.");
 		}
 		
 		// declaring instance of a game for the current PlayableGame
@@ -1303,23 +1308,20 @@ public class Block223Controller {
 		int indexR = game.indexOfHallOfFameEntry(mostRecent);
 		
 		// start-end value checks
-		int start = indexR - numberOfEntries/2;
-		int end = start + numberOfEntries - 1;
+		int start = indexR + numberOfEntries/2;
 		
-		if(start < 1) {
-			start = 1;
-		}else {
-			start = start - 1;
+		if(start > game.numberOfHallOfFameEntries() - 1) {
+			start = game.numberOfHallOfFameEntries() - 1;
 		}
 		
-		if(end > game.numberOfHallOfFameEntries()) {
-			end = game.numberOfHallOfFameEntries();
-		}else {
-			end = end - 1;
+		int end = start - numberOfEntries + 1;
+
+		if(end < 0) {
+			end = 0;
 		}
 		
 		// creating hall of fame entries
-		for (int index = start; index <= end; index++) {
+		for (int index = start; index >= end; index--) {
 			new TOHallOfFameEntry(
 					index+1,
 					game.getHallOfFameEntry(index).getPlayername(),
