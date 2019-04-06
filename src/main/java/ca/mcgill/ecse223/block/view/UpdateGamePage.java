@@ -367,10 +367,8 @@ public class UpdateGamePage implements IPage {
                 	
                 	try {
                     	Block223Controller.updateGame(gameNameField.getText(), gameNrLevels, spinner.getValue(), minSpeedX, minSpeedY, speedUpFactor, maxLength, minLength);
-    					Block223Persistence.save(Block223Application.getBlock223());
-                        
-                        // Publish the game
                         Block223Controller.publishGame();
+                        Block223Persistence.save(Block223Application.getBlock223());
                         
                     	IPage availableGames = Block223Application.getPage(Pages.AvaliableGamesAdmin);
                     	availableGames.display();
