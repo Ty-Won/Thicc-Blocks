@@ -116,22 +116,22 @@ class PlayedGame {
       //TopLeftCorner
       a=blockX;
       b=blockY;
-      BouncePoint [] zoneE = checkCircleLineIntersection(a,b,r,m,c,oldBallX,oldBallY,newBallX,newBallY, ballDirectionX);
+      BouncePoint [] zoneE = checkCircleLineIntersection(a,b,r,m,c,oldBallX,oldBallY,newBallX,newBallY, ballDirectionX, true);
 
       //TopRightCorner
       a=blockX+blockSize;
       b=blockY;
-      BouncePoint [] zoneF = checkCircleLineIntersection(a,b,r,m,c,oldBallX,oldBallY,newBallX,newBallY, ballDirectionX);
+      BouncePoint [] zoneF = checkCircleLineIntersection(a,b,r,m,c,oldBallX,oldBallY,newBallX,newBallY, ballDirectionX, false);
 
       //BottomLeftCorner
       a=blockX;
       b=blockY+blockSize;
-      BouncePoint [] zoneG = checkCircleLineIntersection(a,b,r,m,c,oldBallX,oldBallY,newBallX,newBallY, ballDirectionX);
+      BouncePoint [] zoneG = checkCircleLineIntersection(a,b,r,m,c,oldBallX,oldBallY,newBallX,newBallY, ballDirectionX, true);
 
       //BottomRightCorner
       a=blockX + blockSize;
       b=blockY + blockSize;
-      BouncePoint [] zoneH = checkCircleLineIntersection(a,b,r,m,c,oldBallX,oldBallY,newBallX,newBallY, ballDirectionX);
+      BouncePoint [] zoneH = checkCircleLineIntersection(a,b,r,m,c,oldBallX,oldBallY,newBallX,newBallY, ballDirectionX, false);
 
       // Find closest intersection point
       BouncePoint[] allZonesList = { zoneA, zoneB, zoneC, zoneD, zoneE[0], zoneE[1], zoneF[0], zoneF[1],

@@ -836,6 +836,13 @@ public class Block223Controller {
 			}
 
 			game.setCurrentPaddleX(game.getCurrentPaddleX() + delta);
+			
+			if (game.getCurrentPaddleX() > (390 - game.getCurrentPaddleLength())) {
+				game.setCurrentPaddleX(390 - game.getCurrentPaddleLength());
+			}
+			else if (game.getCurrentPaddleX() < 0) {
+				game.setCurrentPaddleX(0);
+			}
 		}
 
 	}

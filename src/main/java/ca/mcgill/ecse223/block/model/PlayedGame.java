@@ -1,5 +1,5 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.1.4262.30c9ffc7c modeling language!*/
+/*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
 import ca.mcgill.ecse223.block.model.BouncePoint.BounceDirection;
@@ -36,12 +36,12 @@ public class PlayedGame implements Serializable
    * no direct link to Paddle, because the paddle can be found by navigating to PlayedGame, Game, and then Paddle
    * pixels moved when right arrow key is pressed
    */
-  public static final int PADDLE_MOVE_RIGHT = 1;
+  public static final int PADDLE_MOVE_RIGHT = 5;
 
   /**
    * pixels moved when left arrow key is pressed
    */
-  public static final int PADDLE_MOVE_LEFT = -1;
+  public static final int PADDLE_MOVE_LEFT = -5;
 
   //------------------------
   // MEMBER VARIABLES
@@ -81,7 +81,7 @@ public class PlayedGame implements Serializable
 
   public PlayedGame(String aPlayername, Game aGame, Block223 aBlock223)
   {
-    // line 312 "../../../../../Block223PlayMode.ump"
+    // line 335 "../../../../../Block223PlayMode.ump"
     boolean didAddGameResult = setGame(aGame);
           if (!didAddGameResult)
           {
@@ -743,7 +743,6 @@ public class PlayedGame implements Serializable
 		  BouncePoint zoneB = checkLineIntersections(oldBallX, oldBallY, newBallX, newBallY, paddleX - 5, paddleY, paddleX - 5, paddleY + 5, BounceDirection.FLIP_X);
 		  BouncePoint zoneC = checkLineIntersections(oldBallX, oldBallY, newBallX, newBallY, paddleX + paddleLength + 5, paddleY, paddleX + paddleLength + 5, paddleY + 5, BounceDirection.FLIP_X);
 		  BouncePoint zoneA = checkLineIntersections(oldBallX, oldBallY, newBallX, newBallY, paddleX, paddleY - 5, paddleX + paddleLength, paddleY - 5, BounceDirection.FLIP_Y);
-		  //TODO check zones E and F then take BP closest to ball and return that
 		  
 		  //Zone F
 		  //Circle equation: (x-a)^2 + (y-b)^2 = r^2
@@ -753,14 +752,14 @@ public class PlayedGame implements Serializable
 		  //Line Equation: y = mx + c
 		  Double m = (newBallY - oldBallY)/(newBallX - oldBallX);
 		  Double c = oldBallY - (m * oldBallX);
-		  BouncePoint[] zoneFList = checkCircleLineIntersection(a, b, r, m, c, oldBallX, oldBallY, newBallX, newBallY, oldDirX);
+		  BouncePoint[] zoneFList = checkCircleLineIntersection(a, b, r, m, c, oldBallX, oldBallY, newBallX, newBallY, oldDirX, false);
 		  
 		  //Zone E
 		  //Circle equation: (x-a)^2 + (y-b)^2 = r^2
 		  a = paddleX;
 		  b = paddleY;
 		  r = 5.0;
-		  BouncePoint[] zoneEList = checkCircleLineIntersection(a, b, r, m, c, oldBallX, oldBallY, newBallX, newBallY, oldDirX);
+		  BouncePoint[] zoneEList = checkCircleLineIntersection(a, b, r, m, c, oldBallX, oldBallY, newBallX, newBallY, oldDirX, true);
 		  
 		  //Find closest intersection point
 		  BouncePoint[] allZonesList = {zoneA, zoneB, zoneC, zoneEList[0], zoneEList[1], zoneFList[0], zoneFList[1]};
@@ -782,8 +781,8 @@ public class PlayedGame implements Serializable
 	  }
   }
 
-  // line 110 "../../../../../Block223PlayMode.ump"
-   private BouncePoint[] checkCircleLineIntersection(Double a, Double b, Double r, Double m, Double c, Double oldBallX, Double oldBallY, Double newBallX, Double newBallY, Double oldDirX){
+  // line 109 "../../../../../Block223PlayMode.ump"
+   private BouncePoint[] checkCircleLineIntersection(Double a, Double b, Double r, Double m, Double c, Double oldBallX, Double oldBallY, Double newBallX, Double newBallY, Double oldDirX, boolean isLeftCorner){
     Double distanceToCircle = (Math.pow(Math.abs(m * a - b + c), 2)) / (m * m + 1);
 	  //Check for real solutions to intersection
 	  BouncePoint[] intersectionList = new BouncePoint[2];
@@ -800,32 +799,55 @@ public class PlayedGame implements Serializable
 		  
 		  if (!Double.isNaN(solX1) && !Double.isNaN(solY1) && Math.min(oldBallX, newBallX) <= solX1 && solX1 <= Math.max(oldBallX,  newBallX)
         		  && Math.min(oldBallY, newBallY) <= solY1 && solY1 <= Math.max(oldBallY, newBallY)) {
+			  BouncePoint zone1;
 			  if (oldDirX >= 0) {
-				  BouncePoint zoneF1 = new BouncePoint(solX1, solY1, BounceDirection.FLIP_Y);
-				  intersectionList[0] = zoneF1;
+				  if (isLeftCorner) {
+					  zone1 = new BouncePoint(solX1, solY1, BounceDirection.FLIP_X);
+				  }
+				  else {
+					  zone1 = new BouncePoint(solX1, solY1, BounceDirection.FLIP_Y);
+				  }
+				  
+				  intersectionList[0] = zone1;
 			  }
 			  else {
-				  BouncePoint zoneF1 = new BouncePoint(solX1, solY1, BounceDirection.FLIP_X);
-				  intersectionList[0] = zoneF1;
+				  if (isLeftCorner) {
+					  zone1 = new BouncePoint(solX1, solY1, BounceDirection.FLIP_Y);
+				  }
+				  else {
+					  zone1 = new BouncePoint(solX1, solY1, BounceDirection.FLIP_X);
+				  }
+				  intersectionList[0] = zone1;
 			  }
 		  }
 		  
 		  if (!Double.isNaN(solX2) && !Double.isNaN(solY2) && Math.min(oldBallX, newBallX) <= solX2 && solX2 <= Math.max(oldBallX,  newBallX)
         		  && Math.min(oldBallY, newBallY) <= solY2 && solY2 <= Math.max(oldBallY, newBallY)) {
+			  BouncePoint zone2;
 			  if (oldDirX >= 0) {
-				  BouncePoint zoneF2 = new BouncePoint(solX2, solY2, BounceDirection.FLIP_Y);
-				  intersectionList[1] = zoneF2;
+				  if (isLeftCorner) {
+					  zone2 = new BouncePoint(solX2, solY2, BounceDirection.FLIP_X);
+				  }
+				  else {
+					  zone2 = new BouncePoint(solX2, solY2, BounceDirection.FLIP_Y);
+				  }
+				  intersectionList[1] = zone2;
 			  }
 			  else {
-				  BouncePoint zoneF2 = new BouncePoint(solX2, solY2, BounceDirection.FLIP_X);
-				  intersectionList[1] = zoneF2;
+				  if (isLeftCorner) {
+					  zone2 = new BouncePoint(solX2, solY2, BounceDirection.FLIP_Y);
+				  }
+				  else {
+					  zone2 = new BouncePoint(solX2, solY2, BounceDirection.FLIP_X);
+				  }
+				  intersectionList[1] = zone2;
 			  }
 		  }
 	  }
 	  return intersectionList;
   }
 
-  // line 152 "../../../../../Block223PlayMode.ump"
+  // line 174 "../../../../../Block223PlayMode.ump"
    private BouncePoint calculateBouncePointWall(){
     //Get all the attributes of the current ball status
 	  Double oldBallX = this.currentBallX;
@@ -894,7 +916,7 @@ public class PlayedGame implements Serializable
 	  }
   }
 
-  // line 220 "../../../../../Block223PlayMode.ump"
+  // line 242 "../../../../../Block223PlayMode.ump"
    private BouncePoint checkLineIntersections(Double AX, Double AY, Double BX, Double BY, Double CX, Double CY, Double DX, Double DY, BounceDirection bd){
     // Line AB represented as a1x + b1y = c1 
       double a1 = BY - AY; 
@@ -917,8 +939,9 @@ public class PlayedGame implements Serializable
       { 
           double intersectX = (b2*c1 - b1*c2)/determinant; 
           double intersectY = (a1*c2 - a2*c1)/determinant; 
-          if (Math.min(AX, BX) <= intersectX && intersectX <= Math.max(AX,  BX)
-        		  && Math.min(AY, BY) <= intersectY && intersectY <= Math.max(AY, BY)) {
+          if (Math.min(AX, BX) <= intersectX && intersectX <= Math.max(AX,  BX) && Math.min(AY, BY) <= intersectY && intersectY <= Math.max(AY, BY)
+        		  && Math.min(CX, DX) <= intersectX && intersectX <= Math.max(CX,  DX)
+        		  && Math.min(CY, DY) <= intersectY && intersectY <= Math.max(CY, DY)) {
         	  BouncePoint bp = new BouncePoint(intersectX, intersectY, bd);
         	  return bp;
           }
@@ -928,7 +951,7 @@ public class PlayedGame implements Serializable
       }
   }
 
-  // line 253 "../../../../../Block223PlayMode.ump"
+  // line 276 "../../../../../Block223PlayMode.ump"
    private void bounceBall(){
     BouncePoint bp = this.getBounce();
 	  Double ballX = this.getCurrentBallX();
@@ -1084,22 +1107,22 @@ public class PlayedGame implements Serializable
       //TopLeftCorner
       a=blockX;
       b=blockY;
-      BouncePoint [] zoneE = checkCircleLineIntersection(a,b,r,m,c,oldBallX,oldBallY,newBallX,newBallY, ballDirectionX);
+      BouncePoint [] zoneE = checkCircleLineIntersection(a,b,r,m,c,oldBallX,oldBallY,newBallX,newBallY, ballDirectionX, true);
 
       //TopRightCorner
       a=blockX+blockSize;
       b=blockY;
-      BouncePoint [] zoneF = checkCircleLineIntersection(a,b,r,m,c,oldBallX,oldBallY,newBallX,newBallY, ballDirectionX);
+      BouncePoint [] zoneF = checkCircleLineIntersection(a,b,r,m,c,oldBallX,oldBallY,newBallX,newBallY, ballDirectionX, false);
 
       //BottomLeftCorner
       a=blockX;
       b=blockY+blockSize;
-      BouncePoint [] zoneG = checkCircleLineIntersection(a,b,r,m,c,oldBallX,oldBallY,newBallX,newBallY, ballDirectionX);
+      BouncePoint [] zoneG = checkCircleLineIntersection(a,b,r,m,c,oldBallX,oldBallY,newBallX,newBallY, ballDirectionX, true);
 
       //BottomRightCorner
       a=blockX + blockSize;
       b=blockY + blockSize;
-      BouncePoint [] zoneH = checkCircleLineIntersection(a,b,r,m,c,oldBallX,oldBallY,newBallX,newBallY, ballDirectionX);
+      BouncePoint [] zoneH = checkCircleLineIntersection(a,b,r,m,c,oldBallX,oldBallY,newBallX,newBallY, ballDirectionX, false);
 
       // Find closest intersection point
       BouncePoint[] allZonesList = { zoneA, zoneB, zoneC, zoneD, zoneE[0], zoneE[1], zoneF[0], zoneF[1],

@@ -3,6 +3,7 @@ package ca.mcgill.ecse223.block.statemachine.tests;
 import java.util.HashMap;
 import java.util.Map;
 
+import ca.mcgill.ecse223.block.controller.TOHallOfFameEntry;
 import ca.mcgill.ecse223.block.view.Block223PlayModeInterface;
 
 /**
@@ -42,6 +43,11 @@ public class Block223PlayModeTest implements Block223PlayModeInterface {
 
 	@Override
 	public void refresh() {
+		// nop
+	}
+
+	@Override
+	public void endGame(int nrOfLives, TOHallOfFameEntry hof) {
 		// nop
 	}
 

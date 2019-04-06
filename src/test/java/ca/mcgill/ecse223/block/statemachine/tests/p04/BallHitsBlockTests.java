@@ -1,6 +1,7 @@
 package ca.mcgill.ecse223.block.statemachine.tests.p04;
 
 import static ca.mcgill.ecse223.block.util.Block223TestConstants.USER_PASS;
+import static ca.mcgill.ecse223.block.util.Block223TestConstants.BALL_SPEED_INCREASE_FACTOR;
 import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
@@ -71,7 +72,7 @@ public class BallHitsBlockTests {
 		assertEquals(POINTS, game.getMostRecentEntry().getScore());
 	}
 
-	@Test(timeout = 1000)
+	@Test(timeout = 2000)
 	public void testHitLastBlockAndNotLastLevel() throws InvalidInputException {
 		createGame(2, 1);
 
@@ -86,7 +87,7 @@ public class BallHitsBlockTests {
 		assertEquals(Game.PLAY_AREA_SIDE / 2, playedGame.getCurrentBallY(), 0.00001);
 		assertEquals(game.getBall().getMinBallSpeedX(), playedGame.getBallDirectionX(), 0.00001);
 		assertEquals(game.getBall().getMinBallSpeedY(), playedGame.getBallDirectionY(), 0.00001);
-		assertEquals(1100, playedGame.getWaitTime(), 0.00001);
+		assertEquals(PlayedGame.INITIAL_WAIT_TIME * BALL_SPEED_INCREASE_FACTOR, playedGame.getWaitTime(), 0.00001);
 		assertEquals(game.getPaddle().getMinPaddleLength(), playedGame.getCurrentPaddleLength(), 0.00001);
 		assertEquals((Game.PLAY_AREA_SIDE - game.getPaddle().getMinPaddleLength()) / 2, playedGame.getCurrentPaddleX(),
 				0.00001);

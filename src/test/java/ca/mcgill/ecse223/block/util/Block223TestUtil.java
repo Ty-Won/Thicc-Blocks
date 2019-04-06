@@ -64,7 +64,7 @@ public class Block223TestUtil {
 
 	public static Block initializeBlockWithAssignmentAndPublishGame(Game game) {
 		Block block = new Block(1, 1, 1, 1, game);
-		new BlockAssignment(1, 1, game.getLevel(0), block, game);
+		new BlockAssignment(10, 10, game.getLevel(0), block, game);
 		game.setPublished(true);
 		return block;
 	}

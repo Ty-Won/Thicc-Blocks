@@ -94,7 +94,6 @@ public class BallHitsPaddleOrWallTests {
 
 		verifyBounce(x - 1 - dirY / 10, y, computeNewDir(dirX, dirY), -dirY);
 	}
-
 	@Test
 	public void testHitPaddleZoneELeft() throws InvalidInputException {
 		double x = 180;
@@ -105,7 +104,7 @@ public class BallHitsPaddleOrWallTests {
 
 		verifyBounce(x, y - 1 - dirX / 10, -dirX, computeNewDir(dirY, dirX));
 	}
-
+	
 	@Test
 	public void testHitPaddleZoneA() throws InvalidInputException {
 		double x = 194;
@@ -206,7 +205,6 @@ public class BallHitsPaddleOrWallTests {
 
 		verifyBounce(x, y + 2 + dirX / 10, -dirX, computeNewDir(dirY, dirX));
 	}
-
 	// extracted methods
 
 	private double computeNewDir(double dir1, double dir2) {

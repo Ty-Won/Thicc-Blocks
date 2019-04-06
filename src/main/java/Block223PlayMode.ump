@@ -35,8 +35,8 @@ class PlayedGame {
    defaulted Double currentBallY = BALL_INITIAL_Y;
 
    // no direct link to Paddle, because the paddle can be found by navigating to PlayedGame, Game, and then Paddle
-   const Integer PADDLE_MOVE_RIGHT = 1; // pixels moved when right arrow key is pressed
-   const Integer PADDLE_MOVE_LEFT = -1; // pixels moved when left arrow key is pressed
+   const Integer PADDLE_MOVE_RIGHT = 5; // pixels moved when right arrow key is pressed
+   const Integer PADDLE_MOVE_LEFT = -5; // pixels moved when left arrow key is pressed
    Double currentPaddleLength = getGame().getPaddle().getMaxPaddleLength();
    // the position of the paddle is at its top right corner
    defaulted Double currentPaddleX = (Game.PLAY_AREA_SIDE - currentPaddleLength) / 2;
@@ -67,7 +67,6 @@ class PlayedGame {
 		  BouncePoint zoneB = checkLineIntersections(oldBallX, oldBallY, newBallX, newBallY, paddleX - 5, paddleY, paddleX - 5, paddleY + 5, BounceDirection.FLIP_X);
 		  BouncePoint zoneC = checkLineIntersections(oldBallX, oldBallY, newBallX, newBallY, paddleX + paddleLength + 5, paddleY, paddleX + paddleLength + 5, paddleY + 5, BounceDirection.FLIP_X);
 		  BouncePoint zoneA = checkLineIntersections(oldBallX, oldBallY, newBallX, newBallY, paddleX, paddleY - 5, paddleX + paddleLength, paddleY - 5, BounceDirection.FLIP_Y);
-		  //TODO check zones E and F then take BP closest to ball and return that
 		  
 		  //Zone F
 		  //Circle equation: (x-a)^2 + (y-b)^2 = r^2
@@ -77,14 +76,14 @@ class PlayedGame {
 		  //Line Equation: y = mx + c
 		  Double m = (newBallY - oldBallY)/(newBallX - oldBallX);
 		  Double c = oldBallY - (m * oldBallX);
-		  BouncePoint[] zoneFList = checkCircleLineIntersection(a, b, r, m, c, oldBallX, oldBallY, newBallX, newBallY, oldDirX);
+		  BouncePoint[] zoneFList = checkCircleLineIntersection(a, b, r, m, c, oldBallX, oldBallY, newBallX, newBallY, oldDirX, false);
 		  
 		  //Zone E
 		  //Circle equation: (x-a)^2 + (y-b)^2 = r^2
 		  a = paddleX;
 		  b = paddleY;
 		  r = 5.0;
-		  BouncePoint[] zoneEList = checkCircleLineIntersection(a, b, r, m, c, oldBallX, oldBallY, newBallX, newBallY, oldDirX);
+		  BouncePoint[] zoneEList = checkCircleLineIntersection(a, b, r, m, c, oldBallX, oldBallY, newBallX, newBallY, oldDirX, true);
 		  
 		  //Find closest intersection point
 		  BouncePoint[] allZonesList = {zoneA, zoneB, zoneC, zoneEList[0], zoneEList[1], zoneFList[0], zoneFList[1]};
@@ -106,8 +105,8 @@ class PlayedGame {
 	  }
   }
   
-  private BouncePoint[] checkCircleLineIntersection(Double a, Double b, Double r, Double m, Double c, Double oldBallX, Double oldBallY, Double newBallX, Double newBallY, Double oldDirX) {
-	  Double distanceToCircle = (Math.pow(Math.abs(m * a - b + c), 2)) / (m * m + 1);
+  private BouncePoint[] checkCircleLineIntersection(Double a, Double b, Double r, Double m, Double c, Double oldBallX, Double oldBallY, Double newBallX, Double newBallY, Double oldDirX, boolean isLeftCorner){
+    Double distanceToCircle = (Math.pow(Math.abs(m * a - b + c), 2)) / (m * m + 1);
 	  //Check for real solutions to intersection
 	  BouncePoint[] intersectionList = new BouncePoint[2];
 	  if (distanceToCircle <= (r*r)) {
@@ -123,25 +122,48 @@ class PlayedGame {
 		  
 		  if (!Double.isNaN(solX1) && !Double.isNaN(solY1) && Math.min(oldBallX, newBallX) <= solX1 && solX1 <= Math.max(oldBallX,  newBallX)
         		  && Math.min(oldBallY, newBallY) <= solY1 && solY1 <= Math.max(oldBallY, newBallY)) {
+			  BouncePoint zone1;
 			  if (oldDirX >= 0) {
-				  BouncePoint zoneF1 = new BouncePoint(solX1, solY1, BounceDirection.FLIP_Y);
-				  intersectionList[0] = zoneF1;
+				  if (isLeftCorner) {
+					  zone1 = new BouncePoint(solX1, solY1, BounceDirection.FLIP_X);
+				  }
+				  else {
+					  zone1 = new BouncePoint(solX1, solY1, BounceDirection.FLIP_Y);
+				  }
+				  
+				  intersectionList[0] = zone1;
 			  }
 			  else {
-				  BouncePoint zoneF1 = new BouncePoint(solX1, solY1, BounceDirection.FLIP_X);
-				  intersectionList[0] = zoneF1;
+				  if (isLeftCorner) {
+					  zone1 = new BouncePoint(solX1, solY1, BounceDirection.FLIP_Y);
+				  }
+				  else {
+					  zone1 = new BouncePoint(solX1, solY1, BounceDirection.FLIP_X);
+				  }
+				  intersectionList[0] = zone1;
 			  }
 		  }
 		  
 		  if (!Double.isNaN(solX2) && !Double.isNaN(solY2) && Math.min(oldBallX, newBallX) <= solX2 && solX2 <= Math.max(oldBallX,  newBallX)
         		  && Math.min(oldBallY, newBallY) <= solY2 && solY2 <= Math.max(oldBallY, newBallY)) {
+			  BouncePoint zone2;
 			  if (oldDirX >= 0) {
-				  BouncePoint zoneF2 = new BouncePoint(solX2, solY2, BounceDirection.FLIP_Y);
-				  intersectionList[1] = zoneF2;
+				  if (isLeftCorner) {
+					  zone2 = new BouncePoint(solX2, solY2, BounceDirection.FLIP_X);
+				  }
+				  else {
+					  zone2 = new BouncePoint(solX2, solY2, BounceDirection.FLIP_Y);
+				  }
+				  intersectionList[1] = zone2;
 			  }
 			  else {
-				  BouncePoint zoneF2 = new BouncePoint(solX2, solY2, BounceDirection.FLIP_X);
-				  intersectionList[1] = zoneF2;
+				  if (isLeftCorner) {
+					  zone2 = new BouncePoint(solX2, solY2, BounceDirection.FLIP_Y);
+				  }
+				  else {
+					  zone2 = new BouncePoint(solX2, solY2, BounceDirection.FLIP_X);
+				  }
+				  intersectionList[1] = zone2;
 			  }
 		  }
 	  }
@@ -238,8 +260,9 @@ class PlayedGame {
       { 
           double intersectX = (b2*c1 - b1*c2)/determinant; 
           double intersectY = (a1*c2 - a2*c1)/determinant; 
-          if (Math.min(AX, BX) <= intersectX && intersectX <= Math.max(AX,  BX)
-        		  && Math.min(AY, BY) <= intersectY && intersectY <= Math.max(AY, BY)) {
+          if (Math.min(AX, BX) <= intersectX && intersectX <= Math.max(AX,  BX) && Math.min(AY, BY) <= intersectY && intersectY <= Math.max(AY, BY)
+        		  && Math.min(CX, DX) <= intersectX && intersectX <= Math.max(CX,  DX)
+        		  && Math.min(CY, DY) <= intersectY && intersectY <= Math.max(CY, DY)) {
         	  BouncePoint bp = new BouncePoint(intersectX, intersectY, bd);
         	  return bp;
           }

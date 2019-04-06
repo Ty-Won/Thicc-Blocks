@@ -1,10 +1,10 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.1.4262.30c9ffc7c modeling language!*/
+/*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
 import java.io.Serializable;
 
-// line 328 "../../../../../Block223PlayMode.ump"
+// line 351 "../../../../../Block223PlayMode.ump"
 // line 126 "../../../../../Block223Persistence.ump"
 public class HallOfFameEntry implements Serializable
 {

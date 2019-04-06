@@ -147,7 +147,7 @@ public class StartPauseResumeTests {
 		Map<Integer, String> inputs = new HashMap<Integer, String>();
 		// Create input to move the paddle
 		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 20; i++) {
 			builder.append("l");
 		}
 		// The input at iteration 0 is used up by the takeInputs() call before the game
@@ -188,7 +188,7 @@ public class StartPauseResumeTests {
 		Map<Integer, String> inputs = new HashMap<Integer, String>();
 		// Create input to move the paddle right paddleOffsetToTheRight pixels
 		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < paddleOffsetToTheRight; i++) {
+		for (int i = 0; i < paddleOffsetToTheRight / 5; i++) {
 			builder.append("r");
 		}
 		builder.append(" ");
@@ -215,11 +215,11 @@ public class StartPauseResumeTests {
 
 	@Test(timeout = 1000)
 	public void testStartGameMovePaddleRightBeyondLimits() throws InvalidInputException {
-		int paddleOffsetToTheRight = 186;
+		int paddleOffsetToTheRight = 190;
 		Map<Integer, String> inputs = new HashMap<Integer, String>();
 		// Create input to move the paddle right paddleOffsetToTheRight pixels
 		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < paddleOffsetToTheRight; i++) {
+		for (int i = 0; i < paddleOffsetToTheRight / 5; i++) {
 			builder.append("r");
 		}
 		builder.append(" ");
@@ -249,7 +249,7 @@ public class StartPauseResumeTests {
 		Map<Integer, String> inputs = new HashMap<Integer, String>();
 		// Create input to move the paddle left paddleOffsetToTheRight pixels
 		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < paddleOffsetToTheLeft; i++) {
+		for (int i = 0; i < paddleOffsetToTheLeft / 5; i++) {
 			builder.append("l");
 		}
 		builder.append(" ");
@@ -276,11 +276,11 @@ public class StartPauseResumeTests {
 
 	@Test(timeout = 1000)
 	public void testStartGameMovePaddleLeftBeyondLimits() throws InvalidInputException {
-		int paddleOffsetToTheLeft = 186;
+		int paddleOffsetToTheLeft = 190;
 		Map<Integer, String> inputs = new HashMap<Integer, String>();
 		// Create input to move the paddle left paddleOffsetToTheRight pixels
 		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < paddleOffsetToTheLeft; i++) {
+		for (int i = 0; i < paddleOffsetToTheLeft / 5; i++) {
 			builder.append("l");
 		}
 		builder.append(" ");
