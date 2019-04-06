@@ -1308,23 +1308,20 @@ public class Block223Controller {
 		int indexR = game.indexOfHallOfFameEntry(mostRecent);
 		
 		// start-end value checks
-		int start = indexR - numberOfEntries/2;
-		int end = start + numberOfEntries - 1;
+		int start = indexR + numberOfEntries/2;
 		
-		if(start < 1) {
-			start = 1;
-		}else {
-			start = start - 1;
+		if(start > game.numberOfHallOfFameEntries() - 1) {
+			start = game.numberOfHallOfFameEntries() - 1;
 		}
 		
-		if(end > game.numberOfHallOfFameEntries()) {
-			end = game.numberOfHallOfFameEntries();
-		}else {
-			end = end - 1;
+		int end = start - numberOfEntries + 1;
+
+		if(end < 0) {
+			end = 0;
 		}
 		
 		// creating hall of fame entries
-		for (int index = start; index <= end; index++) {
+		for (int index = start; index >= end; index--) {
 			new TOHallOfFameEntry(
 					index+1,
 					game.getHallOfFameEntry(index).getPlayername(),
