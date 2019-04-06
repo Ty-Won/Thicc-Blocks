@@ -788,6 +788,7 @@ public class Block223Controller {
 			// Pause game
 			if (userInputs.contains(" ")) {
 				game.pause();
+				System.out.println("Pause - startGame");
 			}
 
 			try {

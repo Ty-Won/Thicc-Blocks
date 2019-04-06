@@ -1,30 +1,21 @@
 package ca.mcgill.ecse223.block.view;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
 import ca.mcgill.ecse223.block.application.Block223Application;
-import ca.mcgill.ecse223.block.application.Block223Application.Pages;
 import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
+import ca.mcgill.ecse223.block.controller.TOCurrentBlock;
+import ca.mcgill.ecse223.block.controller.TOCurrentlyPlayedGame;
 import ca.mcgill.ecse223.block.controller.TOHallOfFameEntry;
 import ca.mcgill.ecse223.block.view.Block223PlayModeInterface;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.control.Alert;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -56,7 +47,6 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 
         initializeCanvas();
 
-        //Block223Controller.getCurrentPlayableGame();
 
         //Create a border pane which will hold the gridPane in the center of the screen and the HBox at the top
         BorderPane root = new BorderPane();
@@ -73,31 +63,47 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
             // Pause
             if(key.getCode() == KeyCode.SPACE) {
                 inputQueue.append(PAUSE_CHAR);
+                System.out.println("Space");
             }
             
             // Left paddle
             else if (key.getCode() == KeyCode.LEFT) {
                 inputQueue.append(LEFT_CHAR);
+                System.out.println("left");
             }
 
             // Right paddle
             else if (key.getCode() == KeyCode.RIGHT) {
                 inputQueue.append(RIGHT_CHAR);
+                System.out.println("right");
             }            
         });
+
+         // Ensure we can get the current playable game before starting
+         try {
+            Block223Controller.getCurrentPlayableGame();
+		} catch (InvalidInputException e) {
+			Components.showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
+            return;
+        }
+        
+        startGame();
 
         // Set the scene and display it
         stage.setScene(scene);
         stage.show();
 
-        startGame();
     }
 
 	@Override
 	public String takeInputs() {
 
-        
-		return null;
+        String input = inputQueue.toString();
+
+        // Clear the queue
+        inputQueue.setLength(0);
+
+		return input;
 	}
 
 	@Override
@@ -112,9 +118,30 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
             5. Ball locatiom
         */
 
+        clearCanvas();
 
+        TOCurrentlyPlayedGame game;
         
+        try {
+            game = Block223Controller.getCurrentPlayableGame();
+        } catch (InvalidInputException e) {
+            e.printStackTrace();
+            return;
+        }
 
+        gc.setFill(Color.GREEN);
+        gc.setStroke(Color.BLUE);
+        gc.setLineWidth(5);
+
+        for (TOCurrentBlock block : game.getBlocks()) {
+            gc.fillRect(block.getX(), block.getY(), 20, 20);
+        }
+
+        gc.fillRect(game.getCurrentPaddleX(), Block223Controller.getPlayAreaSideLength() - 30, 20, 5);
+
+        gc.fillOval(game.getCurrentBallX(), game.getCurrentBallY(), 5.0, 5.0);
+
+        System.out.println("refresh!");
 	}
 
 	@Override
@@ -130,7 +157,7 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
         try {
 			Block223Controller.startGame(this);
 		} catch (InvalidInputException e) {
-            Components.showAlert(Alert.AlertType.ERROR, canvas.getScene().getWindow(), "Error", e.getMessage());
+            Components.showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
         }   
     }
 
@@ -140,12 +167,29 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
     private void initializeCanvas() {
         this.canvas = new Canvas(Block223Controller.getPlayAreaSideLength(), Block223Controller.getPlayAreaSideLength());
         this.gc = canvas.getGraphicsContext2D();
+
+        TOCurrentlyPlayedGame game;
+        try {
+            game = Block223Controller.getCurrentPlayableGame();
+		} catch (InvalidInputException e) {
+			Components.showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
+            return;
+        }
+
         gc.setFill(Color.GREEN);
         gc.setStroke(Color.BLUE);
         gc.setLineWidth(5);
-        gc.fillRect(0, 0, Block223Controller.getPlayAreaSideLength(), Block223Controller.getPlayAreaSideLength());
-        gc.fillRect(0, 0, 20, 20);
 
+        for (TOCurrentBlock block : game.getBlocks()) {
+            gc.fillRect(block.getX(), block.getY(), 20, 20);
+        }
+
+    }
+
+    /**
+     * Clear entire canvas with a transparent value
+     */
+    private void clearCanvas() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 

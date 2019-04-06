@@ -35,7 +35,7 @@ public class Block223Application extends Application {
 
 	public static final int APPLICATION_WIDTH = 1000;
 	public static final int APPLICATION_HEIGHT = 800;
-
+	
 	public enum Pages {
 		Login, 
 		Welcome, 
@@ -78,9 +78,6 @@ public class Block223Application extends Application {
 		}
 		*/
 		
-		IPage login = Block223Application.getPage(Pages.Login);
-		login.display();
-		
 		// try {
 		// 	Block223Controller.register("user", "player", "admin");
 		// 	Block223Controller.login("user", "admin");
@@ -94,13 +91,15 @@ public class Block223Application extends Application {
 		// 	// TODO Auto-generated catch block
 		// 	e1.printStackTrace();
 		// }
-		// List<PlayedGame> games = null;
-		// games = Block223Application.getBlock223().getPlayedGames();
 		
-		// System.out.println(games.size());
 
 		// IPage playGame = Block223Application.getPage(Pages.PlayGame);
 		// playGame.display();
+
+		IPage login = Block223Application.getPage(Pages.Login);
+		login.display();
+
+		
 
 	}
 
