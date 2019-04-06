@@ -82,8 +82,8 @@ class PlayedGame {
     Double ballDirX = this.ballDirectionX;
     Double ballDirY = this.ballDirectionY;
 
-    Double newBallX = this.currentBallX + ballDirX;
-    Double newBallY = this.currentBallY + ballDirY;
+    Double newBallX = oldBallX  + ballDirX;
+    Double newBallY = oldBallY + ballDirY;
 
     Double blockX = Double.valueOf(block.getX());
     Double blockY = Double.valueOf(block.getY());
@@ -148,7 +148,7 @@ class PlayedGame {
           }
         }
       }
-      if(finalBP!=null && finalBP.getX() != newBallX && finalBP.getY() != newBallY) {
+      if(finalBP!=null && (Math.abs(finalBP.getX() - newBallX)>0.000001 && Math.abs(finalBP.getY() - newBallY)>0.000001)) {
           finalBP.setHitBlock(block);
           return finalBP;
       }
