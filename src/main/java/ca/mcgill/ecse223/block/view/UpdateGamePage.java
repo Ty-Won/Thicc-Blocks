@@ -9,6 +9,7 @@ import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
 import ca.mcgill.ecse223.block.controller.TOGame;
 import ca.mcgill.ecse223.block.model.Block223;
+import ca.mcgill.ecse223.block.model.Game;
 import ca.mcgill.ecse223.block.persistence.Block223Persistence;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -136,7 +137,7 @@ public class UpdateGamePage implements IPage {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-    	
+		
         // Add Header
         Label headerLabel = new Label("Update a Game");
         headerLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, 50));
@@ -243,6 +244,8 @@ public class UpdateGamePage implements IPage {
         levelsButton.setPrefHeight(60);
         levelsButton.setDefaultButton(true);
         levelsButton.setPrefWidth(150);
+        levelsButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
+        levelsButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
         gridPane.add(levelsButton, 0, 8, 2, 1);
         GridPane.setHalignment(levelsButton, HPos.CENTER);
         GridPane.setMargin(levelsButton, new Insets(20,0,20,0));
@@ -252,28 +255,46 @@ public class UpdateGamePage implements IPage {
         blocksButton.setPrefHeight(60);
         blocksButton.setDefaultButton(true);
         blocksButton.setPrefWidth(150);
+        blocksButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
+        blocksButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
         gridPane.add(blocksButton, 2, 8, 2, 1);
         GridPane.setHalignment(blocksButton, HPos.CENTER);
         GridPane.setMargin(blocksButton, new Insets(20,0,20,0));
         
-        // Add Update Game Button
-        Button updateButton = new Button("Update");
-        updateButton.setPrefHeight(60);
-        updateButton.setDefaultButton(true);
-        updateButton.setPrefWidth(150);
-        gridPane.add(updateButton, 0, 9, 2, 1);
-        GridPane.setHalignment(updateButton, HPos.CENTER);
-        GridPane.setMargin(updateButton, new Insets(20,0,20,0));
+        // Add Test Game Button
+        Button testButton = new Button("Test");
+        testButton.setPrefHeight(60);
+        testButton.setDefaultButton(true);
+        testButton.setPrefWidth(150);
+        testButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
+        testButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
+        gridPane.add(testButton, 0, 9, 2, 1);
+        GridPane.setHalignment(testButton, HPos.CENTER);
+        GridPane.setMargin(testButton, new Insets(20,0,20,0));
+        
 
         // Add Publish Game Button
         Button publishButton = new Button("Publish");
         publishButton.setPrefHeight(60);
         publishButton.setDefaultButton(true);
         publishButton.setPrefWidth(150);
+        publishButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
+        publishButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
         gridPane.add(publishButton, 2, 9, 2, 1);
         GridPane.setHalignment(publishButton, HPos.CENTER);
         GridPane.setMargin(publishButton, new Insets(20,0,20,0));
         
+        // Add Update Game Button
+        Button updateButton = new Button("Update");
+        updateButton.setPrefHeight(60);
+        updateButton.setDefaultButton(true);
+        updateButton.setPrefWidth(150);
+        updateButton.setStyle("-fx-background-color: #008000;-fx-text-fill: #fff;");
+        updateButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
+        gridPane.add(updateButton, 2, 10, 2, 1);
+        GridPane.setHalignment(updateButton, HPos.CENTER);
+        GridPane.setMargin(updateButton, new Insets(20,0,20,0));
+      
         
         final int gameNrLevels = game.getNrLevels();
         updateButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -293,11 +314,11 @@ public class UpdateGamePage implements IPage {
                     	IPage availableGames = Block223Application.getPage(Pages.AvaliableGamesAdmin);
                     	availableGames.display();
     				} catch (InvalidInputException e) {
-    					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", e.getMessage());
+    					Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", e.getMessage());
     				}
                 	
                 } catch (NumberFormatException n) {
-                	showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", "Please enter only numbers in the numeric fields\n and ensure no fields are empty.");
+                	Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", "Please enter only numbers in the numeric fields\n and ensure no fields are empty.");
                 }
               
             }
@@ -319,11 +340,11 @@ public class UpdateGamePage implements IPage {
                     	IPage availableLevels = Block223Application.getPage(Pages.AvailableLevels);
                     	availableLevels.display();
     				} catch (InvalidInputException e) {
-    					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", e.getMessage());
+    					Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", e.getMessage());
     				}
                 	
                 } catch (NumberFormatException n) {
-                	showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", "Please enter only numbers in the numeric fields\n and ensure no fields are empty.");
+                	Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", "Please enter only numbers in the numeric fields\n and ensure no fields are empty.");
                 }
               
             }
@@ -345,11 +366,11 @@ public class UpdateGamePage implements IPage {
                     	IPage availableBlocks = Block223Application.getPage(Pages.AvailableBlocks);
                     	availableBlocks.display();
     				} catch (InvalidInputException e) {
-    					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", e.getMessage());
+    					Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", e.getMessage());
     				}
                 	
                 } catch (NumberFormatException n) {
-                	showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", "Please enter only numbers in the numeric fields\n and ensure no fields are empty.");
+                	Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", "Please enter only numbers in the numeric fields\n and ensure no fields are empty.");
                 }
               
             }
@@ -375,26 +396,46 @@ public class UpdateGamePage implements IPage {
                     	IPage availableGames = Block223Application.getPage(Pages.AvaliableGamesAdmin);
                     	availableGames.display();
     				} catch (InvalidInputException e) {
-    					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", e.getMessage());
+    					Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", e.getMessage());
     				}
                 	
                 } catch (NumberFormatException n) {
-                	showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", "Please enter only numbers in the numeric fields\n and ensure no fields are empty.");
+                	Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", "Please enter only numbers in the numeric fields\n and ensure no fields are empty.");
                 }
               
             }
         });
         
+        testButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                	int minSpeedX = Integer.parseInt(minSpeedXField.getText());
+                	int minSpeedY = Integer.parseInt(minSpeedYField.getText());
+                	double speedUpFactor = Double.parseDouble(speedUpField.getText());
+                	int maxLength = Integer.parseInt(maxLengthField.getText());
+                	int minLength = Integer.parseInt(minLengthField.getText());
+                	
+                	try {
+                    	Block223Controller.updateGame(gameNameField.getText(), gameNrLevels, spinner.getValue(), minSpeedX, minSpeedY, speedUpFactor, maxLength, minLength);
+    					Block223Persistence.save(Block223Application.getBlock223());
+                        
+                        // TODO: Add code to start testing a game
+    					// Block223Controller.testGame(ui);
+                        
+    				} catch (InvalidInputException e) {
+    					Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", e.getMessage());
+    				}
+                	
+                } catch (NumberFormatException n) {
+                	Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", "Please enter only numbers in the numeric fields\n and ensure no fields are empty.");
+                }
+              
+            }
+        });
+        
+        
 
-    }
-    
-    private void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.initOwner(owner);
-        alert.show();
     }
 
 }
