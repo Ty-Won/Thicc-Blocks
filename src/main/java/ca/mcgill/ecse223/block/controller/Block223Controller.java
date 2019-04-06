@@ -1331,4 +1331,8 @@ public class Block223Controller {
 		
 		return result;
 	}
+
+	public static int getPlayAreaSideLength() {
+		return Game.PLAY_AREA_SIDE;
+	}
 }
