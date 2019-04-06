@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 
 import ca.mcgill.ecse223.block.application.Block223Application;
 import ca.mcgill.ecse223.block.application.Block223Application.Pages;
+import ca.mcgill.ecse223.block.controller.TOHallOfFameEntry;
+import ca.mcgill.ecse223.block.view.Block223PlayModeInterface;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -13,14 +16,24 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-public class PlayGamePage implements IPage {
+public class PlayGamePage implements IPage, Block223PlayModeInterface {
 	Stage stage;
-	
+    
+
+    private static final char PAUSE_CHAR = ' ';
+    private static final char LEFT_CHAR = 'l';
+    private static final char RIGHT_CHAR = 'r';
+
+    // Stores the user's inputs
+    private StringBuilder inputQueue = new StringBuilder();
+    
 	public PlayGamePage(Stage stage) {
 		this.stage = stage;
 	}
@@ -34,30 +47,6 @@ public class PlayGamePage implements IPage {
         
         //Create an HBox to hold the back button at the top of the screen
         HBox hbButtons = new HBox();
-        
-        //Add Back Button, requires catch for file not found
-        try {
-        	FileInputStream backImageInput = new FileInputStream("Images/next.png");
-        	Image backImage = new Image(backImageInput); 
-            ImageView backImageView = new ImageView(backImage); 
-            backImageView.setFitHeight(60);
-            backImageView.setFitWidth(60);
-            
-            Button backButton = new Button("", backImageView);
-            backButton.setStyle("-fx-base: #92D3FC;");	//Styles the default background color of the button
-            hbButtons.getChildren().add(backButton);
-            hbButtons.setAlignment(Pos.CENTER_LEFT);
-            
-            backButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                	IPage availableGames = Block223Application.getPage(Pages.AvaliableGamesAdmin);
-                	availableGames.display();
-                }
-            });
-        } catch (FileNotFoundException e) {
-        	System.out.println("File not found");
-        }
 
         //Create a border pane which will hold the gridPane in the center of the screen and the HBox at the top
         BorderPane root = new BorderPane();
@@ -67,11 +56,31 @@ public class PlayGamePage implements IPage {
 	    
         // Create the scene with borderPane as the root node (since it contains everything else)
         Scene scene = new Scene(root, Block223Application.APPLICATION_WIDTH, Block223Application.APPLICATION_HEIGHT);
+
+        // Handle key events
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> 
+        {
+            // Pause
+            if(key.getCode() == KeyCode.SPACE) {
+                inputQueue.append(PAUSE_CHAR);
+            }
+            
+            // Left paddle
+            else if (key.getCode() == KeyCode.LEFT) {
+                inputQueue.append(LEFT_CHAR);
+            }
+
+            // Right paddle
+            else if (key.getCode() == KeyCode.RIGHT) {
+                inputQueue.append(RIGHT_CHAR);
+            }            
+        });
+
         // Set the scene and display it
         stage.setScene(scene);
         stage.show();
-	}
-
+    }
+    
 	private void addUIComponents(GridPane gridPane) {
 		// TODO Auto-generated method stub
 		
@@ -81,5 +90,24 @@ public class PlayGamePage implements IPage {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public String takeInputs() {
+
+        
+		return null;
+	}
+
+	@Override
+	public void refresh() {
+		
+	}
+
+	@Override
+	public void endGame(int nrOfLives, TOHallOfFameEntry hof) {
+		
+    }
+    
+    
 
 }
