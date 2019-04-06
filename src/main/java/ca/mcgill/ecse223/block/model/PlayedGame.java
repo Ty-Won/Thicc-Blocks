@@ -1139,7 +1139,7 @@ public class PlayedGame implements Serializable
           }
         }
       }
-      if(finalBP.getX() != newBallX && finalBP.getY() != newBallY) {
+      if(finalBP!=null && finalBP.getX() != newBallX && finalBP.getY() != newBallY) {
           finalBP.setHitBlock(block);
           return finalBP;
       }
@@ -1229,7 +1229,7 @@ public class PlayedGame implements Serializable
     int nrBlocks = numberOfBlocks();
     setBounce(null);
     
-    for(int i =0; i<numberOfBlocks()-1; i++){
+    for(int i =0; i<numberOfBlocks(); i++){
     	PlayedBlockAssignment block = getBlock(i);
     	BouncePoint bp = calculateBouncePointBlock(block);
     	BouncePoint bounce = getBounce();
