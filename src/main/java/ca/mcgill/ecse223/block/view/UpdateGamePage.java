@@ -261,9 +261,18 @@ public class UpdateGamePage implements IPage {
         updateButton.setPrefHeight(60);
         updateButton.setDefaultButton(true);
         updateButton.setPrefWidth(150);
-        gridPane.add(updateButton, 0, 9, 4, 1);
+        gridPane.add(updateButton, 0, 9, 2, 1);
         GridPane.setHalignment(updateButton, HPos.CENTER);
         GridPane.setMargin(updateButton, new Insets(20,0,20,0));
+
+        // Add Publish Game Button
+        Button publishButton = new Button("Publish");
+        publishButton.setPrefHeight(60);
+        publishButton.setDefaultButton(true);
+        publishButton.setPrefWidth(150);
+        gridPane.add(publishButton, 2, 9, 2, 1);
+        GridPane.setHalignment(publishButton, HPos.CENTER);
+        GridPane.setMargin(publishButton, new Insets(20,0,20,0));
         
         
         final int gameNrLevels = game.getNrLevels();
@@ -346,6 +355,37 @@ public class UpdateGamePage implements IPage {
             }
         });
         
+        publishButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                	int minSpeedX = Integer.parseInt(minSpeedXField.getText());
+                	int minSpeedY = Integer.parseInt(minSpeedYField.getText());
+                	double speedUpFactor = Double.parseDouble(speedUpField.getText());
+                	int maxLength = Integer.parseInt(maxLengthField.getText());
+                	int minLength = Integer.parseInt(minLengthField.getText());
+                	
+                	try {
+                    	Block223Controller.updateGame(gameNameField.getText(), gameNrLevels, spinner.getValue(), minSpeedX, minSpeedY, speedUpFactor, maxLength, minLength);
+    					Block223Persistence.save(Block223Application.getBlock223());
+                        
+                        // Publish the game
+                        Block223Controller.publishGame();
+                        
+                    	IPage availableGames = Block223Application.getPage(Pages.AvaliableGamesAdmin);
+                    	availableGames.display();
+    				} catch (InvalidInputException e) {
+    					showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", e.getMessage());
+    				}
+                	
+                } catch (NumberFormatException n) {
+                	showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", "Please enter only numbers in the numeric fields\n and ensure no fields are empty.");
+                }
+              
+            }
+        });
+        
+
     }
     
     private void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
