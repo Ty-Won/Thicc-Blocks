@@ -3,6 +3,7 @@ package ca.mcgill.ecse223.block.view;
 import java.util.Random;
 
 import ca.mcgill.ecse223.block.application.Block223Application;
+import ca.mcgill.ecse223.block.application.Block223Application.Pages;
 import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.GameThread;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
@@ -43,47 +44,49 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 
 	@Override
 	public void display() {
+		
+        //Create an HBox to hold the top bar
+        HBox topPane = new HBox();
 
-		// Create an HBox to hold the top bar
-		HBox topPane = new HBox();
+        initializeCanvas();
 
-		initializeCanvas();
 
-		// Create a border pane which will hold the gridPane in the center of the screen
-		// and the HBox at the top
-		BorderPane root = new BorderPane();
-		root.setPadding(new Insets(20)); // space between elements and window border
-		root.setTop(topPane);
-		root.setCenter(canvas);
+        //Create a border pane which will hold the gridPane in the center of the screen and the HBox at the top
+        BorderPane root = new BorderPane();
+	    root.setPadding(new Insets(20)); // space between elements and window border
+        root.setTop(topPane);
+        root.setCenter(canvas);
+	    
+        // Create the scene with borderPane as the root node (since it contains everything else)
+        Scene scene = new Scene(root, Block223Application.APPLICATION_WIDTH, Block223Application.APPLICATION_HEIGHT);
 
-		// Create the scene with borderPane as the root node (since it contains
-		// everything else)
-		Scene scene = new Scene(root, Block223Application.APPLICATION_WIDTH, Block223Application.APPLICATION_HEIGHT);
+        // Handle key events
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> 
+        {
+            // Pause
+            if(key.getCode() == KeyCode.SPACE) {
+                inputQueue.append(PAUSE_CHAR);
+                System.out.println("Space");
+                IPage pauseGame = Block223Application.getPage(Pages.PauseGame);
+            	pauseGame.display();
+            }
+            
+            // Left paddle
+            else if (key.getCode() == KeyCode.LEFT) {
+                inputQueue.append(LEFT_CHAR);
+                System.out.println("left");
+            }
 
-		// Handle key events
-		scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
-			// Pause
-			if (key.getCode() == KeyCode.SPACE) {
-				inputQueue.append(PAUSE_CHAR);
-				System.out.println("Space");
-			}
+            // Right paddle
+            else if (key.getCode() == KeyCode.RIGHT) {
+                inputQueue.append(RIGHT_CHAR);
+                System.out.println("right");
+            }            
+        });
 
-			// Left paddle
-			else if (key.getCode() == KeyCode.LEFT) {
-				inputQueue.append(LEFT_CHAR);
-				System.out.println("left");
-			}
-
-			// Right paddle
-			else if (key.getCode() == KeyCode.RIGHT) {
-				inputQueue.append(RIGHT_CHAR);
-				System.out.println("right");
-			}
-		});
-
-		// Ensure we can get the current playable game before starting
-		try {
-			Block223Controller.getCurrentPlayableGame();
+         // Ensure we can get the current playable game before starting
+         try {
+            Block223Controller.getCurrentPlayableGame();
 		} catch (InvalidInputException e) {
 			Components.showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
 			return;
