@@ -120,8 +120,8 @@ class PlayedGame {
 		  Double solY1 = (m * solX1) + c;
 		  Double solY2 = (m * solX2) + c;
 		  
-		  if (!Double.isNaN(solX1) && !Double.isNaN(solY1) && Math.min(oldBallX, newBallX) <= solX1 && solX1 <= Math.max(oldBallX,  newBallX)
-        		  && Math.min(oldBallY, newBallY) <= solY1 && solY1 <= Math.max(oldBallY, newBallY)) {
+		  if (!Double.isNaN(solX1) && !Double.isNaN(solY1) && Math.min(oldBallX, newBallX)-0.000001 <= solX1 && solX1 <= Math.max(oldBallX,  newBallX)+0.000001
+        		  && Math.min(oldBallY, newBallY)-0.000001 <= solY1 && solY1 <= Math.max(oldBallY, newBallY)+0.000001) {
 			  BouncePoint zone1;
 			  if (oldDirX >= 0) {
 				  if (isLeftCorner) {
@@ -144,8 +144,8 @@ class PlayedGame {
 			  }
 		  }
 		  
-		  if (!Double.isNaN(solX2) && !Double.isNaN(solY2) && Math.min(oldBallX, newBallX) <= solX2 && solX2 <= Math.max(oldBallX,  newBallX)
-        		  && Math.min(oldBallY, newBallY) <= solY2 && solY2 <= Math.max(oldBallY, newBallY)) {
+		  if (!Double.isNaN(solX2) && !Double.isNaN(solY2) && Math.min(oldBallX, newBallX)-0.000001 <= solX2 && solX2 <= Math.max(oldBallX,  newBallX)+0.000001
+        		  && Math.min(oldBallY, newBallY)-0.000001 <= solY2 && solY2 <= Math.max(oldBallY, newBallY)+0.000001) {
 			  BouncePoint zone2;
 			  if (oldDirX >= 0) {
 				  if (isLeftCorner) {
@@ -260,9 +260,9 @@ class PlayedGame {
       { 
           double intersectX = (b2*c1 - b1*c2)/determinant; 
           double intersectY = (a1*c2 - a2*c1)/determinant; 
-          if (Math.min(AX, BX) <= intersectX && intersectX <= Math.max(AX,  BX) && Math.min(AY, BY) <= intersectY && intersectY <= Math.max(AY, BY)
-        		  && Math.min(CX, DX) <= intersectX && intersectX <= Math.max(CX,  DX)
-        		  && Math.min(CY, DY) <= intersectY && intersectY <= Math.max(CY, DY)) {
+          if (Math.min(AX, BX)-0.000001 <= intersectX && intersectX <= Math.max(AX,  BX)+0.000001 && Math.min(AY, BY)-0.000001 <= intersectY && intersectY <= Math.max(AY, BY)+0.000001
+        		  && Math.min(CX, DX)-0.000001 <= intersectX && intersectX <= Math.max(CX,  DX)+0.000001
+        		  && Math.min(CY, DY)-0.000001 <= intersectY && intersectY <= Math.max(CY, DY)+0.000001) {
         	  BouncePoint bp = new BouncePoint(intersectX, intersectY, bd);
         	  return bp;
           }

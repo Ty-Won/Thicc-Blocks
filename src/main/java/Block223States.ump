@@ -82,8 +82,8 @@ class PlayedGame {
     Double ballDirX = this.ballDirectionX;
     Double ballDirY = this.ballDirectionY;
 
-    Double newBallX = this.currentBallX + ballDirX;
-    Double newBallY = this.currentBallY + ballDirY;
+    Double newBallX = oldBallX  + ballDirX;
+    Double newBallY = oldBallY + ballDirY;
 
     Double blockX = Double.valueOf(block.getX());
     Double blockY = Double.valueOf(block.getY());
@@ -102,7 +102,7 @@ class PlayedGame {
       BouncePoint zoneC = checkLineIntersections(oldBallX, oldBallY, newBallX, newBallY, blockX+ballRadius+blockSize, blockY, blockX+ballRadius+blockSize, blockY+blockSize, BounceDirection.FLIP_X);
 
       //bottom
-      BouncePoint zoneD = checkLineIntersections(oldBallX, oldBallY, newBallX, newBallY, blockX, blockY-blockSize-ballRadius, blockX+blockSize, blockY-blockSize-ballRadius, BounceDirection.FLIP_Y);
+      BouncePoint zoneD = checkLineIntersections(oldBallX, oldBallY, newBallX, newBallY, blockX, blockY+blockSize+ballRadius, blockX+blockSize, blockY+blockSize+ballRadius, BounceDirection.FLIP_Y);
 
       // Circle equation: (x-a)^2 + (y-b)^2 = r^2
       Double a;
@@ -148,10 +148,13 @@ class PlayedGame {
           }
         }
       }
-      return finalBP;
-    } else {
-      return null;
+      if(finalBP!=null && (Math.abs(finalBP.getX() - newBallX)>0.000001 && Math.abs(finalBP.getY() - newBallY)>0.000001)) {
+          finalBP.setHitBlock(block);
+          return finalBP;
+      }
     }
+    return null;
+
 
 
   };
@@ -216,7 +219,7 @@ class PlayedGame {
       double deltaDistFirst = euclideanDistance(xPos, yPos, first.getX(), first.getY());
       double deltaDistSecond = euclideanDistance(xPos, yPos, second.getX(), second.getY());
 
-      if (deltaDistFirst >= deltaDistSecond) {
+      if (deltaDistFirst <= deltaDistSecond) {
         return true;
       } else {
         return false;
@@ -235,7 +238,7 @@ class PlayedGame {
     int nrBlocks = numberOfBlocks();
     setBounce(null);
     
-    for(int i =0; i<numberOfBlocks()-1; i++){
+    for(int i =0; i<numberOfBlocks(); i++){
     	PlayedBlockAssignment block = getBlock(i);
     	BouncePoint bp = calculateBouncePointBlock(block);
     	BouncePoint bounce = getBounce();
