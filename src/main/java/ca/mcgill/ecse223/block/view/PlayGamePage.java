@@ -67,8 +67,6 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
             if(key.getCode() == KeyCode.SPACE) {
                 inputQueue.append(PAUSE_CHAR);
                 System.out.println("Space");
-                IPage pauseGame = Block223Application.getPage(Pages.PauseGame);
-            	pauseGame.display();
             }
             
             // Left paddle

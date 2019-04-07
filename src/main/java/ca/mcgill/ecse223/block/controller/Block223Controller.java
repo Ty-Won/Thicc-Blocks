@@ -798,8 +798,9 @@ public class Block223Controller {
 			}
 
 			long duration = java.lang.System.currentTimeMillis() - startTime;
+			
 			try {
-				Thread.sleep(Math.abs(17 - duration));
+				Thread.sleep((long) Math.abs(game.getWaitTime() - duration));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

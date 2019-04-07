@@ -44,7 +44,7 @@ public class GameThread extends Thread {
         				// Normally I would look into this more but tbh
         				// it works so I'm just going to leave it
         				try {
-							Thread.sleep(10);
+							Thread.sleep(1);
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
