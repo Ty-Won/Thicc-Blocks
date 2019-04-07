@@ -126,7 +126,15 @@ public class PauseGamePage implements IPage{
         playButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-            	System.out.println("hello");
+//                try {
+//                    Block223Controller.selectPlayableGame(selectedGame.getName(), selectedGame.getNumber());
+//                } catch (InvalidInputException e) {
+//                    Components.showAlert(Alert.AlertType.INFORMATION, gridPane.getScene().getWindow(), "Play Game" , e.getMessage());
+//                    return;
+//                }
+                
+                IPage playGame = Block223Application.getPage(Pages.PlayGame);
+            	playGame.display();
             }
         });
 

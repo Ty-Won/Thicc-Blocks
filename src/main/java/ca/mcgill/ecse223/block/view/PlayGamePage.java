@@ -3,6 +3,7 @@ package ca.mcgill.ecse223.block.view;
 import java.util.Random;
 
 import ca.mcgill.ecse223.block.application.Block223Application;
+import ca.mcgill.ecse223.block.application.Block223Application.Pages;
 import ca.mcgill.ecse223.block.controller.Block223Controller;
 import ca.mcgill.ecse223.block.controller.GameThread;
 import ca.mcgill.ecse223.block.controller.InvalidInputException;
@@ -67,6 +68,8 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
             if(key.getCode() == KeyCode.SPACE) {
                 inputQueue.append(PAUSE_CHAR);
                 System.out.println("Space");
+                IPage pauseGame = Block223Application.getPage(Pages.PauseGame);
+            	pauseGame.display();
             }
             
             // Left paddle
