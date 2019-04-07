@@ -26,12 +26,13 @@ import javafx.stage.Stage;
 
 public class PlayGamePage implements IPage, Block223PlayModeInterface {
 
+
 	private Stage stage;
 
 	private Canvas canvas;
 	private GraphicsContext gc;
-	
 	TOCurrentlyPlayedGame game;
+	private Boolean isTest;
 
 	private static final char PAUSE_CHAR = ' ';
 	private static final char LEFT_CHAR = 'l';
@@ -42,6 +43,11 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 
 	public PlayGamePage(Stage stage) {
 		this.stage = stage;
+		this.isTest = false;
+	}
+	
+	public void setIsTest(Boolean val) {
+		this.isTest = val;
 	}
 
 	@Override
@@ -154,7 +160,8 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 
 	@Override
 	public void endGame(int nrOfLives, TOHallOfFameEntry hof) {
-
+  	  IPage availableGames = Block223Application.getPage(Pages.AvaliableGamesPlayer);
+  	  availableGames.display();
 	}
 
 	/**
