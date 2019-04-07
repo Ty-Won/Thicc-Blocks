@@ -776,10 +776,13 @@ public class Block223Controller {
 
 		game.play();
 		ui.takeInputs();
+		
+		long startTime;
 
 		// Game loop
 		while (game.getPlayStatus() == PlayStatus.Moving) {
-
+			startTime = java.lang.System.currentTimeMillis();
+			
 			String userInputs = ui.takeInputs();
 			updatePaddlePosition(userInputs);
 
@@ -790,9 +793,11 @@ public class Block223Controller {
 				game.pause();
 				System.out.println("Pause - startGame");
 			}
-
+			
+			long duration = java.lang.System.currentTimeMillis() - startTime;
+			System.out.println(duration);
 			try {
-				Thread.sleep((long) game.getWaitTime());
+				Thread.sleep(Math.abs(17 - duration));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
