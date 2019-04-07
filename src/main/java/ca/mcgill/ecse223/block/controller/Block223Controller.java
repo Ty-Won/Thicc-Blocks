@@ -6,7 +6,9 @@ import ca.mcgill.ecse223.block.model.*;
 import ca.mcgill.ecse223.block.model.PlayedGame.PlayStatus;
 import ca.mcgill.ecse223.block.persistence.Block223Persistence;
 import ca.mcgill.ecse223.block.view.Block223PlayModeInterface;
+import ca.mcgill.ecse223.block.view.IPage;
 import ca.mcgill.ecse223.block.application.*;
+import ca.mcgill.ecse223.block.application.Block223Application.Pages;
 import ca.mcgill.ecse223.block.controller.TOUserMode.Mode;
 
 public class Block223Controller {
@@ -776,13 +778,13 @@ public class Block223Controller {
 
 		game.play();
 		ui.takeInputs();
-		
+
 		long startTime;
 
 		// Game loop
 		while (game.getPlayStatus() == PlayStatus.Moving) {
 			startTime = java.lang.System.currentTimeMillis();
-			
+
 			String userInputs = ui.takeInputs();
 			updatePaddlePosition(userInputs);
 
@@ -793,9 +795,8 @@ public class Block223Controller {
 				game.pause();
 				System.out.println("Pause - startGame");
 			}
-			
+
 			long duration = java.lang.System.currentTimeMillis() - startTime;
-			System.out.println(duration);
 			try {
 				Thread.sleep(Math.abs(17 - duration));
 			} catch (InterruptedException e) {
@@ -807,16 +808,21 @@ public class Block223Controller {
 
 		if (game.getPlayStatus() == PlayStatus.GameOver) {
 			Block223Application.setCurrentPlayableGame(null);
+			
+			// TODO: switch this to HOF page once that's done
+			IPage availableGames = Block223Application.getPage(Pages.AvaliableGamesPlayer);
+			availableGames.display();
 		} else if (game.getPlayer() != null) {
+			game.setBounce(null);
 
-			// NOTE: The game is saved here instead of in the state machine to avoid dependency
+			// NOTE: The game is saved here instead of in the state machine to avoid
+			// dependency
 			// of the Model package on the Application and Persistence packages
 			Block223 block223 = Block223Application.getBlock223();
 			Block223Persistence.save(block223);
 		}
 
 	}
-
 	/**
 	 * Moves the paddle one PlayedGame.PADDLE_MOVE_LEFT to the left for each l
 	 * in the userInputs before a space. Same for the right movement.
