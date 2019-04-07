@@ -30,6 +30,8 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 
 	private Canvas canvas;
 	private GraphicsContext gc;
+	
+	TOCurrentlyPlayedGame game;
 
 	private static final char PAUSE_CHAR = ' ';
 	private static final char LEFT_CHAR = 'l';
@@ -44,7 +46,12 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 
 	@Override
 	public void display() {
-		
+		try {
+			this.game = Block223Controller.getCurrentPlayableGame();
+		} catch (InvalidInputException e) {
+			e.printStackTrace();
+			return;
+		}
         //Create an HBox to hold the top bar
         HBox topPane = new HBox();
 
