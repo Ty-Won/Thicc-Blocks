@@ -7,6 +7,7 @@ import ca.mcgill.ecse223.block.model.PlayedGame.PlayStatus;
 import ca.mcgill.ecse223.block.persistence.Block223Persistence;
 import ca.mcgill.ecse223.block.view.Block223PlayModeInterface;
 import ca.mcgill.ecse223.block.view.IPage;
+import javafx.application.Platform;
 import ca.mcgill.ecse223.block.application.*;
 import ca.mcgill.ecse223.block.application.Block223Application.Pages;
 import ca.mcgill.ecse223.block.controller.TOUserMode.Mode;
@@ -810,8 +811,12 @@ public class Block223Controller {
 			Block223Application.setCurrentPlayableGame(null);
 			
 			// TODO: switch this to HOF page once that's done
-			IPage availableGames = Block223Application.getPage(Pages.AvaliableGamesPlayer);
-			availableGames.display();
+			new Thread(() -> {
+			      Platform.runLater(() -> { 
+			    	  IPage availableGames = Block223Application.getPage(Pages.AvaliableGamesPlayer);
+			    	  availableGames.display();
+			      });   
+			}).start();
 		} else if (game.getPlayer() != null) {
 			game.setBounce(null);
 
