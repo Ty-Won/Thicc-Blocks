@@ -121,7 +121,8 @@ public class AvailableGamesPlayer implements IPage {
     	        FXCollections.observableArrayList();
     	
     	List<TOPlayableGame> games = Block223Controller.getPlayableGames();
-    	
+        System.out.println(games.size());
+        
     	for(TOPlayableGame game : games) {
     		data.add(game.getName());
     	}
@@ -152,16 +153,16 @@ public class AvailableGamesPlayer implements IPage {
             		Components.showAlert(Alert.AlertType.INFORMATION, gridPane.getScene().getWindow(), "Play Game" , "Please select a game to play");
             	} else {
 	            	TOPlayableGame selectedGame = games.get(selectedIndex);
-	            	int selectedGameId = selectedGame.getNumber();
-	            	PlayedGame selectedPlayedGame = null;
-	            	if (selectedGameId == -1) { // game id is -1 if playedGame doesn't exist yet
-	            		Game game = Block223Controller.getGameByName(selectedGame.getName());
-	            		selectedPlayedGame = new PlayedGame(Block223Application.getCurrentUser().getUsername(), game, Block223Application.getBlock223());
-	            	} else {
-	            		selectedPlayedGame = Block223Application.getBlock223().findPlayableGame(selectedGameId);
-	            	}
-	            	Block223Application.setCurrentPlayableGame(selectedPlayedGame);
-	            	// TODO: Add transition to game playing page 
+	            	
+                    try {
+                        Block223Controller.selectPlayableGame(selectedGame.getName(), selectedGame.getNumber());
+                    } catch (InvalidInputException e) {
+                        Components.showAlert(Alert.AlertType.INFORMATION, gridPane.getScene().getWindow(), "Play Game" , e.getMessage());
+                        return;
+                    }
+                    
+                    IPage playGame = Block223Application.getPage(Pages.PlayGame);
+                	playGame.display();
             	}
             } 
         });

@@ -776,10 +776,13 @@ public class Block223Controller {
 
 		game.play();
 		ui.takeInputs();
+		
+		long startTime;
 
 		// Game loop
 		while (game.getPlayStatus() == PlayStatus.Moving) {
-
+			startTime = java.lang.System.currentTimeMillis();
+			
 			String userInputs = ui.takeInputs();
 			updatePaddlePosition(userInputs);
 
@@ -788,10 +791,13 @@ public class Block223Controller {
 			// Pause game
 			if (userInputs.contains(" ")) {
 				game.pause();
+				System.out.println("Pause - startGame");
 			}
-
+			
+			long duration = java.lang.System.currentTimeMillis() - startTime;
+			System.out.println(duration);
 			try {
-				Thread.sleep((long) game.getWaitTime());
+				Thread.sleep(Math.abs(17 - duration));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -1139,7 +1145,7 @@ public class Block223Controller {
 		Block223 block223 = Block223Application.getBlock223();
 		UserRole userRole = Block223Application.getCurrentUserRole();
 
-		// User must be admin
+		// User must be player
 		if(!(userRole instanceof Player)) {
 			throw new InvalidInputException("Player privileges are required to play a game.");
 		}
@@ -1330,5 +1336,9 @@ public class Block223Controller {
 		}
 		
 		return result;
+	}
+
+	public static int getPlayAreaSideLength() {
+		return Game.PLAY_AREA_SIDE;
 	}
 }

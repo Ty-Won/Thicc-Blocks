@@ -292,8 +292,8 @@ public class EditLevelPage implements IPage {
      */
     private GridPane createBlockPlacementUI() {
         GridPane grid = new GridPane();
-        grid.setPrefWidth(390);
-        grid.setPrefHeight(390);
+        grid.setPrefWidth(Block223Controller.getPlayAreaSideLength());
+        grid.setPrefHeight(Block223Controller.getPlayAreaSideLength());
         grid.setHgap(5);
         grid.setVgap(2);
         grid.setPadding(new Insets(0, 10, 0, 10));

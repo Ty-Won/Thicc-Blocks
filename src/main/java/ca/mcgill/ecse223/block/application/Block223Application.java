@@ -23,8 +23,11 @@ import ca.mcgill.ecse223.block.view.RegisterPage;
 import ca.mcgill.ecse223.block.view.UpdateBlockPage;
 import ca.mcgill.ecse223.block.view.UpdateGamePage;
 import ca.mcgill.ecse223.block.view.WelcomePage;
+import ca.mcgill.ecse223.block.view.PlayGamePage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import ca.mcgill.ecse223.block.controller.*;
 
@@ -32,9 +35,21 @@ public class Block223Application extends Application {
 
 	public static final int APPLICATION_WIDTH = 1000;
 	public static final int APPLICATION_HEIGHT = 800;
-
+	
 	public enum Pages {
-		Login, Welcome, AvaliableGamesAdmin, AvaliableGamesPlayer,  CreateGame, UpdateGame, EditLevel, AvailableLevels, Register, UpdateBlock, AvailableBlocks, CreateBlock
+		Login, 
+		Welcome, 
+		AvaliableGamesAdmin, 
+		AvaliableGamesPlayer,  
+		CreateGame, 
+		UpdateGame, 
+		EditLevel, 
+		AvailableLevels, 
+		Register, 
+		UpdateBlock, 
+		AvailableBlocks, 
+		CreateBlock,
+		PlayGame
 	}
 
 	private static HashMap<Pages, IPage> pageMap;
@@ -63,8 +78,29 @@ public class Block223Application extends Application {
 		}
 		*/
 		
+		// try {
+		// 	Block223Controller.register("user", "player", "admin");
+		// 	Block223Controller.login("user", "admin");
+		// 	Block223Controller.createGame("Game 1");
+		// 	Block223Controller.selectGame("Game 1");
+		// 	Block223Controller.setGameDetails(4, 5, 4, 4, 4, 10, 4);
+		// 	Block223Controller.publishGame();
+		// 	Block223Controller.logout();
+		// 	Block223Controller.login("user", "player");
+		// } catch (InvalidInputException e1) {
+		// 	// TODO Auto-generated catch block
+		// 	e1.printStackTrace();
+		// }
+		
+
+		// IPage playGame = Block223Application.getPage(Pages.PlayGame);
+		// playGame.display();
+
 		IPage login = Block223Application.getPage(Pages.Login);
 		login.display();
+
+		
+
 	}
 
 	public static IPage getPage(Pages page) {
@@ -107,6 +143,9 @@ public class Block223Application extends Application {
 			case CreateBlock:
 				newPage = new CreateBlockPage(Block223Application.stage);
 				break;
+			case PlayGame:
+				newPage = new PlayGamePage(Block223Application.stage);
+				break;
 			}
 
 			pageMap.put(page, newPage);
@@ -127,6 +166,7 @@ public class Block223Application extends Application {
 		pageMap.put(Pages.Register, new RegisterPage(stage));
 		pageMap.put(Pages.UpdateBlock, new UpdateBlockPage(stage));
 		pageMap.put(Pages.AvailableBlocks, new AvailableBlocksPage(stage));
+		pageMap.put(Pages.PlayGame, new PlayGamePage(stage));
 	}
 
 	public static void main(String[] args) {
