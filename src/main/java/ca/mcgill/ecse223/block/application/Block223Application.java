@@ -24,6 +24,7 @@ import ca.mcgill.ecse223.block.view.UpdateBlockPage;
 import ca.mcgill.ecse223.block.view.UpdateGamePage;
 import ca.mcgill.ecse223.block.view.WelcomePage;
 import ca.mcgill.ecse223.block.view.PlayGamePage;
+import ca.mcgill.ecse223.block.view.PauseGamePage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +50,8 @@ public class Block223Application extends Application {
 		UpdateBlock, 
 		AvailableBlocks, 
 		CreateBlock,
-		PlayGame
+		PlayGame,
+		PauseGame
 	}
 
 	private static HashMap<Pages, IPage> pageMap;
@@ -64,19 +66,20 @@ public class Block223Application extends Application {
 	public void start(Stage stage) {
 		Block223Application.stage = stage;
 
-		/*
-		try {
-			// Block223Controller.register("Michael", "abc", "123");
-			// Block223Controller.login("Michael", "123");
-
-			// //Block223Controller.createGame("Game 1");
-			// //Block223Controller.createGame("ANother one");
-			//Block223Controller.selectGame("wow");
-			currentGame.addBlock(1, 2, 3, 3);
-		} catch (InvalidInputException e) {
-			Components.showAlert(AlertType.INFORMATION, stage.getOwner(), "", "throw in start:\n" + e.getMessage());
-		}
-		*/
+		
+//		try {
+////			Block223Controller.register("test", "test", "test123");
+//			Block223Controller.login("test", "test");
+//
+//			// //Block223Controller.createGame("Game 1");
+//			// //Block223Controller.createGame("ANother one");
+//			//Block223Controller.selectGame("wow");
+////			currentGame.addBlock(1, 2, 3, 3);
+//			Block223Controller.selectPlayableGame("Test game name 1", 0);
+//		} catch (InvalidInputException e) {
+//			Components.showAlert(AlertType.INFORMATION, stage.getOwner(), "", "throw in start:\n" + e.getMessage());
+//		}
+		
 		
 		// try {
 		// 	Block223Controller.register("user", "player", "admin");
@@ -92,9 +95,6 @@ public class Block223Application extends Application {
 		// 	e1.printStackTrace();
 		// }
 		
-
-		// IPage playGame = Block223Application.getPage(Pages.PlayGame);
-		// playGame.display();
 
 		IPage login = Block223Application.getPage(Pages.Login);
 		login.display();
@@ -146,13 +146,17 @@ public class Block223Application extends Application {
 			case PlayGame:
 				newPage = new PlayGamePage(Block223Application.stage);
 				break;
+			case PauseGame:
+				newPage = new PauseGamePage(Block223Application.stage);
+				break;
 			}
-
 			pageMap.put(page, newPage);
 			return newPage;
-		} else
+		} else {
 			return pageMap.get(page);
+		}
 	}
+		
 
 	public void initPages(Stage stage) {
 		pageMap = new HashMap<Pages, IPage>();
@@ -167,6 +171,7 @@ public class Block223Application extends Application {
 		pageMap.put(Pages.UpdateBlock, new UpdateBlockPage(stage));
 		pageMap.put(Pages.AvailableBlocks, new AvailableBlocksPage(stage));
 		pageMap.put(Pages.PlayGame, new PlayGamePage(stage));
+		pageMap.put(Pages.PauseGame, new PauseGamePage(stage));
 	}
 
 	public static void main(String[] args) {
