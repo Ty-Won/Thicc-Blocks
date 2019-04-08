@@ -9,9 +9,15 @@ import javafx.scene.control.Alert;
 
 public class GameThread extends Thread {
 	Block223PlayModeInterface ui;
+	Boolean running;
 	
 	public GameThread(Block223PlayModeInterface ui) {
 		this.ui = ui;
+		this.running = true;
+	}
+	
+	public void setRunning(Boolean status) {
+		this.running = status;
 	}
 	
 	public void run() {
@@ -30,12 +36,12 @@ public class GameThread extends Thread {
         try {
         	PlayedGame game = Block223Application.getCurrentPlayableGame();
         	
-        	while(game.getPlayStatus() != PlayStatus.GameOver) {
+        	while(game.getPlayStatus() != PlayStatus.GameOver && running) {
         		Block223Controller.startGame(ui);
         		
         		if(game.getPlayStatus() == PlayStatus.Paused) {
         			System.out.println("In GameThread Paused");
-        			while(true) {
+        			while(running) {
         				String userInputs = ui.takeInputs();
         				
         				
@@ -60,6 +66,8 @@ public class GameThread extends Thread {
         	}
 		} catch (InvalidInputException e) {
             Components.showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
-        }   
+        }
+        
+        System.out.println("Game Thread Exiting");
 	}
 }

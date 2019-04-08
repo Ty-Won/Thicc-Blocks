@@ -1,5 +1,7 @@
 package ca.mcgill.ecse223.block.view;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Random;
 
 import ca.mcgill.ecse223.block.application.Block223Application;
@@ -10,13 +12,19 @@ import ca.mcgill.ecse223.block.controller.InvalidInputException;
 import ca.mcgill.ecse223.block.controller.TOCurrentBlock;
 import ca.mcgill.ecse223.block.controller.TOCurrentlyPlayedGame;
 import ca.mcgill.ecse223.block.controller.TOHallOfFameEntry;
+import ca.mcgill.ecse223.block.model.PlayedGame;
 import ca.mcgill.ecse223.block.view.Block223PlayModeInterface;
-
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -31,7 +39,8 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 
 	private Canvas canvas;
 	private GraphicsContext gc;
-	TOCurrentlyPlayedGame game;
+	private TOCurrentlyPlayedGame game;
+	private GameThread gameThread;
 	private Boolean isTest;
 
 	private static final char PAUSE_CHAR = ' ';
@@ -60,7 +69,33 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 		}
         //Create an HBox to hold the top bar
         HBox topPane = new HBox();
-
+        //Add Back Button, requires catch for file not found
+        try {
+        	FileInputStream backImageInput = new FileInputStream("Images/next.png");
+        	Image backImage = new Image(backImageInput); 
+            ImageView backImageView = new ImageView(backImage); 
+            backImageView.setFitHeight(60);
+            backImageView.setFitWidth(60);
+            
+            Button backButton = new Button("", backImageView);
+            backButton.setStyle("-fx-base: #92D3FC;");	//Styles the default background color of the button
+            topPane.getChildren().add(backButton);
+            topPane.setAlignment(Pos.CENTER_LEFT);
+            
+            backButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                	gameThread.setRunning(false);
+                	
+                	IPage availGames = Block223Application.getPage(Pages.AvaliableGamesPlayer);
+                	availGames.display();
+                }
+            });
+            backButton.setFocusTraversable(false);
+        } catch (FileNotFoundException e) {
+        	System.out.println("File not found");
+        }
+        
         initializeCanvas();
 
 
@@ -103,7 +138,7 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 			return;
 		}
 
-		GameThread gameThread = new GameThread(this);
+		gameThread = new GameThread(this);
 		gameThread.setDaemon(true);
 		gameThread.start();
 
