@@ -187,6 +187,7 @@ public class LoginPage implements IPage {
               
             }
         });
+        loginButton.setDefaultButton(true);
         
         createUserButon.setOnAction(new EventHandler<ActionEvent>() {
             @Override

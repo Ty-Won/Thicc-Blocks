@@ -161,8 +161,9 @@ public class AvailableGamesPlayer implements IPage {
                         return;
                     }
                     
-                    IPage playGame = Block223Application.getPage(Pages.PlayGame);
-                	playGame.display();
+					PlayGamePage playGame = (PlayGamePage) Block223Application.getPage(Pages.PlayGame);
+					playGame.setIsTest(false);
+					playGame.display();
             	}
             } 
         });

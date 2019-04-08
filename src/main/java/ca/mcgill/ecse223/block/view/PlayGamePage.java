@@ -31,6 +31,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -155,27 +156,18 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 			return;
 		}
 
-		gc.setFill(Color.GREEN);
 		gc.setStroke(Color.BLUE);
 		gc.setLineWidth(5);
 
-		Random rand = new Random();
-		for (TOCurrentBlock block : game.getBlocks()) {
-			gc.fillRect(block.getX(), block.getY(), 20, 20);
-		}
+		drawBlocks();
 
+		gc.setFill(Color.BLACK);
 		gc.fillRect(game.getCurrentPaddleX(), Block223Controller.getPlayAreaSideLength() - 30, 20, 5);
 
 		gc.fillOval(game.getCurrentBallX(), game.getCurrentBallY(), 5.0, 5.0);
 
         gc.fillText("Lives: " + game.getLives(), 0, 300);
         gc.fillText(game.getPaused() ? "PAUSED" : "", 150, 300);
-
-        
-        
-        //livesText.setText("Lives: " + game.getLives());
-        //pauseText.setText(game.getPaused() ? "PAUSED" : "");
-		//System.out.println("refresh!");
 	}
 
 	@Override
@@ -211,14 +203,28 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 			return;
 		}
 
-		gc.setFill(Color.GREEN);
+		
 		gc.setStroke(Color.BLUE);
 		gc.setLineWidth(5);
 
+		drawBlocks();
+	}
+	
+	private void drawBlocks() {
+		
+		TOCurrentlyPlayedGame game;
+
+		try {
+			game = Block223Controller.getCurrentPlayableGame();
+		} catch (InvalidInputException e) {
+			e.printStackTrace();
+			return;
+		}
+		
 		for (TOCurrentBlock block : game.getBlocks()) {
+			gc.setFill(Color.color(block.getRed()/255.0,block.getGreen()/255.0,block.getBlue()/255.0));
 			gc.fillRect(block.getX(), block.getY(), 20, 20);
 		}
-
 	}
 	
 	private void initializeTopPane(HBox topPane) {

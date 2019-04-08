@@ -418,8 +418,9 @@ public class UpdateGamePage implements IPage {
                     	Block223Controller.updateGame(gameNameField.getText(), gameNrLevels, spinner.getValue(), minSpeedX, minSpeedY, speedUpFactor, maxLength, minLength);
     					Block223Persistence.save(Block223Application.getBlock223());
                         
-                        // TODO: Add code to start testing a game
-    					// Block223Controller.testGame(ui);
+    					PlayGamePage playGame = (PlayGamePage) Block223Application.getPage(Pages.PlayGame);
+    					playGame.setIsTest(true);
+    					playGame.display();
                         
     				} catch (InvalidInputException e) {
     					Components.showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Update Game Error", e.getMessage());
