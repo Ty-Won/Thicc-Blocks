@@ -385,16 +385,18 @@ public class Block223Controller {
 			// for each loop to check all blocks in a game and compare them with the block
 			// being updated
 			for (Block blocks : game.getBlocks()) {
-				if (blocks.getRed() != red && blocks.getGreen() != green && block.getBlue() != blue) {
-					block.setRed(red);
-					block.setGreen(green);
-					block.setBlue(blue);
-					block.setPoints(points);
-				} else {
-					throw new InvalidInputException("A block with the same color already exists for the game.");
+				if (block != blocks) {
+					if (blocks.getRed() == red && blocks.getGreen() == green && blocks.getBlue() == blue) {
+						throw new InvalidInputException("A block with the same color already exists for the game.");
+					}
 				}
 			}
-		} else {
+			block.setRed(red);
+			block.setGreen(green);
+			block.setBlue(blue);
+			block.setPoints(points);
+		} 
+		else {
 			throw new InvalidInputException("The block does not exist.");
 		}
 
