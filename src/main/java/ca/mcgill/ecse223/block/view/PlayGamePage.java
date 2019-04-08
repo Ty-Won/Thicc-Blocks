@@ -159,15 +159,7 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 		gc.setStroke(Color.BLUE);
 		gc.setLineWidth(5);
 
-		drawBlocks();
-
-		gc.setFill(Color.BLACK);
-		gc.fillRect(game.getCurrentPaddleX(), Block223Controller.getPlayAreaSideLength() - 30, 20, 5);
-
-		gc.fillOval(game.getCurrentBallX(), game.getCurrentBallY(), 5.0, 5.0);
-
-        gc.fillText("Lives: " + game.getLives(), 0, 300);
-        gc.fillText(game.getPaused() ? "PAUSED" : "", 150, 300);
+		drawEntities();
 	}
 
 	@Override
@@ -207,10 +199,10 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 		gc.setStroke(Color.BLUE);
 		gc.setLineWidth(5);
 
-		drawBlocks();
+		drawEntities();
 	}
 	
-	private void drawBlocks() {
+	private void drawEntities() {
 		
 		TOCurrentlyPlayedGame game;
 
@@ -225,6 +217,19 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 			gc.setFill(Color.color(block.getRed()/255.0,block.getGreen()/255.0,block.getBlue()/255.0));
 			gc.fillRect(block.getX(), block.getY(), 20, 20);
 		}
+		
+		
+		gc.setFill(Color.BLACK);
+		gc.fillRect(game.getCurrentPaddleX(), Block223Controller.getPlayAreaSideLength() - 30, 20, 5);
+		
+		gc.fillRect(0, 0, 1, Block223Controller.getPlayAreaSideLength()); // left border
+		gc.fillRect(0, 0, Block223Controller.getPlayAreaSideLength(), 1); // top border
+		gc.fillRect(Block223Controller.getPlayAreaSideLength() - 1, 0, 1, Block223Controller.getPlayAreaSideLength()); // right border
+
+		gc.fillOval(game.getCurrentBallX(), game.getCurrentBallY(), 5.0, 5.0);
+
+        gc.fillText("Lives: " + game.getLives(), 0, 300);
+        gc.fillText(game.getPaused() ? "PAUSED" : "", 150, 300);
 	}
 	
 	private void initializeTopPane(HBox topPane) {
