@@ -1286,7 +1286,7 @@ public class PlayedGame implements Serializable
     int xmax = x_y_capacity[0];
 
     int ymin = 1;
-    int ymax = x_y_capacity[1];
+    int ymax = x_y_capacity[1] - 2;
 
     System.out.println("xmax = " + xmax + ", ymax = " + ymax);
 
