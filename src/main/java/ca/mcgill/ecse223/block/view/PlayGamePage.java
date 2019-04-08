@@ -220,7 +220,7 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 		
 		
 		gc.setFill(Color.BLACK);
-		gc.fillRect(game.getCurrentPaddleX(), Block223Controller.getPlayAreaSideLength() - 30, 20, 5);
+		gc.fillRect(game.getCurrentPaddleX(), Block223Controller.getPlayAreaSideLength() - 30, game.getCurrentPaddleLength(), 5);
 		
 		gc.fillRect(0, 0, 1, Block223Controller.getPlayAreaSideLength()); // left border
 		gc.fillRect(0, 0, Block223Controller.getPlayAreaSideLength(), 1); // top border
