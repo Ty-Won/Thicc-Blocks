@@ -104,9 +104,13 @@ public class Block223Controller {
 		if (nrBlocksPerLevel < 1) {
 			throw new InvalidInputException("The number of blocks per level must be greater than zero.");
 		}
-		if (nrBlocksPerLevel < game.numberOfBlockAssignments()) {
-			throw new InvalidInputException(
-					"The maximum number of blocks per level cannot be less than the number of existing blocks in a level.");
+		
+		for(Level level : game.getLevels())
+		{
+			if (nrBlocksPerLevel < level.numberOfBlockAssignments()) {
+				throw new InvalidInputException(
+						"The maximum number of blocks per level cannot be less than the number of existing blocks in a level.");
+			}
 		}
 		game.setNrBlocksPerLevel(nrBlocksPerLevel);
 
