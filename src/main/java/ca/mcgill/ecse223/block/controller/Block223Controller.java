@@ -816,7 +816,7 @@ public class Block223Controller {
 			// TODO: switch this to HOF page once that's done
 			new Thread(() -> {
 			      Platform.runLater(() -> { 
-			    	  ui.endGame(game.getLives(), null);
+			    	  ui.endGame(game.getLives(), null);		    	  
 			      });   
 			}).start();
 		} else if (game.getPlayer() != null) {

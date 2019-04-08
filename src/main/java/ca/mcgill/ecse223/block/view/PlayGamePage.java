@@ -43,10 +43,10 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 	private Canvas canvas;
 	private GraphicsContext gc;
 	private Boolean isTest;
-	
+
 	private TOCurrentlyPlayedGame game;
 	private GameThread gameThread;
-	
+
 	private static final char PAUSE_CHAR = ' ';
 	private static final char LEFT_CHAR = 'l';
 	private static final char RIGHT_CHAR = 'r';
@@ -58,7 +58,7 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 		this.stage = stage;
 		this.isTest = false;
 	}
-	
+
 	public void setIsTest(Boolean val) {
 		this.isTest = val;
 	}
@@ -71,47 +71,47 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 			e.printStackTrace();
 			return;
 		}
-        //Create an HBox to hold the top bar
-        HBox topPane = new HBox();
+		//Create an HBox to hold the top bar
+		HBox topPane = new HBox();
 
-        initializeTopPane(topPane);        
-        initializeCanvas();
+		initializeTopPane(topPane);        
+		initializeCanvas();
 
 
-        //Create a border pane which will hold the gridPane in the center of the screen and the HBox at the top
-        BorderPane root = new BorderPane();
-	    root.setPadding(new Insets(20)); // space between elements and window border
-        root.setTop(topPane);
-        root.setCenter(canvas);
-	    
-        // Create the scene with borderPane as the root node (since it contains everything else)
-        Scene scene = new Scene(root, Block223Application.APPLICATION_WIDTH, Block223Application.APPLICATION_HEIGHT);
+		//Create a border pane which will hold the gridPane in the center of the screen and the HBox at the top
+		BorderPane root = new BorderPane();
+		root.setPadding(new Insets(20)); // space between elements and window border
+		root.setTop(topPane);
+		root.setCenter(canvas);
 
-        // Handle key events
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> 
-        {
-            // Pause
-            if(key.getCode() == KeyCode.SPACE) {
-                inputQueue.append(PAUSE_CHAR);
-                System.out.println("Space");
-            }
-            
-            // Left paddle
-            else if (key.getCode() == KeyCode.LEFT) {
-                inputQueue.append(LEFT_CHAR);
-                System.out.println("left");
-            }
+		// Create the scene with borderPane as the root node (since it contains everything else)
+		Scene scene = new Scene(root, Block223Application.APPLICATION_WIDTH, Block223Application.APPLICATION_HEIGHT);
 
-            // Right paddle
-            else if (key.getCode() == KeyCode.RIGHT) {
-                inputQueue.append(RIGHT_CHAR);
-                System.out.println("right");
-            }            
-        });
+		// Handle key events
+		scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> 
+		{
+			// Pause
+			if(key.getCode() == KeyCode.SPACE) {
+				inputQueue.append(PAUSE_CHAR);
+				System.out.println("Space");
+			}
 
-         // Ensure we can get the current playable game before starting
-         try {
-            Block223Controller.getCurrentPlayableGame();
+			// Left paddle
+			else if (key.getCode() == KeyCode.LEFT) {
+				inputQueue.append(LEFT_CHAR);
+				System.out.println("left");
+			}
+
+			// Right paddle
+			else if (key.getCode() == KeyCode.RIGHT) {
+				inputQueue.append(RIGHT_CHAR);
+				System.out.println("right");
+			}            
+		});
+
+		// Ensure we can get the current playable game before starting
+		try {
+			Block223Controller.getCurrentPlayableGame();
 		} catch (InvalidInputException e) {
 			Components.showAlert(Alert.AlertType.ERROR, null, "Error", e.getMessage());
 			return;
@@ -166,14 +166,20 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 
 		gc.fillOval(game.getCurrentBallX(), game.getCurrentBallY(), 5.0, 5.0);
 
-        gc.fillText("Lives: " + game.getLives(), 0, 300);
-        gc.fillText(game.getPaused() ? "PAUSED" : "", 150, 300);
+		gc.fillText("Lives: " + game.getLives(), 0, 300);
+		gc.fillText(game.getPaused() ? "PAUSED" : "", 150, 300);
 	}
 
 	@Override
 	public void endGame(int nrOfLives, TOHallOfFameEntry hof) {
-  	  IPage availableGames = Block223Application.getPage(Pages.AvaliableGamesPlayer);
-  	  availableGames.display();
+		
+		// clearing game area
+		clearCanvas();		
+		
+		if (nrOfLives == 0) {
+			GameOverPage gameOver = new GameOverPage(stage);
+			gameOver.display();
+		}
 	}
 
 	/**
@@ -203,15 +209,15 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 			return;
 		}
 
-		
+
 		gc.setStroke(Color.BLUE);
 		gc.setLineWidth(5);
 
 		drawBlocks();
 	}
-	
+
 	private void drawBlocks() {
-		
+
 		TOCurrentlyPlayedGame game;
 
 		try {
@@ -220,41 +226,41 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 			e.printStackTrace();
 			return;
 		}
-		
+
 		for (TOCurrentBlock block : game.getBlocks()) {
 			gc.setFill(Color.color(block.getRed()/255.0,block.getGreen()/255.0,block.getBlue()/255.0));
 			gc.fillRect(block.getX(), block.getY(), 20, 20);
 		}
 	}
-	
+
 	private void initializeTopPane(HBox topPane) {
-        //Add Back Button, requires catch for file not found
-        try {
-        	FileInputStream backImageInput = new FileInputStream("Images/next.png");
-        	Image backImage = new Image(backImageInput); 
-            ImageView backImageView = new ImageView(backImage); 
-            backImageView.setFitHeight(60);
-            backImageView.setFitWidth(60);
-            
-            Button backButton = new Button("", backImageView);
-            backButton.setStyle("-fx-base: #92D3FC;");	//Styles the default background color of the button
-            topPane.getChildren().add(backButton);
-            topPane.setAlignment(Pos.CENTER_LEFT);
-            
-            backButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                	gameThread.setRunning(false);
-                	
-                	IPage availGames = Block223Application.getPage(Pages.AvaliableGamesPlayer);
-                	availGames.display();
-                }
-            });
-            backButton.setFocusTraversable(false);
-        } catch (FileNotFoundException e) {
-        	System.out.println("File not found");
-        }
-        
+		//Add Back Button, requires catch for file not found
+		try {
+			FileInputStream backImageInput = new FileInputStream("Images/next.png");
+			Image backImage = new Image(backImageInput); 
+			ImageView backImageView = new ImageView(backImage); 
+			backImageView.setFitHeight(60);
+			backImageView.setFitWidth(60);
+
+			Button backButton = new Button("", backImageView);
+			backButton.setStyle("-fx-base: #92D3FC;");	//Styles the default background color of the button
+			topPane.getChildren().add(backButton);
+			topPane.setAlignment(Pos.CENTER_LEFT);
+
+			backButton.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					gameThread.setRunning(false);
+
+					IPage availGames = Block223Application.getPage(Pages.AvaliableGamesPlayer);
+					availGames.display();
+				}
+			});
+			backButton.setFocusTraversable(false);
+		} catch (FileNotFoundException e) {
+			System.out.println("File not found");
+		}
+
 	}
 
 	/**
