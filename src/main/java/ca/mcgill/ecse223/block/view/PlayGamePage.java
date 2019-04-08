@@ -246,8 +246,14 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
                 public void handle(ActionEvent event) {
                 	gameThread.setRunning(false);
                 	
-                	IPage availGames = Block223Application.getPage(Pages.AvaliableGamesPlayer);
-                	availGames.display();
+                	if(isTest) {
+                		IPage updateGame = Block223Application.getPage(Pages.UpdateGame);
+                		updateGame.display();
+                	}
+                	else {
+                		IPage availGames = Block223Application.getPage(Pages.AvaliableGamesPlayer);
+                		availGames.display();                		
+                	}
                 }
             });
             backButton.setFocusTraversable(false);
