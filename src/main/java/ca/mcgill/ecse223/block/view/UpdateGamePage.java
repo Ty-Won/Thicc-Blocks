@@ -244,8 +244,8 @@ public class UpdateGamePage implements IPage {
         levelsButton.setPrefHeight(60);
         levelsButton.setDefaultButton(true);
         levelsButton.setPrefWidth(150);
-        levelsButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
-        levelsButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
+        //levelsButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
+        //levelsButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
         gridPane.add(levelsButton, 0, 8, 2, 1);
         GridPane.setHalignment(levelsButton, HPos.CENTER);
         GridPane.setMargin(levelsButton, new Insets(20,0,20,0));
@@ -255,8 +255,8 @@ public class UpdateGamePage implements IPage {
         blocksButton.setPrefHeight(60);
         blocksButton.setDefaultButton(true);
         blocksButton.setPrefWidth(150);
-        blocksButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
-        blocksButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
+        //blocksButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
+        //blocksButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
         gridPane.add(blocksButton, 2, 8, 2, 1);
         GridPane.setHalignment(blocksButton, HPos.CENTER);
         GridPane.setMargin(blocksButton, new Insets(20,0,20,0));
@@ -266,8 +266,8 @@ public class UpdateGamePage implements IPage {
         testButton.setPrefHeight(60);
         testButton.setDefaultButton(true);
         testButton.setPrefWidth(150);
-        testButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
-        testButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
+        //testButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
+        //testButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
         gridPane.add(testButton, 0, 9, 2, 1);
         GridPane.setHalignment(testButton, HPos.CENTER);
         GridPane.setMargin(testButton, new Insets(20,0,20,0));
@@ -278,8 +278,8 @@ public class UpdateGamePage implements IPage {
         publishButton.setPrefHeight(60);
         publishButton.setDefaultButton(true);
         publishButton.setPrefWidth(150);
-        publishButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
-        publishButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
+        //publishButton.setStyle("-fx-background-color: #000;-fx-text-fill: #fff;");
+        //publishButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
         gridPane.add(publishButton, 2, 9, 2, 1);
         GridPane.setHalignment(publishButton, HPos.CENTER);
         GridPane.setMargin(publishButton, new Insets(20,0,20,0));
@@ -289,9 +289,9 @@ public class UpdateGamePage implements IPage {
         updateButton.setPrefHeight(60);
         updateButton.setDefaultButton(true);
         updateButton.setPrefWidth(150);
-        updateButton.setStyle("-fx-background-color: #008000;-fx-text-fill: #fff;");
-        updateButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
-        gridPane.add(updateButton, 2, 10, 2, 1);
+        //updateButton.setStyle("-fx-background-color: #008000;-fx-text-fill: #fff;");
+        //updateButton.setFont(Font.font("Arial", FontWeight.MEDIUM, 20));
+        gridPane.add(updateButton, 0, 10, 4, 1);
         GridPane.setHalignment(updateButton, HPos.CENTER);
         GridPane.setMargin(updateButton, new Insets(20,0,20,0));
       
