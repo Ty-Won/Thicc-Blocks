@@ -23,6 +23,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -30,6 +31,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class PlayGamePage implements IPage, Block223PlayModeInterface {
@@ -39,10 +41,11 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 
 	private Canvas canvas;
 	private GraphicsContext gc;
+	private Boolean isTest;
+	
 	private TOCurrentlyPlayedGame game;
 	private GameThread gameThread;
-	private Boolean isTest;
-
+	
 	private static final char PAUSE_CHAR = ' ';
 	private static final char LEFT_CHAR = 'l';
 	private static final char RIGHT_CHAR = 'r';
@@ -69,33 +72,8 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 		}
         //Create an HBox to hold the top bar
         HBox topPane = new HBox();
-        //Add Back Button, requires catch for file not found
-        try {
-        	FileInputStream backImageInput = new FileInputStream("Images/next.png");
-        	Image backImage = new Image(backImageInput); 
-            ImageView backImageView = new ImageView(backImage); 
-            backImageView.setFitHeight(60);
-            backImageView.setFitWidth(60);
-            
-            Button backButton = new Button("", backImageView);
-            backButton.setStyle("-fx-base: #92D3FC;");	//Styles the default background color of the button
-            topPane.getChildren().add(backButton);
-            topPane.setAlignment(Pos.CENTER_LEFT);
-            
-            backButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                	gameThread.setRunning(false);
-                	
-                	IPage availGames = Block223Application.getPage(Pages.AvaliableGamesPlayer);
-                	availGames.display();
-                }
-            });
-            backButton.setFocusTraversable(false);
-        } catch (FileNotFoundException e) {
-        	System.out.println("File not found");
-        }
-        
+
+        initializeTopPane(topPane);        
         initializeCanvas();
 
 
@@ -190,6 +168,13 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 
 		gc.fillOval(game.getCurrentBallX(), game.getCurrentBallY(), 5.0, 5.0);
 
+        gc.fillText("Lives: " + game.getLives(), 0, 300);
+        gc.fillText(game.getPaused() ? "PAUSED" : "", 150, 300);
+
+        
+        
+        //livesText.setText("Lives: " + game.getLives());
+        //pauseText.setText(game.getPaused() ? "PAUSED" : "");
 		//System.out.println("refresh!");
 	}
 
@@ -234,6 +219,36 @@ public class PlayGamePage implements IPage, Block223PlayModeInterface {
 			gc.fillRect(block.getX(), block.getY(), 20, 20);
 		}
 
+	}
+	
+	private void initializeTopPane(HBox topPane) {
+        //Add Back Button, requires catch for file not found
+        try {
+        	FileInputStream backImageInput = new FileInputStream("Images/next.png");
+        	Image backImage = new Image(backImageInput); 
+            ImageView backImageView = new ImageView(backImage); 
+            backImageView.setFitHeight(60);
+            backImageView.setFitWidth(60);
+            
+            Button backButton = new Button("", backImageView);
+            backButton.setStyle("-fx-base: #92D3FC;");	//Styles the default background color of the button
+            topPane.getChildren().add(backButton);
+            topPane.setAlignment(Pos.CENTER_LEFT);
+            
+            backButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                	gameThread.setRunning(false);
+                	
+                	IPage availGames = Block223Application.getPage(Pages.AvaliableGamesPlayer);
+                	availGames.display();
+                }
+            });
+            backButton.setFocusTraversable(false);
+        } catch (FileNotFoundException e) {
+        	System.out.println("File not found");
+        }
+        
 	}
 
 	/**
