@@ -147,7 +147,7 @@ public class CreateGamePage implements IPage {
         gridPane.add(gameNameField,1,1,3,1);
         
         // Add Max Blocks Per Level Label
-        Label maxBlocksLabel = new Label("Max Blocks Per Level: ");
+        Label maxBlocksLabel = new Label("Blocks Per Level: ");
         gridPane.add(maxBlocksLabel,0,2);
         
         //Add numeric spinner for max blocks per level
