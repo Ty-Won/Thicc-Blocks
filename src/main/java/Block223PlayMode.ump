@@ -12,7 +12,7 @@ class PlayedGame {
    depend ca.mcgill.ecse223.block.model.BouncePoint.BounceDirection;
    depend java.awt.geom.Rectangle2D;
    
-   const Integer INITIAL_WAIT_TIME = 1000; // at design time, the initial wait time may be adjusted as seen fit
+   const Integer INITIAL_WAIT_TIME = 8; // at design time, the initial wait time may be adjusted as seen fit
    autounique id;
    const Integer NR_LIVES = 3;
    Integer score = 0;
