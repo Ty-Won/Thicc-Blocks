@@ -261,8 +261,7 @@ class PlayedGame {
   
   // Actions
   
-  private void doSetup() {
-    
+  private void doSetup(){
     resetCurrentBallX();
     resetCurrentBallY();
     resetBallDirectionX();
@@ -293,6 +292,8 @@ class PlayedGame {
 
     int ymin = 1;
     int ymax = x_y_capacity[1];
+
+    System.out.println("xmax = " + xmax + ", ymax = " + ymax);
 
     Random rand = new Random();
 
@@ -329,13 +330,16 @@ class PlayedGame {
 
           // Advance to next column
           x = (x % xmax) + 1;
+
+        // Found a location, update x and y to be in screen coordinates
+        } else {
+          x = xa;
+          y = ya;
         }
-        
       }
 
       PlayedBlockAssignment pBlock = new PlayedBlockAssignment(x, y, game.getRandomBlock(), this);
     }
-
   }
   
   private void doHitPaddleOrWall() {

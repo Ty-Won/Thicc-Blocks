@@ -1,5 +1,5 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.29.0.4181.a593105a9 modeling language!*/
+/*This code was generated using the UMPLE 1.29.1.4262.30c9ffc7c modeling language!*/
 
 package ca.mcgill.ecse223.block.model;
 import ca.mcgill.ecse223.block.model.BouncePoint.BounceDirection;
@@ -21,7 +21,7 @@ public class PlayedGame implements Serializable
   /**
    * at design time, the initial wait time may be adjusted as seen fit
    */
-  public static final int INITIAL_WAIT_TIME = 8;
+  public static final int INITIAL_WAIT_TIME = 1000;
   private static int nextId = 1;
   public static final int NR_LIVES = 3;
 
@@ -1255,7 +1255,7 @@ public class PlayedGame implements Serializable
   /**
    * Actions
    */
-  // line 266 "../../../../../Block223States.ump"
+  // line 265 "../../../../../Block223States.ump"
    private void doSetup(){
     resetCurrentBallX();
     resetCurrentBallY();
@@ -1287,6 +1287,8 @@ public class PlayedGame implements Serializable
 
     int ymin = 1;
     int ymax = x_y_capacity[1];
+
+    System.out.println("xmax = " + xmax + ", ymax = " + ymax);
 
     Random rand = new Random();
 
@@ -1323,20 +1325,24 @@ public class PlayedGame implements Serializable
 
           // Advance to next column
           x = (x % xmax) + 1;
+
+        // Found a location, update x and y to be in screen coordinates
+        } else {
+          x = xa;
+          y = ya;
         }
-        
       }
 
       PlayedBlockAssignment pBlock = new PlayedBlockAssignment(x, y, game.getRandomBlock(), this);
     }
   }
 
-  // line 342 "../../../../../Block223States.ump"
+  // line 346 "../../../../../Block223States.ump"
    private void doHitPaddleOrWall(){
     this.bounceBall();
   }
 
-  // line 346 "../../../../../Block223States.ump"
+  // line 350 "../../../../../Block223States.ump"
    private void doOutOfBounds(){
     setLives(lives - 1);
     resetCurrentBallX();
@@ -1346,13 +1352,13 @@ public class PlayedGame implements Serializable
     resetCurrentPaddleX();
   }
 
-  // line 356 "../../../../../Block223States.ump"
+  // line 360 "../../../../../Block223States.ump"
    private void doHitNothingAndNotOutOfBounds(){
     setCurrentBallX(currentBallX + ballDirectionX);
     setCurrentBallY(currentBallY + ballDirectionY);
   }
 
-  // line 361 "../../../../../Block223States.ump"
+  // line 365 "../../../../../Block223States.ump"
    private void doGameOver(){
     Block223 block223 = getBlock223();
     Player p = getPlayer();
